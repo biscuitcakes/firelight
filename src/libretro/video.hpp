@@ -1,0 +1,118 @@
+//
+// Created by alexs on 10/17/2023.
+//
+
+#ifndef BLUEMBER_VIDEO_HPP
+#define BLUEMBER_VIDEO_HPP
+
+#include "libretro.h"
+#include <GL/glew.h>
+#include <array>
+#include <cstddef>
+
+namespace libretro {
+
+/**
+ * Represents the way the game's image will be displayed on the user's screen.
+ */
+enum PictureMode {
+  // Display using the console or game's native resolution.
+  ORIGINAL,
+
+  // Maintain the game's aspect ratio and scale to the size of the window.
+  ASPECT_RATIO,
+
+  // Fill the entire window, ignoring aspect ratio.
+  STRETCH
+};
+
+class Video {
+
+public:
+  Video();
+
+  void initialize(int x2, int y2, int screenWidth, int screenHeight);
+
+  retro_hw_render_callback *hardwareRenderCallback;
+
+  void initializeHwFramebuffer();
+
+  void setPictureMode(PictureMode);
+
+  void draw();
+
+  void setScreenDimensions(int x, int y, int width, int height);
+
+  void refreshCoreVideo(const void *data, unsigned width, unsigned height,
+                        size_t pitch);
+
+  void setRotation(unsigned int);
+
+  bool getOverscan() const;
+
+  bool getAllowDupeFrames() const;
+
+  void setGameGeometry(retro_game_geometry *);
+
+  void setPixelFormat(retro_pixel_format *);
+
+  void setHardwareRenderCallback(retro_hw_render_callback *);
+
+  void setFrameTimeCallback(retro_frame_time_callback *);
+
+private:
+  int x, y = 0;
+  int windowWidth, windowHeight;
+
+  bool hardwareRendering = false;
+
+  PictureMode displayMode = ASPECT_RATIO;
+
+  GLuint renderBuffer;
+  GLuint fbo;
+  GLuint otherTex;
+
+  GLuint intermediateVao;
+  GLuint intermediateVbo;
+  GLuint intermediateTex;
+  GLuint intermediateFbo;
+  GLuint intermediateProgram;
+
+  void recalcVertexArray();
+
+  GLuint vao;
+  GLuint vbo;
+  GLuint tex;
+  GLuint program;
+
+  std::array<float, 16> vertices = {-1.0, -1.0, 0, 1.0, 1.0, -1.0, 1.0, 1.0,
+                                    -1.0, 1.0,  0, 0,   1.0, 1.0,  1.0, 0};
+
+  std::array<float, 16> fullScreenVertices = {-1.0, -1.0, 0,    1.0, 1.0, -1.0,
+                                              1.0,  1.0,  -1.0, 1.0, 0,   0,
+                                              1.0,  1.0,  1.0,  0};
+
+  const void *softwareBufData;
+  unsigned softwareBufWidth;
+  unsigned softwareBufHeight;
+  size_t softwareBufPitch;
+
+  retro_game_geometry *gameGeometry;
+
+  retro_frame_time_callback *frameTimeCallback;
+  unsigned preferredHardwareRenderer; // need to set early based on window
+  unsigned rotation = 0;
+  bool useOverscan = false;
+  bool canDupeFrames = true;
+  retro_pixel_format *pixelFormat;
+  retro_framebuffer *softwareFramebuffer;
+  retro_hw_render_interface *hardwareRenderInterface;
+  retro_hw_render_context_negotiation_interface
+      *hwRenderContextNegotiationInterface;
+  bool hardwareSharedContext; // TODO what is this
+  float targetRefreshRate;
+};
+
+} // namespace libretro
+
+#endif // BLUEMBER_VIDEO_HPP
