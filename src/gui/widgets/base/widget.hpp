@@ -2,8 +2,8 @@
 // Created by alexs on 11/7/2023.
 //
 
-#ifndef FIRELIGHT_NEW_WIDGET_HPP
-#define FIRELIGHT_NEW_WIDGET_HPP
+#ifndef FIRELIGHT_WIDGET_HPP
+#define FIRELIGHT_WIDGET_HPP
 
 #include "../../../math/bbox.hpp"
 #include "../../open_gl_painter.hpp"
@@ -12,7 +12,7 @@
 
 namespace FL::GUI {
 
-class NewWidget {
+class Widget {
 public:
   virtual void paint(OpenGLPainter *painter, FL::Math::BBox box);
   virtual void paint(WidgetPainter *painter, FL::Math::BBox box) = 0;
@@ -23,4 +23,4 @@ public:
 
 } // namespace FL::GUI
 
-#endif // FIRELIGHT_NEW_WIDGET_HPP
+#endif // FIRELIGHT_WIDGET_HPP

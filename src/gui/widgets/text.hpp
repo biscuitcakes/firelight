@@ -5,11 +5,11 @@
 #ifndef FIRELIGHT_TEXT_HPP
 #define FIRELIGHT_TEXT_HPP
 
-#include "base/new_widget.hpp"
+#include "base/widget.hpp"
 #include <string>
 namespace FL::GUI {
 
-class Text : public NewWidget {
+class Text : public Widget {
 public:
   explicit Text(std::string text);
 

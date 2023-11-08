@@ -10,8 +10,8 @@ namespace FL::Graphics {
 
 class Driver {
 public:
-  void drawRectangle(int x, int y, int w, int h);
-  void drawText(std::string text, int x, int y);
+  virtual void drawRectangle(int x, int y, int w, int h) = 0;
+  virtual void drawText(std::string text, int x, int y) = 0;
 };
 
 } // namespace FL::Graphics

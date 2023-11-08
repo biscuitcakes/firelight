@@ -8,7 +8,7 @@
 #include "../math/bbox.hpp"
 #include "SDL2/SDL.h"
 #include "open_gl_painter.hpp"
-#include "widgets/base/new_widget.hpp"
+#include "widgets/base/widget.hpp"
 #include <memory>
 #include <string>
 #include <vector>
@@ -20,20 +20,19 @@ namespace FL::GUI {
 
 class Context {
 public:
-  explicit Context(FL::Math::BBox size);
+  explicit Context(FL::Math::BBox workArea, FL::Graphics::Driver *driver);
   void handleSdlEvent(SDL_Event *event);
   void setWorkArea(FL::Math::BBox area);
 
-  void addWidget(NewWidget *widget);
-
-  void drawText(const std::string &text, FL::Math::BBox bbox);
+  void addWidget(Widget *widget);
 
   void render();
 
 private:
-  std::unique_ptr<OpenGLPainter> painter;
+  FL::Math::BBox workArea;
+  std::unique_ptr<WidgetPainter> widgetPainter;
 
-  vector<NewWidget *> newWidgets;
+  vector<Widget *> widgets;
 };
 
 } // namespace FL::GUI

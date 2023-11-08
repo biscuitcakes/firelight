@@ -6,39 +6,19 @@
 
 namespace FL::GUI {
 void Context::handleSdlEvent(SDL_Event *event) {}
-void Context::setWorkArea(FL::Math::BBox area) {
-  painter->viewportWidth = area.widthPx;
-  painter->viewportHeight = area.heightPx;
-}
+void Context::setWorkArea(FL::Math::BBox area) { workArea = area; }
 
 void Context::render() {
-  // for each widget
-  // get the style
-  // check for positioning first
-  // - anchors
-  // - padding
-  // - margin
-  // - border
-  // - size restrictions?
-
-  //  for (auto t : thingies) {
-  //    renderWidget(t, t->x, t->y, t->w, t->h);
-  //  }
-
-  FL::Math::BBox box(0, 0, 1280, 720);
-
-  for (auto widget : newWidgets) {
-    widget->paint(painter.get(), box);
+  for (auto widget : widgets) {
+    widget->paint(widgetPainter.get(), workArea);
   }
 }
 
-Context::Context(FL::Math::BBox size) {
-  painter = std::make_unique<OpenGLPainter>(size.widthPx, size.heightPx);
+Context::Context(FL::Math::BBox workArea, FL::Graphics::Driver *driver)
+    : workArea(workArea) {
+  widgetPainter = std::make_unique<WidgetPainter>(driver);
 }
 
-void Context::drawText(const std::string &text, FL::Math::BBox bbox) {
-  painter->drawText(text, bbox.xPx, bbox.yPx);
-}
-void Context::addWidget(NewWidget *widget) { newWidgets.emplace_back(widget); }
+void Context::addWidget(Widget *widget) { widgets.emplace_back(widget); }
 
 } // namespace FL::GUI

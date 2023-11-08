@@ -66,13 +66,15 @@ add_executable(firelight
         src/gui/widgets/text.cpp
         src/gui/widgets/text.hpp
         src/graphics/color.hpp
-        src/gui/widgets/base/new_widget.cpp
-        src/gui/widgets/base/new_widget.hpp
+        src/gui/widgets/base/widget.cpp
+        src/gui/widgets/base/widget.hpp
         src/math/bbox.hpp
         src/math/bbox.cpp
         src/gui/widget_painter.hpp
         src/gui/widget_painter.cpp
         src/graphics/driver.hpp
+        src/graphics/open_gl_driver.cpp
+        src/graphics/open_gl_driver.hpp
         #        includes/GLfont/FontAtlas.cpp
         #        includes/GLfont/FTLabel.cpp
         #        includes/GLfont/GLFont.cpp

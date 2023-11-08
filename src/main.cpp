@@ -2,6 +2,7 @@
 #include "GL/glew.h"
 #include "SDL2/SDL.h"
 #include "controller/controller_manager.hpp"
+#include "graphics/open_gl_driver.hpp"
 #include "graphics/shaders.hpp"
 #include "gui/context.hpp"
 #include "gui/widgets/text.hpp"
@@ -82,7 +83,8 @@ int main(int argc, char *argv[]) {
 
   FL::Math::BBox box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  FL::GUI::Context guiContext(box);
+  FL::Graphics::Driver *driver = new FL::Graphics::OpenGLDriver();
+  FL::GUI::Context guiContext(box, driver);
   guiContext.addWidget(new FL::GUI::Text("heya"));
 
   bool running = true;
