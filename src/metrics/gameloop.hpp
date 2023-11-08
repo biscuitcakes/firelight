@@ -2,8 +2,8 @@
 // Created by alexs on 10/26/2023.
 //
 
-#ifndef BLUEMBER_GAMELOOP_HPP
-#define BLUEMBER_GAMELOOP_HPP
+#ifndef FIRELIGHT_GAMELOOP_HPP
+#define FIRELIGHT_GAMELOOP_HPP
 
 #include <cstddef>
 namespace FL {
@@ -27,4 +27,4 @@ private:
 
 } // namespace FL
 
-#endif // BLUEMBER_GAMELOOP_HPP
+#endif // FIRELIGHT_GAMELOOP_HPP

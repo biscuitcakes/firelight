@@ -6,41 +6,39 @@
 
 namespace FL::GUI {
 void Context::handleSdlEvent(SDL_Event *event) {}
-Rect Context::getWorkArea() { return workArea; }
-void Context::setWorkArea(Rect area) {
-  workArea = area;
-  painter->viewportWidth = area.w;
-  painter->viewportHeight = area.h;
+void Context::setWorkArea(FL::Math::BBox area) {
+  painter->viewportWidth = area.widthPx;
+  painter->viewportHeight = area.heightPx;
 }
 
 void Context::render() {
-  for (auto t : thingies) {
-    t->render(painter.get());
+  // for each widget
+  // get the style
+  // check for positioning first
+  // - anchors
+  // - padding
+  // - margin
+  // - border
+  // - size restrictions?
+
+  //  for (auto t : thingies) {
+  //    renderWidget(t, t->x, t->y, t->w, t->h);
+  //  }
+
+  FL::Math::BBox box(0, 0, 1280, 720);
+
+  for (auto widget : newWidgets) {
+    widget->paint(painter.get(), box);
   }
 }
 
-Context::Context(Point size) {
-  workArea.x = 0;
-  workArea.y = 0;
-  workArea.w = size.x;
-  workArea.h = size.y;
-
-  painter = std::make_unique<OpenGLPainter>(size.x, size.y);
+Context::Context(FL::Math::BBox size) {
+  painter = std::make_unique<OpenGLPainter>(size.widthPx, size.heightPx);
 }
 
-void Context::addThingy(Widget *thingy) { thingies.emplace_back(thingy); }
-void Context::focus(Widget *target) {
-  focusChain.clear();
-  if (target->canHaveFocus()) {
-    // TODO: Set target state
-  }
-
-  focusChain.emplace_back(target);
-
-  auto parent = target->getParent();
-  while (parent != nullptr) {
-    focusChain.emplace_back(parent);
-    parent = parent->getParent();
-  }
+void Context::drawText(const std::string &text, FL::Math::BBox bbox) {
+  painter->drawText(text, bbox.xPx, bbox.yPx);
 }
+void Context::addWidget(NewWidget *widget) { newWidgets.emplace_back(widget); }
+
 } // namespace FL::GUI

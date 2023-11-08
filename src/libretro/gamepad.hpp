@@ -2,8 +2,8 @@
 // Created by alexs on 10/27/2023.
 //
 
-#ifndef BLUEMBER_GAMEPAD_HPP
-#define BLUEMBER_GAMEPAD_HPP
+#ifndef FIRELIGHT_GAMEPAD_HPP
+#define FIRELIGHT_GAMEPAD_HPP
 
 #include <SDL2/SDL.h>
 #include <cstdint>
@@ -26,4 +26,4 @@ private:
 
 } // namespace libretro
 
-#endif // BLUEMBER_GAMEPAD_HPP
+#endif // FIRELIGHT_GAMEPAD_HPP

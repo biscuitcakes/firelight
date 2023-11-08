@@ -2,8 +2,8 @@
 // Created by alexs on 10/27/2023.
 //
 
-#ifndef BLUEMBER_CONTROLLER_MANAGER_HPP
-#define BLUEMBER_CONTROLLER_MANAGER_HPP
+#ifndef FIRELIGHT_CONTROLLER_MANAGER_HPP
+#define FIRELIGHT_CONTROLLER_MANAGER_HPP
 
 #include "../libretro/core.hpp"
 #include <cstdint>
@@ -23,4 +23,4 @@ private:
 
 } // namespace FL
 
-#endif // BLUEMBER_CONTROLLER_MANAGER_HPP
+#endif // FIRELIGHT_CONTROLLER_MANAGER_HPP

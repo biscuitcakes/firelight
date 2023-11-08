@@ -2,22 +2,13 @@
 #include "GL/glew.h"
 #include "SDL2/SDL.h"
 #include "controller/controller_manager.hpp"
-#include "gfx/shaders.hpp"
-#include "gfx/stuff.hpp"
+#include "graphics/shaders.hpp"
 #include "gui/context.hpp"
 #include "gui/widgets/text.hpp"
-#include "imgui.h"
-#include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl2.h"
 #include "libretro/core.hpp"
 #include "metrics/gameloop.hpp"
 
-#include <chrono>
-#include <freetype/freetype.h>
-#include <fstream>
-#include <ft2build.h>
-#include <iostream>
-#include <memory>
 #include <thread>
 
 const int SCREEN_WIDTH = 1280;
@@ -89,33 +80,10 @@ int main(int argc, char *argv[]) {
   Uint64 frameEnd;
   double frameDiff;
 
-  Point p{SCREEN_WIDTH, SCREEN_HEIGHT};
+  FL::Math::BBox box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  FL::GUI::Context guiContext(p);
-
-  FL::GUI::Text t("Create Suspend Point", 180, 225, 460, 40);
-  guiContext.addThingy(&t);
-
-  FL::GUI::Text t2("Load Suspend Point", 180, 275, 460, 40);
-  guiContext.addThingy(&t2);
-
-  FL::GUI::Text t3("Reset Game", 180, 325, 460, 40);
-  guiContext.addThingy(&t3);
-
-  //  FL::GUI::Widget t2{180, 275, 460, 40};
-  //  guiContext.addThingy(t2);
-  //
-  //  FL::GUI::Widget t3{180, 325, 460, 40};
-  //  guiContext.addThingy(t3);
-  //
-  //  FL::GUI::Widget t4{180, 375, 460, 40};
-  //  guiContext.addThingy(t4);
-  //
-  //  FL::GUI::Widget t5{180, 425, 460, 40};
-  //  guiContext.addThingy(t5);
-  //
-  //  FL::GUI::Widget t6{640, 15, 1, 690};
-  //  guiContext.addThingy(t6);
+  FL::GUI::Context guiContext(box);
+  guiContext.addWidget(new FL::GUI::Text("heya"));
 
   bool running = true;
   while (running) {
@@ -166,7 +134,8 @@ int main(int argc, char *argv[]) {
           auto width = ev.window.data1;
           auto height = ev.window.data2;
           core->getVideo()->setScreenDimensions(0, 0, width, height);
-          guiContext.setWorkArea(FL::GUI::Rect{0, 0, width, height});
+          guiContext.setWorkArea(
+              FL::Math::BBox(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
           break;
         }
       }

@@ -3,20 +3,21 @@
 //
 
 #include "open_gl_painter.hpp"
-#include "../gfx/shaders.hpp"
+#include "../graphics/shaders.hpp"
 #include <array>
 #include <cstdio>
 
 namespace FL::GUI {
 // compiler combines adjacent strings apparently
-static const GLchar *fragmentShader =
-    "#version 330 core\n"
-    "out vec4 FragColor;\n"
+static const GLchar *fragmentShader = "#version 330 core\n"
+                                      "out vec4 FragColor;\n"
 
-    "void main()\n"
-    "{\n"
-    " FragColor = vec4(1.0f, 0.5f, 0.2f, 1.0f);\n"
-    "}\0";
+                                      "uniform vec3 color;\n"
+
+                                      "void main()\n"
+                                      "{\n"
+                                      " FragColor = vec4(color.rgb, 1.0f);\n"
+                                      "}\0";
 
 // compiler combines adjacent strings apparently
 static const char *vertexShaderSource =
@@ -230,7 +231,6 @@ OpenGLPainter::OpenGLPainter(int w, int h) {
   glShaderSource(vert, 1, &vertexShaderSource, nullptr);
   glCompileShader(vert);
 
-  status;
   glGetShaderiv(vert, GL_COMPILE_STATUS, &status);
   if (status == GL_FALSE) {
     printf("Oh no, error: %d :(\n", status);
@@ -278,9 +278,13 @@ OpenGLPainter::OpenGLPainter(int w, int h) {
   glBindVertexArray(0);
 }
 
-void OpenGLPainter::drawRectangle(int x, int y, int w, int h) {
+void OpenGLPainter::drawRectangle(int x, int y, int w, int h,
+                                  FL::Graphics::Color color) {
   auto vertices = calculateVertexArray(x, y, w, h);
+
   glUseProgram(program);
+  glUniform3f(glGetUniformLocation(program, "color"), color.R, color.G,
+              color.B);
 
   glBindBuffer(GL_ARRAY_BUFFER, vbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
@@ -351,7 +355,8 @@ void OpenGLPainter::drawText(const std::string &text, int x, int y) {
   // loop.
   cursorX2 -= (lastChar.xAdvance - lastChar.glyphWidth);
 
-  drawRectangle(x - 10, y - 10, cursorX2 + 20, maxAscent + maxDescent + 20);
+  //  drawRectangle(x - 10, y - 10, cursorX2 + 20, maxAscent + maxDescent + 20,
+  //                FL::Graphics::Color{1.0, 0.5, 0.2});
 
   auto cursorX = x;
   auto cursorY = y + maxAscent;
@@ -366,4 +371,36 @@ void OpenGLPainter::drawText(const std::string &text, int x, int y) {
 }
 
 OpenGLPainter::~OpenGLPainter() { FT_Done_FreeType(fontLib); }
+void OpenGLPainter::calculateTextBounds(const std::string &text, int &width,
+                                        int &height) {
+  auto maxAscent = 0;
+  auto maxDescent = 0;
+
+  width = 0;
+
+  Character lastChar;
+  for (unsigned char glyph : text) {
+    auto c = characters.at(glyph);
+
+    auto ascent = c.yBearing;
+    if (ascent > maxAscent) {
+      maxAscent = ascent;
+    }
+
+    auto descent = c.glyphHeight - c.yBearing;
+    if (descent > maxDescent) {
+      maxDescent = descent;
+    }
+
+    width += c.xAdvance; // TODO: don't do this for the last one. For now
+                         // whatever
+    lastChar = c;
+  }
+
+  // We added the advance each time, but we don't want to do that for the
+  // last character. So, we just subtract the difference here to simplify the
+  // loop.
+  width -= (lastChar.xAdvance - lastChar.glyphWidth);
+  height = (maxAscent + maxDescent);
+}
 } // namespace FL::GUI

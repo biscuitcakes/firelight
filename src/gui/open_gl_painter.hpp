@@ -2,9 +2,10 @@
 // Created by alexs on 10/31/2023.
 //
 
-#ifndef BLUEMBER_OPEN_GL_PAINTER_HPP
-#define BLUEMBER_OPEN_GL_PAINTER_HPP
+#ifndef FIRELIGHT_OPEN_GL_PAINTER_HPP
+#define FIRELIGHT_OPEN_GL_PAINTER_HPP
 
+#include "../graphics/color.hpp"
 #include "GL/glew.h"
 #include "character.hpp"
 #include <array>
@@ -18,9 +19,10 @@ class OpenGLPainter {
 public:
   OpenGLPainter(int w, int h);
   ~OpenGLPainter();
-  void drawRectangle(int x, int y, int w, int h);
+  void drawRectangle(int x, int y, int w, int h, FL::Graphics::Color color);
   void drawTexture(unsigned tex, int x, int y, unsigned w, unsigned h);
   void drawText(const std::string &text, int x, int y);
+  void calculateTextBounds(const std::string &text, int &width, int &height);
   int viewportWidth, viewportHeight = 0;
 
 private:
@@ -42,4 +44,4 @@ private:
 
 } // namespace FL::GUI
 
-#endif // BLUEMBER_OPEN_GL_PAINTER_HPP
+#endif // FIRELIGHT_OPEN_GL_PAINTER_HPP

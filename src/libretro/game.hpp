@@ -2,8 +2,8 @@
 // Created by alexs on 10/17/2023.
 //
 
-#ifndef BLUEMBER_GAME_HPP
-#define BLUEMBER_GAME_HPP
+#ifndef FIRELIGHT_GAME_HPP
+#define FIRELIGHT_GAME_HPP
 
 #include <cstddef>
 #include <string>
@@ -30,4 +30,4 @@ private:
 
 } // namespace libretro
 
-#endif // BLUEMBER_GAME_HPP
+#endif // FIRELIGHT_GAME_HPP

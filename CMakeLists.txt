@@ -57,22 +57,22 @@ add_executable(firelight
         #        includes/imgui/imgui_impl_opengl3.cpp
         src/gui/context.cpp
         src/gui/context.hpp
-        src/gui/style.cpp
         src/gui/style.hpp
-        src/gui/point.hpp
-        src/gui/rect.hpp
-        src/gui/widgets/widget.cpp
-        src/gui/widgets/widget.hpp
         src/gui/open_gl_painter.cpp
         src/gui/open_gl_painter.hpp
-        src/gui/widget_state.hpp
         src/gui/character.hpp
-        src/gfx/shaders.hpp
-        src/gfx/shaders.cpp
+        src/graphics/shaders.hpp
+        src/graphics/shaders.cpp
         src/gui/widgets/text.cpp
         src/gui/widgets/text.hpp
-        src/gui/widgets/menu.cpp
-        src/gui/widgets/menu.hpp
+        src/graphics/color.hpp
+        src/gui/widgets/base/new_widget.cpp
+        src/gui/widgets/base/new_widget.hpp
+        src/math/bbox.hpp
+        src/math/bbox.cpp
+        src/gui/widget_painter.hpp
+        src/gui/widget_painter.cpp
+        src/graphics/driver.hpp
         #        includes/GLfont/FontAtlas.cpp
         #        includes/GLfont/FTLabel.cpp
         #        includes/GLfont/GLFont.cpp

@@ -2,8 +2,8 @@
 // Created by alexs on 10/14/2023.
 //
 
-#ifndef BLUEMBER_COREOPTION_HPP
-#define BLUEMBER_COREOPTION_HPP
+#ifndef FIRELIGHT_COREOPTION_HPP
+#define FIRELIGHT_COREOPTION_HPP
 
 #include "libretro.h"
 #include <string>
@@ -37,4 +37,4 @@ public:
 
 } // namespace libretro
 
-#endif // BLUEMBER_COREOPTION_HPP
+#endif // FIRELIGHT_COREOPTION_HPP

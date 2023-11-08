@@ -19,7 +19,7 @@ void Shaders::initializeAll() {
 
                        "void main() {\n"
                        "float alpha = texture(Texture, fragTexCoord).a;\n"
-                       "FragColor = vec4(1.0, 1.0, 1.0, alpha);\n"
+                       "FragColor = vec4(1, 1, 1, alpha);\n"
                        //                       "FragColor = c;\n"
                        "}\0";
 

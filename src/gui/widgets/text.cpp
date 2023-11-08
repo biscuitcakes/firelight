@@ -7,8 +7,11 @@
 #include <utility>
 
 namespace FL::GUI {
-Text::Text(std::string text, int x, int y, int w, int h) : Widget(x, y, w, h) {
-  this->text = std::move(text);
+
+Text::Text(std::string text) { text = std::move(text); }
+
+void Text::paint(WidgetPainter *painter, FL::Math::BBox box) {
+  painter->paintText(text, box, FL::GUI::Style{});
 }
-void Text::render(OpenGLPainter *painter) { painter->drawText(text, x, y); }
+
 } // namespace FL::GUI

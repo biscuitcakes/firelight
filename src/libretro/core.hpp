@@ -2,8 +2,8 @@
 // Created by alexs on 10/12/2023.
 //
 
-#ifndef BLUEMBER_CORE_HPP
-#define BLUEMBER_CORE_HPP
+#ifndef FIRELIGHT_CORE_HPP
+#define FIRELIGHT_CORE_HPP
 
 #include "SDL2/SDL.h"
 #include "audio.hpp"
@@ -180,4 +180,4 @@ private:
 
 } // namespace libretro
 
-#endif // BLUEMBER_CORE_HPP
+#endif // FIRELIGHT_CORE_HPP

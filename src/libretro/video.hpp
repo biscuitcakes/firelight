@@ -2,8 +2,8 @@
 // Created by alexs on 10/17/2023.
 //
 
-#ifndef BLUEMBER_VIDEO_HPP
-#define BLUEMBER_VIDEO_HPP
+#ifndef FIRELIGHT_VIDEO_HPP
+#define FIRELIGHT_VIDEO_HPP
 
 #include "libretro.h"
 #include <GL/glew.h>
@@ -115,4 +115,4 @@ private:
 
 } // namespace libretro
 
-#endif // BLUEMBER_VIDEO_HPP
+#endif // FIRELIGHT_VIDEO_HPP

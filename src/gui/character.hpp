@@ -2,8 +2,8 @@
 // Created by alexs on 11/2/2023.
 //
 
-#ifndef BLUEMBER_CHARACTER_HPP
-#define BLUEMBER_CHARACTER_HPP
+#ifndef FIRELIGHT_CHARACTER_HPP
+#define FIRELIGHT_CHARACTER_HPP
 
 #include "GL/glew.h"
 
@@ -36,4 +36,4 @@ public:
 
 } // namespace FL::GUI
 
-#endif // BLUEMBER_CHARACTER_HPP
+#endif // FIRELIGHT_CHARACTER_HPP

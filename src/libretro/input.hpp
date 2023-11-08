@@ -2,8 +2,8 @@
 // Created by alexs on 10/28/2023.
 //
 
-#ifndef BLUEMBER_INPUT_HPP
-#define BLUEMBER_INPUT_HPP
+#ifndef FIRELIGHT_INPUT_HPP
+#define FIRELIGHT_INPUT_HPP
 
 #include "gamepad.hpp"
 #include <array>
@@ -25,4 +25,4 @@ private:
 
 } // namespace libretro
 
-#endif // BLUEMBER_INPUT_HPP
+#endif // FIRELIGHT_INPUT_HPP

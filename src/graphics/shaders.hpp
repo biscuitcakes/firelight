@@ -2,8 +2,8 @@
 // Created by alexs on 11/3/2023.
 //
 
-#ifndef BLUEMBER_SHADERS_HPP
-#define BLUEMBER_SHADERS_HPP
+#ifndef FIRELIGHT_SHADERS_HPP
+#define FIRELIGHT_SHADERS_HPP
 
 #include "GL/glew.h"
 #include <cstdio>
@@ -25,4 +25,4 @@ public:
 
 } // namespace FL::Graphics
 
-#endif // BLUEMBER_SHADERS_HPP
+#endif // FIRELIGHT_SHADERS_HPP

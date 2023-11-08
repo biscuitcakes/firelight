@@ -2,8 +2,8 @@
 // Created by alexs on 10/30/2023.
 //
 
-#ifndef BLUEMBER_STUFF_HPP
-#define BLUEMBER_STUFF_HPP
+#ifndef FIRELIGHT_STUFF_HPP
+#define FIRELIGHT_STUFF_HPP
 
 #include "GL/glew.h"
 #include <array>
@@ -150,4 +150,4 @@ public:
 
 } // namespace Stuff
 
-#endif // BLUEMBER_STUFF_HPP
+#endif // FIRELIGHT_STUFF_HPP
