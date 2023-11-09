@@ -9,6 +9,7 @@ namespace FL::Math {
 
 class BBox {
 public:
+  BBox();
   explicit BBox(int x, int y, int w, int h);
   int xPx = 0;
   int yPx = 0;

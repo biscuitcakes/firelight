@@ -5,9 +5,9 @@
 #ifndef FIRELIGHT_CHARACTER_HPP
 #define FIRELIGHT_CHARACTER_HPP
 
-#include "GL/glew.h"
+#include "../../includes/GL/glew.h"
 
-namespace FL::GUI {
+namespace FL::Graphics {
 
 /**
  * A Character represents a single glyph in a specific typeface and font size
@@ -34,6 +34,6 @@ public:
   unsigned xAdvance = 0;
 };
 
-} // namespace FL::GUI
+} // namespace FL::Graphics
 
 #endif // FIRELIGHT_CHARACTER_HPP

@@ -15,9 +15,7 @@ public:
 
 private:
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;
-  TextAlignment horiAlignment = CENTER;
-  TextAlignment vertAlignment = CENTER;
-  std::string text;
+  std::string myText;
 };
 
 } // namespace FL::GUI

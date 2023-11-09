@@ -7,7 +7,6 @@
 
 #include "../math/bbox.hpp"
 #include "SDL2/SDL.h"
-#include "open_gl_painter.hpp"
 #include "widgets/base/widget.hpp"
 #include <memory>
 #include <string>
@@ -31,6 +30,8 @@ public:
 private:
   FL::Math::BBox workArea;
   std::unique_ptr<WidgetPainter> widgetPainter;
+
+  Widget *focusTarget = nullptr;
 
   vector<Widget *> widgets;
 };

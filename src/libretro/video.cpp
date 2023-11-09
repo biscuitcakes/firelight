@@ -3,7 +3,7 @@
 //
 
 #include "video.hpp"
-#include "../graphics/shaders.hpp"
+#include "../graphics/opengl/shaders.hpp"
 #include "../includes/spdlog/spdlog.h"
 #include <SDL2/SDL_video.h>
 #include <cstdio>

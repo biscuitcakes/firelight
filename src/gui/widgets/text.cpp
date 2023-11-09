@@ -8,10 +8,10 @@
 
 namespace FL::GUI {
 
-Text::Text(std::string text) { text = std::move(text); }
+Text::Text(std::string text) { myText = std::move(text); }
 
 void Text::paint(WidgetPainter *painter, FL::Math::BBox box) {
-  painter->paintText(text, box, FL::GUI::Style{});
+  painter->paintText(myText, box, FL::GUI::Style{});
 }
 
 } // namespace FL::GUI

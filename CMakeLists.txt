@@ -34,8 +34,6 @@ add_executable(firelight
         src/libretro/gamepad.hpp
         src/libretro/input.cpp
         src/libretro/input.hpp
-        src/libretro/audio.cpp
-        src/libretro/audio.hpp
         #        includes/imgui/imconfig.h
         #        includes/imgui/imgui.cpp
         #        includes/imgui/imgui.h
@@ -58,11 +56,9 @@ add_executable(firelight
         src/gui/context.cpp
         src/gui/context.hpp
         src/gui/style.hpp
-        src/gui/open_gl_painter.cpp
-        src/gui/open_gl_painter.hpp
-        src/gui/character.hpp
-        src/graphics/shaders.hpp
-        src/graphics/shaders.cpp
+        src/graphics/character.hpp
+        src/graphics/opengl/shaders.hpp
+        src/graphics/opengl/shaders.cpp
         src/gui/widgets/text.cpp
         src/gui/widgets/text.hpp
         src/graphics/color.hpp
@@ -73,8 +69,15 @@ add_executable(firelight
         src/gui/widget_painter.hpp
         src/gui/widget_painter.cpp
         src/graphics/driver.hpp
-        src/graphics/open_gl_driver.cpp
-        src/graphics/open_gl_driver.hpp
+        src/graphics/opengl/open_gl_driver.cpp
+        src/graphics/opengl/open_gl_driver.hpp
+        src/gui/widgets/frame.cpp
+        src/gui/widgets/frame.hpp
+        src/gui/widgets/quick_menu.cpp
+        src/gui/widgets/quick_menu.hpp
+        src/gui/event.hpp
+        src/gui/widgets/button.cpp
+        src/gui/widgets/button.hpp
         #        includes/GLfont/FontAtlas.cpp
         #        includes/GLfont/FTLabel.cpp
         #        includes/GLfont/GLFont.cpp

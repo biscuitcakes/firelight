@@ -1,13 +1,11 @@
 //
-// Created by alexs on 10/31/2023.
+// Created by alexs on 11/8/2023.
 //
 
-#include "open_gl_painter.hpp"
-#include "../graphics/shaders.hpp"
-#include <array>
-#include <cstdio>
+#include "open_gl_driver.hpp"
+#include "shaders.hpp"
 
-namespace FL::GUI {
+namespace FL::Graphics {
 // compiler combines adjacent strings apparently
 static const GLchar *fragmentShader = "#version 330 core\n"
                                       "out vec4 FragColor;\n"
@@ -28,8 +26,8 @@ static const char *vertexShaderSource =
     "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
     "}\0";
 
-std::array<float, 8> OpenGLPainter::calculateVertexArray(int x, int y, int w,
-                                                         int h) const {
+std::array<float, 8> OpenGLDriver::calculateVertexArray(int x, int y, int w,
+                                                        int h) const {
   std::array<float, 8> result = {0};
 
   auto topLeftX = x;
@@ -55,8 +53,8 @@ std::array<float, 8> OpenGLPainter::calculateVertexArray(int x, int y, int w,
   return result;
 }
 
-std::array<float, 16>
-OpenGLPainter::calculateTexVertexArray(int x, int y, int w, int h) const {
+std::array<float, 16> OpenGLDriver::calculateTexVertexArray(int x, int y, int w,
+                                                            int h) const {
   std::array<float, 16> result = {0};
 
   auto topLeftX = x;
@@ -92,7 +90,7 @@ OpenGLPainter::calculateTexVertexArray(int x, int y, int w, int h) const {
   return result;
 }
 
-OpenGLPainter::OpenGLPainter(int w, int h) {
+OpenGLDriver::OpenGLDriver(int w, int h) {
   if (FT_Init_FreeType(&fontLib) != 0) {
     // oops
   }
@@ -120,7 +118,7 @@ OpenGLPainter::OpenGLPainter(int w, int h) {
 
     FT_Render_Glyph(fontFace->glyph, FT_RENDER_MODE_NORMAL);
 
-    Character c;
+    FL::Graphics::Character c;
     c.fontSize = size;
     c.glyphHeight = fontFace->glyph->metrics.height / 64;
     c.glyphWidth = fontFace->glyph->metrics.width / 64;
@@ -278,8 +276,8 @@ OpenGLPainter::OpenGLPainter(int w, int h) {
   glBindVertexArray(0);
 }
 
-void OpenGLPainter::drawRectangle(int x, int y, int w, int h,
-                                  FL::Graphics::Color color) {
+void OpenGLDriver::drawRectangle(int x, int y, int w, int h,
+                                 FL::Graphics::Color color) {
   auto vertices = calculateVertexArray(x, y, w, h);
 
   glUseProgram(program);
@@ -299,8 +297,8 @@ void OpenGLPainter::drawRectangle(int x, int y, int w, int h,
   glBindVertexArray(0);
 }
 
-void OpenGLPainter::drawTexture(unsigned tex, int x, int y, unsigned w,
-                                unsigned h) {
+void OpenGLDriver::drawTexture(unsigned tex, int x, int y, unsigned w,
+                               unsigned h) {
   auto vertices = calculateTexVertexArray(x, y, w, h);
 
   glEnable(GL_BLEND);
@@ -322,7 +320,7 @@ void OpenGLPainter::drawTexture(unsigned tex, int x, int y, unsigned w,
   glBindVertexArray(0);
 }
 
-void OpenGLPainter::drawText(const std::string &text, int x, int y) {
+void OpenGLDriver::drawText(std::string text, int x, int y) {
   // go through each character and calculate the total width
   // while doing that, keep track of which character goes highest above the
   // baseline and which character goes lowest below the baseline
@@ -331,7 +329,7 @@ void OpenGLPainter::drawText(const std::string &text, int x, int y) {
 
   auto cursorX2 = 0;
 
-  Character lastChar;
+  FL::Graphics::Character lastChar;
   for (unsigned char glyph : text) {
     auto c = characters.at(glyph);
 
@@ -355,7 +353,8 @@ void OpenGLPainter::drawText(const std::string &text, int x, int y) {
   // loop.
   cursorX2 -= (lastChar.xAdvance - lastChar.glyphWidth);
 
-  //  drawRectangle(x - 10, y - 10, cursorX2 + 20, maxAscent + maxDescent + 20,
+  //  drawRectangle(x - 10, y - 10, cursorX2 + 20, maxAscent + maxDescent +
+  //  20,
   //                FL::Graphics::Color{1.0, 0.5, 0.2});
 
   auto cursorX = x;
@@ -370,15 +369,15 @@ void OpenGLPainter::drawText(const std::string &text, int x, int y) {
   }
 }
 
-OpenGLPainter::~OpenGLPainter() { FT_Done_FreeType(fontLib); }
-void OpenGLPainter::calculateTextBounds(const std::string &text, int &width,
-                                        int &height) {
+OpenGLDriver::~OpenGLDriver() { FT_Done_FreeType(fontLib); }
+void OpenGLDriver::calculateTextBounds(const std::string &text, int &width,
+                                       int &height) {
   auto maxAscent = 0;
   auto maxDescent = 0;
 
   width = 0;
 
-  Character lastChar;
+  FL::Graphics::Character lastChar;
   for (unsigned char glyph : text) {
     auto c = characters.at(glyph);
 
@@ -403,4 +402,5 @@ void OpenGLPainter::calculateTextBounds(const std::string &text, int &width,
   width -= (lastChar.xAdvance - lastChar.glyphWidth);
   height = (maxAscent + maxDescent);
 }
-} // namespace FL::GUI
+
+} // namespace FL::Graphics

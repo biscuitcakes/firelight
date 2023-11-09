@@ -6,6 +6,8 @@
 
 namespace FL::GUI {
 
-void Widget::paint(OpenGLPainter *painter, FL::Math::BBox box) {}
+void Widget::setStyle(Style *widgetStyle) { style = widgetStyle; }
+
+bool Widget::focusable() { return false; }
 
 } // namespace FL::GUI

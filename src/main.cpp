@@ -2,9 +2,11 @@
 #include "GL/glew.h"
 #include "SDL2/SDL.h"
 #include "controller/controller_manager.hpp"
-#include "graphics/open_gl_driver.hpp"
-#include "graphics/shaders.hpp"
+#include "graphics/opengl/open_gl_driver.hpp"
+#include "graphics/opengl/shaders.hpp"
 #include "gui/context.hpp"
+#include "gui/widgets/frame.hpp"
+#include "gui/widgets/quick_menu.hpp"
 #include "gui/widgets/text.hpp"
 #include "imgui_impl_sdl2.h"
 #include "libretro/core.hpp"
@@ -83,9 +85,26 @@ int main(int argc, char *argv[]) {
 
   FL::Math::BBox box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
-  FL::Graphics::Driver *driver = new FL::Graphics::OpenGLDriver();
+  FL::Graphics::Driver *driver =
+      new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   FL::GUI::Context guiContext(box, driver);
-  guiContext.addWidget(new FL::GUI::Text("heya"));
+
+  FL::GUI::Frame frame;
+  //  frame.addChild(new FL::GUI::Text("heya"), FL::Math::BBox(100, 100, 400,
+  //  400)); guiContext.addWidget(&frame);
+
+  FL::GUI::QuickMenu quickMenu;
+  quickMenu.addItem("Continue");
+  quickMenu.addItem("Rewind");
+  quickMenu.addItem("Load Suspend Point");
+  quickMenu.addItem("Create Suspend Point");
+  quickMenu.addItem("Game Settings");
+  quickMenu.addItem("Restart Game");
+  quickMenu.addItem("Quit Game");
+
+  frame.addChild(&quickMenu, FL::Math::BBox(200, 220, 220, 280));
+
+  guiContext.addWidget(&frame);
 
   bool running = true;
   while (running) {
@@ -149,7 +168,7 @@ int main(int argc, char *argv[]) {
     //
     glEnable(GL_BLEND);
     core->run(deltaTime);
-    //    core->getVideo()->draw();
+    core->getVideo()->draw();
     frameEnd = SDL_GetPerformanceCounter();
     frameDiff = ((frameEnd - frameBegin) * 1000 /
                  (double)SDL_GetPerformanceFrequency());

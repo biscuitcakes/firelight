@@ -15,6 +15,7 @@ class WidgetPainter {
 public:
   explicit WidgetPainter(FL::Graphics::Driver *driver);
   void paintText(const std::string &text, FL::Math::BBox box, Style style);
+  void paintBackground(FL::Math::BBox box, Style style);
 
 private:
   FL::Graphics::Driver *gfxDriver;

@@ -8,13 +8,21 @@
 #include "../graphics/color.hpp"
 namespace FL::GUI {
 
-enum TextAlignment { NONE, CENTER, RIGHT };
+enum Alignment { LEFT, CENTER, RIGHT, TOP, BOTTOM };
+
+enum Background { NO_FILL, FILL_BACKGROUND };
 
 struct Style {
-  bool hasBackgroundColor = false;
-  FL::Graphics::Color backgroundColor{1.0, 1.0, 1.0, 1.0};
-  TextAlignment horiTextAlignment = NONE;
-  TextAlignment vertTextAlignment = NONE;
+  Background background = NO_FILL;
+  FL::Graphics::Color backgroundColor{};
+
+  Alignment horiAlignment = LEFT;
+  Alignment vertAlignment = TOP;
+
+  //  bool hasBackgroundColor = false;
+  //  FL::Graphics::Color backgroundColor{1.0, 1.0, 1.0, 1.0};
+  //  TextAlignment horiTextAlignment = NONE;
+  //  TextAlignment vertTextAlignment = NONE;
   int innerPaddingPx = 0;
 };
 

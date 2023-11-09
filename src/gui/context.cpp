@@ -5,7 +5,18 @@
 #include "context.hpp"
 
 namespace FL::GUI {
-void Context::handleSdlEvent(SDL_Event *event) {}
+
+void Context::handleSdlEvent(SDL_Event *event) {
+  switch (event->type) {
+  case SDL_CONTROLLERBUTTONDOWN:
+    printf("button down\n");
+    break;
+  case SDL_CONTROLLERBUTTONUP:
+    printf("button up\n");
+    break;
+  }
+}
+
 void Context::setWorkArea(FL::Math::BBox area) { workArea = area; }
 
 void Context::render() {
@@ -19,6 +30,15 @@ Context::Context(FL::Math::BBox workArea, FL::Graphics::Driver *driver)
   widgetPainter = std::make_unique<WidgetPainter>(driver);
 }
 
-void Context::addWidget(Widget *widget) { widgets.emplace_back(widget); }
+void Context::addWidget(Widget *widget) {
+  if (focusTarget == nullptr) {
+    if (widget->focusable()) {
+      printf("Found focus target\n");
+      focusTarget = widget;
+    }
+  }
+  
+  widgets.emplace_back(widget);
+}
 
 } // namespace FL::GUI

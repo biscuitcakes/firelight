@@ -6,7 +6,6 @@
 #define FIRELIGHT_CORE_HPP
 
 #include "SDL2/SDL.h"
-#include "audio.hpp"
 #include "coreoption.hpp"
 #include "game.hpp"
 #include "gamepad.hpp"
@@ -39,7 +38,6 @@ public:
 
   Video *getVideo();
   Input *getInput();
-  Audio *getAudio();
 
   std::basic_string<char> dumpJson();
 
@@ -68,7 +66,6 @@ private:
 
   Video *video;
   Input *input;
-  Audio *audio;
 
   vector<string> environmentCalls;
 
