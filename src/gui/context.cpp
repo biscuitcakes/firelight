@@ -24,6 +24,9 @@ void Context::handleSdlEvent(SDL_Event *event) {
     case SDL_CONTROLLER_BUTTON_A:
       guiEvent.type = Event::NAV_SELECT_PUSHED;
       break;
+    case SDL_CONTROLLER_BUTTON_B:
+      guiEvent.type = Event::NAV_BACK_PUSHED;
+      break;
     }
     break;
   default:
@@ -32,26 +35,37 @@ void Context::handleSdlEvent(SDL_Event *event) {
 
   Widget *next = focusTarget;
 
+  // Give the focus chain an opportunity to handle the event
+  while (next != nullptr) {
+    if (next->handleEvent(guiEvent)) {
+      return;
+    }
+
+    next = next->getParent();
+  }
+
+  // If we got here, then no widget handled the event, so we see if it's a
+  // nav event we can handle. Later this should probably go on a window or
+  // something
+  next = focusTarget;
   while (next != nullptr) {
     if (guiEvent.type == Event::NAV_UP) {
       auto up = next->getNeighborUp();
       if (up != nullptr) {
-        next->isFocused = false;
         setFocusTarget(up);
         return;
       }
     } else if (guiEvent.type == Event::NAV_DOWN) {
       auto down = next->getNeighborDown();
       if (down != nullptr) {
-        next->isFocused = false;
         setFocusTarget(down);
         return;
       }
-    } else if (guiEvent.type == Event::NAV_SELECT_PUSHED) {
-      if (focusTarget != nullptr) {
-        if (focusTarget->handleEvent(guiEvent)) {
-          return;
-        }
+    } else if (guiEvent.type == Event::NAV_BACK_PUSHED) {
+      if (next->getParent() != nullptr) {
+        printf("We goin back\n");
+        setFocusTarget(next->getParent());
+        return;
       }
     }
 
@@ -96,27 +110,31 @@ void Context::addWidget(Widget *widget) {
     auto target = widget->getFirstFocusable();
     if (target != nullptr) {
       setFocusTarget(target);
-      focusTarget = target;
     }
   }
 
   widgets.emplace_back(widget);
 }
 void Context::setFocusTarget(Widget *widget) {
-  if (!widget->focusable()) {
+  auto target = widget->getFirstFocusable();
+  if (target == nullptr || target == focusTarget) {
     // TODO: error
     return;
   }
 
+  if (focusTarget != nullptr) {
+    focusTarget->isFocused = false;
+  }
+
   focusChain.clear();
-  Widget *next = widget;
+  Widget *next = target;
 
   while (next != nullptr) {
     focusChain.push_back(next);
     next = next->getParent();
   }
 
-  focusTarget = widget;
+  focusTarget = target;
   focusTarget->isFocused = true;
 }
 

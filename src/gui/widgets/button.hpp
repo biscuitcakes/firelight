@@ -11,7 +11,7 @@ namespace FL::GUI {
 
 class Button : public Widget {
 public:
-  Button(std::string text, std::function<void()> onClickCallback);
+  Button(std::string text, std::function<void(Button *button)> onClickCallback);
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;
   Widget *getFirstFocusable() override;
   bool focusable() override;
@@ -19,7 +19,7 @@ public:
 
 private:
   std::string label;
-  std::function<void()> onClick;
+  std::function<void(Button *button)> onClick;
 };
 
 } // namespace FL::GUI

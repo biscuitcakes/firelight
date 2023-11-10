@@ -12,8 +12,8 @@ namespace FL::GUI {
 
 void FL::GUI::QuickMenu::addItem(const std::string &header) {
   Child child;
-  child.header = new Button(header, [&]() {
-    printf("heyooooo i'm a kid again buddy you pressed a thing");
+  child.header = new Button(header, [](Button *button) {
+    printf("heyooooo i'm a kid again buddy you pressed a thing\n");
   });
   child.header->setParent(this);
   child.header->setStyle(&childStyle);
@@ -21,6 +21,7 @@ void FL::GUI::QuickMenu::addItem(const std::string &header) {
 
   children.emplace_back(child);
 }
+
 void QuickMenu::recalculateNavNeighbors() {
   Widget *last = nullptr;
   for (const auto &child : children) {
