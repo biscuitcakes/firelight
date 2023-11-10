@@ -28,6 +28,9 @@ public:
   void render();
 
 private:
+  void setFocusTarget(Widget *widget);
+  std::vector<Widget *> focusChain;
+
   FL::Math::BBox workArea;
   std::unique_ptr<WidgetPainter> widgetPainter;
 

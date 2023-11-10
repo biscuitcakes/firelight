@@ -6,7 +6,9 @@
 #define FIRELIGHT_WIDGET_HPP
 
 #include "../../../math/bbox.hpp"
+#include "../../events/event.hpp"
 #include "../../widget_painter.hpp"
+#include <unordered_map>
 #include <vector>
 
 namespace FL::GUI {
@@ -14,13 +16,40 @@ namespace FL::GUI {
 class Widget {
 public:
   virtual void paint(WidgetPainter *painter, FL::Math::BBox box) = 0;
+  virtual bool focusable() = 0;
 
-  virtual bool focusable();
+  virtual Widget *getFirstFocusable() = 0;
 
   void setStyle(Style *style);
+  void setParent(Widget *newParent);
+  Widget *getParent() const;
+  virtual bool handleEvent(FL::GUI::Event &event);
+  virtual void addEventHandler(Event::Type type, EventHandler handler);
 
-private:
+  void setNeighborUp(Widget *neighbor);
+  void setNeighborDown(Widget *neighbor);
+  void setNeighborLeft(Widget *neighbor);
+  void setNeighborRight(Widget *neighbor);
+
+  Widget *getNeighborUp();
+  Widget *getNeighborDown();
+  Widget *getNeighborLeft();
+  Widget *getNeighborRight();
+
+  virtual void recalculateNavNeighbors();
+
+  bool isFocused = false;
+
+protected:
+  Widget *neighborUp = nullptr;
+  Widget *neighborDown = nullptr;
+  Widget *neighborLeft = nullptr;
+  Widget *neighborRight = nullptr;
+
+  Widget *parent = nullptr;
   Style *style = nullptr;
+
+  std::unordered_map<Event::Type, EventHandler> handlersByType;
 };
 
 } // namespace FL::GUI

@@ -14,6 +14,8 @@ public:
   Type type;
 };
 
+typedef bool (*EventHandler)(FL::GUI::Event &);
+
 } // namespace FL::GUI
 
 #endif // FIRELIGHT_EVENT_HPP

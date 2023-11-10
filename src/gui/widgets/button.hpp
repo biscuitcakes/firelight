@@ -12,6 +12,7 @@ class Button : public Widget {
 public:
   explicit Button(std::string text);
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;
+  Widget *getFirstFocusable() override;
   bool focusable() override;
 
 private:

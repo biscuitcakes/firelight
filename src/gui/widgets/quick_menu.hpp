@@ -14,6 +14,8 @@ public:
   void addItem(std::string header);
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;
   bool focusable() override;
+  Widget *getFirstFocusable() override;
+  void recalculateNavNeighbors() override;
 
 private:
   int active = 0;

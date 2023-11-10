@@ -8,6 +8,35 @@ namespace FL::GUI {
 
 void Widget::setStyle(Style *widgetStyle) { style = widgetStyle; }
 
-bool Widget::focusable() { return false; }
+void Widget::setParent(Widget *newParent) { parent = newParent; }
+
+bool Widget::handleEvent(FL::GUI::Event &event) {
+  for (auto handler : handlersByType) {
+    if (handler.first == event.type) {
+      handler.second(event);
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void Widget::addEventHandler(Event::Type type, EventHandler handler) {
+  handlersByType.emplace(type, handler); // todo
+}
+Widget *Widget::getParent() const { return parent; }
+Widget *Widget::getNeighborRight() { return neighborRight; }
+Widget *Widget::getNeighborLeft() { return neighborLeft; }
+Widget *Widget::getNeighborDown() { return neighborDown; }
+Widget *Widget::getNeighborUp() { return neighborUp; }
+
+void Widget::recalculateNavNeighbors() {
+  // Intentional no-op for default implementation
+}
+
+void Widget::setNeighborUp(Widget *neighbor) { neighborUp = neighbor; }
+void Widget::setNeighborDown(Widget *neighbor) { neighborDown = neighbor; }
+void Widget::setNeighborLeft(Widget *neighbor) { neighborLeft = neighbor; }
+void Widget::setNeighborRight(Widget *neighbor) { neighborRight = neighbor; }
 
 } // namespace FL::GUI

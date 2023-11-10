@@ -4,6 +4,7 @@
 
 #include "quick_menu.hpp"
 
+#include <sstream>
 #include <utility>
 
 namespace FL::GUI {
@@ -11,8 +12,21 @@ namespace FL::GUI {
 void FL::GUI::QuickMenu::addItem(std::string header) {
   Child child;
   child.header = new Button(std::move(header));
+  child.header->setParent(this);
+  child.header->setStyle(&childStyle);
 
   children.emplace_back(child);
+}
+void QuickMenu::recalculateNavNeighbors() {
+  Widget *last = nullptr;
+  for (const auto &child : children) {
+    child.header->setNeighborUp(last);
+
+    if (last != nullptr) {
+      last->setNeighborDown(child.header);
+    }
+    last = child.header;
+  }
 }
 
 void FL::GUI::QuickMenu::paint(FL::GUI::WidgetPainter *painter,
@@ -20,11 +34,10 @@ void FL::GUI::QuickMenu::paint(FL::GUI::WidgetPainter *painter,
   auto itemHeight = box.heightPx / children.size();
 
   auto cursor = 0;
-  for (int i = 0; i < children.size(); ++i) {
-    auto child = children.at(i);
+  for (auto child : children) {
     FL::Math::BBox childBox(box.xPx, box.yPx + cursor, box.widthPx, itemHeight);
 
-    if (active == i) {
+    if (child.header->isFocused) {
       painter->paintBackground(childBox, childStyle);
     }
 
@@ -34,6 +47,25 @@ void FL::GUI::QuickMenu::paint(FL::GUI::WidgetPainter *painter,
   }
 }
 
-bool QuickMenu::focusable() { return !children.empty(); }
+Widget *QuickMenu::getFirstFocusable() {
+  for (auto child : children) {
+    if (child.header->focusable()) {
+      auto addr = child.header->getFirstFocusable();
+      return addr;
+    }
+  }
+
+  return nullptr;
+}
+
+bool QuickMenu::focusable() {
+  for (auto child : children) {
+    if (child.header->focusable()) {
+      return true;
+    }
+  }
+
+  return false;
+}
 
 } // namespace FL::GUI

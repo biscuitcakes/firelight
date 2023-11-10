@@ -12,6 +12,8 @@ namespace FL::GUI {
 class Text : public Widget {
 public:
   explicit Text(std::string text);
+  bool focusable() override;
+  Widget *getFirstFocusable() override;
 
 private:
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;

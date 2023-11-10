@@ -34,25 +34,25 @@ add_executable(firelight
         src/libretro/gamepad.hpp
         src/libretro/input.cpp
         src/libretro/input.hpp
-        #        includes/imgui/imconfig.h
-        #        includes/imgui/imgui.cpp
-        #        includes/imgui/imgui.h
-        #        includes/imgui/imgui_demo.cpp
-        #        includes/imgui/imgui_draw.cpp
-        #        includes/imgui/imgui_impl_opengl3.cpp
-        #        includes/imgui/imgui_impl_opengl3.h
-        #        includes/imgui/imgui_impl_opengl3_loader.h
-        #        includes/imgui/imgui_impl_sdl2.cpp
-        #        includes/imgui/imgui_impl_sdl2.h
-        #        includes/imgui/imgui_internal.h
-        #        includes/imgui/imgui_stdlib.cpp
-        #        includes/imgui/imgui_stdlib.h
-        #        includes/imgui/imgui_tables.cpp
-        #        includes/imgui/imgui_widgets.cpp
-        #        includes/imgui/imstb_rectpack.h
-        #        includes/imgui/imstb_textedit.h
-        #        includes/imgui/imstb_truetype.h
-        #        includes/imgui/imgui_impl_opengl3.cpp
+        includes/imgui/imconfig.h
+        includes/imgui/imgui.cpp
+        includes/imgui/imgui.h
+        includes/imgui/imgui_demo.cpp
+        includes/imgui/imgui_draw.cpp
+        includes/imgui/imgui_impl_opengl3.cpp
+        includes/imgui/imgui_impl_opengl3.h
+        includes/imgui/imgui_impl_opengl3_loader.h
+        includes/imgui/imgui_impl_sdl2.cpp
+        includes/imgui/imgui_impl_sdl2.h
+        includes/imgui/imgui_internal.h
+        includes/imgui/imgui_stdlib.cpp
+        includes/imgui/imgui_stdlib.h
+        includes/imgui/imgui_tables.cpp
+        includes/imgui/imgui_widgets.cpp
+        includes/imgui/imstb_rectpack.h
+        includes/imgui/imstb_textedit.h
+        includes/imgui/imstb_truetype.h
+        includes/imgui/imgui_impl_opengl3.cpp
         src/gui/context.cpp
         src/gui/context.hpp
         src/gui/style.hpp
@@ -75,7 +75,7 @@ add_executable(firelight
         src/gui/widgets/frame.hpp
         src/gui/widgets/quick_menu.cpp
         src/gui/widgets/quick_menu.hpp
-        src/gui/event.hpp
+        src/gui/events/event.hpp
         src/gui/widgets/button.cpp
         src/gui/widgets/button.hpp
         #        includes/GLfont/FontAtlas.cpp

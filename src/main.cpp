@@ -8,6 +8,7 @@
 #include "gui/widgets/frame.hpp"
 #include "gui/widgets/quick_menu.hpp"
 #include "gui/widgets/text.hpp"
+#include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl2.h"
 #include "libretro/core.hpp"
 #include "metrics/gameloop.hpp"
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
 
   printf("DPI values: d: %f h: %f v: %f", dDpi, hDpi, vDpi);
 
-  SDL_GL_CreateContext(window);
+  auto context = SDL_GL_CreateContext(window);
 
   SDL_SetWindowMinimumSize(window, 160, 144); // TODO set based on core
 
@@ -57,6 +58,18 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   SDL_GL_SetSwapInterval(1);
+
+  IMGUI_CHECKVERSION();
+  ImGui::CreateContext();
+  ImGuiIO &io = ImGui::GetIO();
+
+  // Setup Dear ImGui style
+  ImGui::StyleColorsDark();
+  // ImGui::StyleColorsLight();
+
+  // Setup Platform/Renderer backends
+  ImGui_ImplSDL2_InitForOpenGL(window, context);
+  ImGui_ImplOpenGL3_Init("#version 130");
 
   FL::Graphics::Shaders::initializeAll();
 
@@ -102,6 +115,8 @@ int main(int argc, char *argv[]) {
   quickMenu.addItem("Restart Game");
   quickMenu.addItem("Quit Game");
 
+  quickMenu.recalculateNavNeighbors();
+
   frame.addChild(&quickMenu, FL::Math::BBox(200, 220, 220, 280));
 
   guiContext.addWidget(&frame);
@@ -120,6 +135,7 @@ int main(int argc, char *argv[]) {
     SDL_Event ev;
     while (SDL_PollEvent(&ev)) {
       guiContext.handleSdlEvent(&ev);
+      ImGui_ImplSDL2_ProcessEvent(&ev);
       switch (ev.type) {
       case SDL_CONTROLLERDEVICEADDED: {
         conManager.handleControllerAddedEvent(ev.cdevice.which);
@@ -162,6 +178,10 @@ int main(int argc, char *argv[]) {
       }
     }
 
+    ImGui_ImplOpenGL3_NewFrame();
+    ImGui_ImplSDL2_NewFrame();
+    ImGui::NewFrame();
+
     int width, height;
     SDL_GetWindowSize(window, &width, &height);
     glViewport(0, 0, width, height);
@@ -177,9 +197,12 @@ int main(int argc, char *argv[]) {
 
     //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     //        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     guiContext.render();
+    ImGui::Render();
     //
     loopMetrics.recordFrameWorkDuration(frameDiff);
+    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(window);
     glFinish();
 

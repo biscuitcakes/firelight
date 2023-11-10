@@ -13,6 +13,8 @@ public:
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;
   void addChild(Widget *widget, FL::Math::BBox box);
   bool focusable() override;
+  Widget *getFirstFocusable() override;
+  bool handleEvent(Event &event) override;
 
 private:
   struct Child {

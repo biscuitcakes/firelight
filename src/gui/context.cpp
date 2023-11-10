@@ -3,17 +3,60 @@
 //
 
 #include "context.hpp"
+#include "events/event.hpp"
+#include "imgui_impl_opengl3.h"
+#include <sstream>
 
 namespace FL::GUI {
 
 void Context::handleSdlEvent(SDL_Event *event) {
+  FL::GUI::Event guiEvent{};
+
   switch (event->type) {
   case SDL_CONTROLLERBUTTONDOWN:
-    printf("button down\n");
+    switch (event->cbutton.button) {
+    case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+      guiEvent.type = Event::NAV_DOWN;
+      break;
+    case SDL_CONTROLLER_BUTTON_DPAD_UP:
+      guiEvent.type = Event::NAV_UP;
+      break;
+    }
     break;
-  case SDL_CONTROLLERBUTTONUP:
-    printf("button up\n");
-    break;
+  default:
+    return;
+  }
+
+  Widget *next = focusTarget;
+
+  while (next != nullptr) {
+    //    if (next->handleEvent(guiEvent)) {
+    //      break;
+    //    }
+    switch (guiEvent.type) {
+    case Event::NAV_UP: {
+      auto up = next->getNeighborUp();
+      if (up != nullptr) {
+        next->isFocused = false;
+        setFocusTarget(up);
+        return;
+      }
+
+      break;
+    }
+    case Event::NAV_DOWN: {
+      auto down = next->getNeighborDown();
+      if (down != nullptr) {
+        next->isFocused = false;
+        setFocusTarget(down);
+        return;
+      }
+
+      break;
+    }
+    }
+
+    next = next->getParent();
   }
 }
 
@@ -23,6 +66,25 @@ void Context::render() {
   for (auto widget : widgets) {
     widget->paint(widgetPainter.get(), workArea);
   }
+
+  ImGui::Begin("Widgets");
+
+  ImGui::Text("Number of widgets in chain: %d", focusChain.size());
+
+  if (ImGui::TreeNode("Focus Chain")) {
+    for (auto f : focusChain) {
+      std::ostringstream address;
+      address << (void const *)f;
+      std::string name = address.str();
+
+      if (ImGui::TreeNode(name.c_str())) {
+        ImGui::TreePop();
+      }
+    }
+    ImGui::TreePop();
+  }
+
+  ImGui::End();
 }
 
 Context::Context(FL::Math::BBox workArea, FL::Graphics::Driver *driver)
@@ -32,13 +94,31 @@ Context::Context(FL::Math::BBox workArea, FL::Graphics::Driver *driver)
 
 void Context::addWidget(Widget *widget) {
   if (focusTarget == nullptr) {
-    if (widget->focusable()) {
-      printf("Found focus target\n");
-      focusTarget = widget;
+    auto target = widget->getFirstFocusable();
+    if (target != nullptr) {
+      setFocusTarget(target);
+      focusTarget = target;
     }
   }
-  
+
   widgets.emplace_back(widget);
+}
+void Context::setFocusTarget(Widget *widget) {
+  if (!widget->focusable()) {
+    // TODO: error
+    return;
+  }
+
+  focusChain.clear();
+  Widget *next = widget;
+
+  while (next != nullptr) {
+    focusChain.push_back(next);
+    next = next->getParent();
+  }
+
+  focusTarget = widget;
+  focusTarget->isFocused = true;
 }
 
 } // namespace FL::GUI
