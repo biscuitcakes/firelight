@@ -117,7 +117,7 @@ int main(int argc, char *argv[]) {
 
   quickMenu.recalculateNavNeighbors();
 
-  frame.addChild(&quickMenu, FL::Math::BBox(200, 220, 220, 280));
+  frame.addChild(&quickMenu, FL::Math::BBox(200, 220, 800, 280));
 
   guiContext.addWidget(&frame);
 
