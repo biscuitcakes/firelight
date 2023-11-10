@@ -25,15 +25,7 @@ bool Frame::focusable() {
   return false;
 }
 
-bool Frame::handleEvent(Event &event) {
-  for (auto child : children) {
-    if (child.widget->handleEvent(event)) {
-      return true;
-    }
-  }
-
-  return false;
-}
+bool Frame::handleEvent(Event &event) { return false; }
 
 Widget *Frame::getFirstFocusable() {
   for (auto child : children) {

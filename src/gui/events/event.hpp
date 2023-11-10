@@ -9,7 +9,7 @@ namespace FL::GUI {
 
 class Event {
 public:
-  enum Type { NAV_UP, NAV_DOWN };
+  enum Type { NAV_UP, NAV_DOWN, NAV_SELECT_PUSHED };
 
   Type type;
 };

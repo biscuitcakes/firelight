@@ -12,7 +12,9 @@ namespace FL::GUI {
 
 void FL::GUI::QuickMenu::addItem(const std::string &header) {
   Child child;
-  child.header = new Button(header);
+  child.header = new Button(header, [&]() {
+    printf("heyooooo i'm a kid again buddy you pressed a thing");
+  });
   child.header->setParent(this);
   child.header->setStyle(&childStyle);
   child.children.emplace_back(new FL::GUI::Text("sub-content for " + header));
@@ -81,5 +83,7 @@ bool QuickMenu::focusable() {
 
   return false;
 }
+
+bool QuickMenu::handleEvent(Event &event) { return false; }
 
 } // namespace FL::GUI

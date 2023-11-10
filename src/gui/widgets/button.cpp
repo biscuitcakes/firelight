@@ -9,6 +9,9 @@
 
 namespace FL::GUI {
 
+Button::Button(std::string text, std::function<void()> onClickCallback)
+    : label(std::move(text)), onClick(std::move(onClickCallback)) {}
+
 void Button::paint(WidgetPainter *painter, FL::Math::BBox box) {
   painter->paintText(label, box, *style);
   // draw rectangle
@@ -16,6 +19,14 @@ void Button::paint(WidgetPainter *painter, FL::Math::BBox box) {
 bool Button::focusable() { return true; }
 Widget *Button::getFirstFocusable() { return this; }
 
-Button::Button(std::string text) : label(std::move(text)) {}
+bool Button::handleEvent(Event &event) {
+  if (event.type == Event::NAV_SELECT_PUSHED) {
+    if (onClick) {
+      onClick();
+      return true;
+    }
+  }
+  return false;
+}
 
 } // namespace FL::GUI

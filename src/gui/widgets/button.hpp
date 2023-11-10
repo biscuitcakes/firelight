@@ -6,17 +6,20 @@
 #define FIRELIGHT_BUTTON_HPP
 
 #include "base/widget.hpp"
+#include <functional>
 namespace FL::GUI {
 
 class Button : public Widget {
 public:
-  explicit Button(std::string text);
+  Button(std::string text, std::function<void()> onClickCallback);
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;
   Widget *getFirstFocusable() override;
   bool focusable() override;
+  bool handleEvent(Event &event) override;
 
 private:
   std::string label;
+  std::function<void()> onClick;
 };
 
 } // namespace FL::GUI

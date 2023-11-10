@@ -23,8 +23,7 @@ public:
   void setStyle(Style *style);
   void setParent(Widget *newParent);
   Widget *getParent() const;
-  virtual bool handleEvent(FL::GUI::Event &event);
-  virtual void addEventHandler(Event::Type type, EventHandler handler);
+  virtual bool handleEvent(FL::GUI::Event &event) = 0;
 
   void setNeighborUp(Widget *neighbor);
   void setNeighborDown(Widget *neighbor);
@@ -48,8 +47,6 @@ protected:
 
   Widget *parent = nullptr;
   Style *style = nullptr;
-
-  std::unordered_map<Event::Type, EventHandler> handlersByType;
 };
 
 } // namespace FL::GUI

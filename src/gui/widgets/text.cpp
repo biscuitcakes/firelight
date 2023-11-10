@@ -15,5 +15,6 @@ void Text::paint(WidgetPainter *painter, FL::Math::BBox box) {
 }
 bool Text::focusable() { return false; }
 Widget *Text::getFirstFocusable() { return nullptr; }
+bool Text::handleEvent(Event &event) { return false; }
 
 } // namespace FL::GUI

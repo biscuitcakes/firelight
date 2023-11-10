@@ -11,6 +11,7 @@ namespace FL::GUI {
 
 class QuickMenu : public Widget {
 public:
+  bool handleEvent(Event &event) override;
   void addItem(const std::string &header);
   void paint(WidgetPainter *painter, FL::Math::BBox box) override;
   bool focusable() override;

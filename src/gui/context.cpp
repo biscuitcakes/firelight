@@ -21,6 +21,9 @@ void Context::handleSdlEvent(SDL_Event *event) {
     case SDL_CONTROLLER_BUTTON_DPAD_UP:
       guiEvent.type = Event::NAV_UP;
       break;
+    case SDL_CONTROLLER_BUTTON_A:
+      guiEvent.type = Event::NAV_SELECT_PUSHED;
+      break;
     }
     break;
   default:
@@ -30,30 +33,26 @@ void Context::handleSdlEvent(SDL_Event *event) {
   Widget *next = focusTarget;
 
   while (next != nullptr) {
-    //    if (next->handleEvent(guiEvent)) {
-    //      break;
-    //    }
-    switch (guiEvent.type) {
-    case Event::NAV_UP: {
+    if (guiEvent.type == Event::NAV_UP) {
       auto up = next->getNeighborUp();
       if (up != nullptr) {
         next->isFocused = false;
         setFocusTarget(up);
         return;
       }
-
-      break;
-    }
-    case Event::NAV_DOWN: {
+    } else if (guiEvent.type == Event::NAV_DOWN) {
       auto down = next->getNeighborDown();
       if (down != nullptr) {
         next->isFocused = false;
         setFocusTarget(down);
         return;
       }
-
-      break;
-    }
+    } else if (guiEvent.type == Event::NAV_SELECT_PUSHED) {
+      if (focusTarget != nullptr) {
+        if (focusTarget->handleEvent(guiEvent)) {
+          return;
+        }
+      }
     }
 
     next = next->getParent();

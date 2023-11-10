@@ -9,21 +9,6 @@ namespace FL::GUI {
 void Widget::setStyle(Style *widgetStyle) { style = widgetStyle; }
 
 void Widget::setParent(Widget *newParent) { parent = newParent; }
-
-bool Widget::handleEvent(FL::GUI::Event &event) {
-  for (auto handler : handlersByType) {
-    if (handler.first == event.type) {
-      handler.second(event);
-      return true;
-    }
-  }
-
-  return false;
-}
-
-void Widget::addEventHandler(Event::Type type, EventHandler handler) {
-  handlersByType.emplace(type, handler); // todo
-}
 Widget *Widget::getParent() const { return parent; }
 Widget *Widget::getNeighborRight() { return neighborRight; }
 Widget *Widget::getNeighborLeft() { return neighborLeft; }
