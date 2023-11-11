@@ -27,6 +27,8 @@ void Context::handleSdlEvent(SDL_Event *event) {
     case SDL_CONTROLLER_BUTTON_B:
       guiEvent.type = Event::NAV_BACK_PUSHED;
       break;
+    default:
+      return;
     }
     break;
   default:
@@ -62,8 +64,7 @@ void Context::handleSdlEvent(SDL_Event *event) {
         return;
       }
     } else if (guiEvent.type == Event::NAV_BACK_PUSHED) {
-      if (next->getParent() != nullptr) {
-        printf("We goin back\n");
+      if (next->getParent() != nullptr && next->getParent()->canHaveFocus()) {
         setFocusTarget(next->getParent());
         return;
       }
@@ -116,6 +117,10 @@ void Context::addWidget(Widget *widget) {
   widgets.emplace_back(widget);
 }
 void Context::setFocusTarget(Widget *widget) {
+  if (widget == nullptr) {
+    return;
+  }
+
   auto target = widget->getFirstFocusable();
   if (target == nullptr || target == focusTarget) {
     // TODO: error
@@ -136,6 +141,16 @@ void Context::setFocusTarget(Widget *widget) {
 
   focusTarget = target;
   focusTarget->isFocused = true;
+}
+
+bool Context::inFocusChain(Widget *widget) {
+  for (auto w : focusChain) {
+    if (w == widget) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 } // namespace FL::GUI

@@ -24,6 +24,7 @@ struct Style {
   //  TextAlignment horiTextAlignment = NONE;
   //  TextAlignment vertTextAlignment = NONE;
   int innerPaddingPx = 0;
+  FL::Graphics::Color textColor{};
 };
 
 } // namespace FL::GUI

@@ -15,6 +15,8 @@
 
 #include <thread>
 
+using namespace FL::GUI;
+
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
@@ -106,14 +108,43 @@ int main(int argc, char *argv[]) {
   //  frame.addChild(new FL::GUI::Text("heya"), FL::Math::BBox(100, 100, 400,
   //  400)); guiContext.addWidget(&frame);
 
-  FL::GUI::QuickMenu quickMenu;
-  quickMenu.addItem("Continue");
-  quickMenu.addItem("Rewind");
-  quickMenu.addItem("Load Suspend Point");
-  quickMenu.addItem("Create Suspend Point");
-  quickMenu.addItem("Game Settings");
-  quickMenu.addItem("Restart Game");
-  quickMenu.addItem("Quit Game");
+  FL::GUI::QuickMenu quickMenu2(&guiContext);
+  quickMenu2.addItem(new FL::GUI::MenuItem("Test Item 1", [&](MenuItem *item) {
+    guiContext.setFocusTarget(item->getSubMenu());
+  }));
+  quickMenu2.addItem(new FL::GUI::MenuItem("Test Item 2", [&](MenuItem *item) {
+    guiContext.setFocusTarget(item->getSubMenu());
+  }));
+  quickMenu2.addItem(new FL::GUI::MenuItem("Test Item 3", [&](MenuItem *item) {
+    guiContext.setFocusTarget(item->getSubMenu());
+  }));
+
+  quickMenu2.recalculateNavNeighbors();
+
+  auto load = new FL::GUI::MenuItem("Load Suspend Point", [&](MenuItem *item) {
+    guiContext.setFocusTarget(item->getSubMenu());
+  });
+
+  load->setSubMenu(&quickMenu2);
+
+  FL::GUI::QuickMenu quickMenu(&guiContext);
+  quickMenu.addItem(new FL::GUI::MenuItem("Continue", [&](MenuItem *item) {
+    guiContext.setFocusTarget(item->getSubMenu());
+  }));
+  quickMenu.addItem(new FL::GUI::MenuItem("Rewind", [&](MenuItem *item) {
+    guiContext.setFocusTarget(item->getSubMenu());
+  }));
+  quickMenu.addItem(load);
+  quickMenu.addItem(
+      new FL::GUI::MenuItem("Create Suspend Point", [&](MenuItem *item) {
+        guiContext.setFocusTarget(item->getSubMenu());
+      }));
+  quickMenu.addItem(new FL::GUI::MenuItem("Game Settings", [&](MenuItem *item) {
+    guiContext.setFocusTarget(item->getSubMenu());
+  }));
+  //  quickMenu.addItem("Crazy Bro", &quickMenu2);
+  //  quickMenu.addItem("Quit Game",
+  //                    new FL::GUI::Text("sub-content for Quit Game"));
 
   quickMenu.recalculateNavNeighbors();
 
@@ -187,8 +218,8 @@ int main(int argc, char *argv[]) {
     glViewport(0, 0, width, height);
     //
     glEnable(GL_BLEND);
-    core->run(deltaTime);
-    core->getVideo()->draw();
+    //    core->run(deltaTime);
+    //    core->getVideo()->draw();
     frameEnd = SDL_GetPerformanceCounter();
     frameDiff = ((frameEnd - frameBegin) * 1000 /
                  (double)SDL_GetPerformanceFrequency());

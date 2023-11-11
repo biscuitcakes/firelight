@@ -15,6 +15,8 @@ Widget *Widget::getNeighborLeft() { return neighborLeft; }
 Widget *Widget::getNeighborDown() { return neighborDown; }
 Widget *Widget::getNeighborUp() { return neighborUp; }
 
+bool Widget::canHaveFocus() { return true; }
+
 void Widget::recalculateNavNeighbors() {
   // Intentional no-op for default implementation
 }

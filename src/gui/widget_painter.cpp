@@ -30,7 +30,7 @@ void WidgetPainter::paintText(const std::string &text, FL::Math::BBox box,
   }
 
   // calculate padding, alignment etc
-  gfxDriver->drawText(text, cursorX, cursorY);
+  gfxDriver->drawText(text, cursorX, cursorY, style.textColor);
 }
 
 void WidgetPainter::paintBackground(FL::Math::BBox box, Style style) {

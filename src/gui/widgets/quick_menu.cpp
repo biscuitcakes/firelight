@@ -3,6 +3,8 @@
 //
 
 #include "quick_menu.hpp"
+#include "../context.hpp"
+#include "menu_item.hpp"
 #include "text.hpp"
 
 #include <sstream>
@@ -10,27 +12,24 @@
 
 namespace FL::GUI {
 
-void FL::GUI::QuickMenu::addItem(const std::string &header) {
-  Child child;
-  child.header = new Button(header, [](Button *button) {
-    printf("heyooooo i'm a kid again buddy you pressed a thing\n");
-  });
-  child.header->setParent(this);
-  child.header->setStyle(&childStyle);
-  child.children.emplace_back(new FL::GUI::Text("sub-content for " + header));
+QuickMenu::QuickMenu(Context *c) : context(c) {}
 
-  children.emplace_back(child);
+void FL::GUI::QuickMenu::addItem(MenuItem *menuItem) {
+  menuItem->setParent(this);
+  menuItem->setStyle(&childStyle);
+
+  children.emplace_back(menuItem);
 }
 
 void QuickMenu::recalculateNavNeighbors() {
   Widget *last = nullptr;
   for (const auto &child : children) {
-    child.header->setNeighborUp(last);
+    child->setNeighborUp(last);
 
     if (last != nullptr) {
-      last->setNeighborDown(child.header);
+      last->setNeighborDown(child);
     }
-    last = child.header;
+    last = child;
   }
 }
 
@@ -48,17 +47,14 @@ void FL::GUI::QuickMenu::paint(FL::GUI::WidgetPainter *painter,
     FL::Math::BBox childBox(left.xPx, left.yPx + cursor, left.widthPx,
                             itemHeight);
 
-    if (child.header->isFocused) {
+    if (context->inFocusChain(child)) {
       painter->paintBackground(childBox, childStyle);
-      if (!child.children.empty()) {
-        painter->paintBackground(
-            right, Style{.background = FILL_BACKGROUND,
-                         .backgroundColor = FL::Graphics::Color{.R = 1}});
-        child.children.at(0)->paint(painter, right);
+      if (child->getSubMenu() != nullptr) {
+        child->getSubMenu()->paint(painter, right);
       }
     }
 
-    child.header->paint(painter, childBox);
+    child->paint(painter, childBox);
 
     cursor += itemHeight;
   }
@@ -66,8 +62,8 @@ void FL::GUI::QuickMenu::paint(FL::GUI::WidgetPainter *painter,
 
 Widget *QuickMenu::getFirstFocusable() {
   for (auto child : children) {
-    if (child.header->focusable()) {
-      auto addr = child.header->getFirstFocusable();
+    if (child->focusable()) {
+      auto addr = child->getFirstFocusable();
       return addr;
     }
   }
@@ -77,13 +73,14 @@ Widget *QuickMenu::getFirstFocusable() {
 
 bool QuickMenu::focusable() {
   for (auto child : children) {
-    if (child.header->focusable()) {
+    if (child->focusable()) {
       return true;
     }
   }
 
   return false;
 }
+bool QuickMenu::canHaveFocus() { return false; }
 
 bool QuickMenu::handleEvent(Event &event) { return false; }
 

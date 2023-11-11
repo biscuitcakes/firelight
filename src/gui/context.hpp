@@ -26,9 +26,10 @@ public:
   void addWidget(Widget *widget);
 
   void render();
+  void setFocusTarget(Widget *widget);
+  bool inFocusChain(Widget *widget);
 
 private:
-  void setFocusTarget(Widget *widget);
   std::vector<Widget *> focusChain;
 
   FL::Math::BBox workArea;

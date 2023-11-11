@@ -12,6 +12,7 @@ void Shaders::initializeAll() {
                        "//uniform vec2 TextureSize;\n"
                        "//uniform vec2 InputSize;\n"
                        "uniform sampler2D Texture;\n"
+                       "uniform vec3 color;\n"
 
                        "in vec2 fragTexCoord;\n"
 
@@ -19,7 +20,7 @@ void Shaders::initializeAll() {
 
                        "void main() {\n"
                        "float alpha = texture(Texture, fragTexCoord).a;\n"
-                       "FragColor = vec4(0, 0, 0, alpha);\n"
+                       "FragColor = vec4(color.rgb, alpha);\n"
                        //                       "FragColor = c;\n"
                        "}\0";
 

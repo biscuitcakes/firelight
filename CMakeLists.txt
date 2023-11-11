@@ -78,6 +78,8 @@ add_executable(firelight
         src/gui/events/event.hpp
         src/gui/widgets/button.cpp
         src/gui/widgets/button.hpp
+        src/gui/widgets/menu_item.cpp
+        src/gui/widgets/menu_item.hpp
         #        includes/GLfont/FontAtlas.cpp
         #        includes/GLfont/FTLabel.cpp
         #        includes/GLfont/GLFont.cpp

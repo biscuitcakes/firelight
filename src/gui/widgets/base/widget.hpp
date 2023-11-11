@@ -20,6 +20,8 @@ public:
 
   virtual Widget *getFirstFocusable() = 0;
 
+  virtual bool canHaveFocus();
+
   void setStyle(Style *style);
   void setParent(Widget *newParent);
   Widget *getParent() const;

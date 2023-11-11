@@ -95,7 +95,7 @@ OpenGLDriver::OpenGLDriver(int w, int h) {
     // oops
   }
 
-  if (FT_New_Face(fontLib, "font.ttf", 0, &fontFace) != 0) {
+  if (FT_New_Face(fontLib, "Jost-Regular.ttf", 0, &fontFace) != 0) {
     // oops
   }
 
@@ -306,6 +306,8 @@ void OpenGLDriver::drawTexture(unsigned tex, int x, int y, unsigned w,
 
   glBindTexture(GL_TEXTURE_2D, tex);
   glUseProgram(FL::Graphics::Shaders::fontProgram);
+  glUniform3f(glGetUniformLocation(FL::Graphics::Shaders::fontProgram, "color"),
+              1, 0, 0);
 
   glBindBuffer(GL_ARRAY_BUFFER, texVbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
@@ -320,7 +322,7 @@ void OpenGLDriver::drawTexture(unsigned tex, int x, int y, unsigned w,
   glBindVertexArray(0);
 }
 
-void OpenGLDriver::drawText(std::string text, int x, int y) {
+void OpenGLDriver::drawText(std::string text, int x, int y, Color color) {
   // go through each character and calculate the total width
   // while doing that, keep track of which character goes highest above the
   // baseline and which character goes lowest below the baseline
@@ -362,8 +364,33 @@ void OpenGLDriver::drawText(std::string text, int x, int y) {
   for (unsigned char glyph : text) {
     auto c = characters.at(glyph);
 
-    drawTexture(c.texture, cursorX + c.xBearing, cursorY - c.yBearing + 1,
-                c.glyphWidth, c.glyphHeight);
+    auto vertices =
+        calculateTexVertexArray(cursorX + c.xBearing, cursorY - c.yBearing + 1,
+                                c.glyphWidth, c.glyphHeight);
+
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glBindTexture(GL_TEXTURE_2D, c.texture);
+    glUseProgram(FL::Graphics::Shaders::fontProgram);
+    glUniform3f(
+        glGetUniformLocation(FL::Graphics::Shaders::fontProgram, "color"),
+        color.R, color.G, color.B);
+
+    glBindBuffer(GL_ARRAY_BUFFER, texVbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
+                 GL_DYNAMIC_DRAW);
+
+    glBindVertexArray(texVao);
+
+    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+    //
+    //    drawTexture(c.texture, cursorX + c.xBearing, cursorY - c.yBearing + 1,
+    //                c.glyphWidth, c.glyphHeight);
 
     cursorX += c.xAdvance;
   }

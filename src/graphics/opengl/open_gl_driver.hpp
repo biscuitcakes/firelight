@@ -21,7 +21,7 @@ public:
   ~OpenGLDriver();
 
   void drawRectangle(int x, int y, int w, int h, Color color) override;
-  void drawText(std::string text, int x, int y) override;
+  void drawText(std::string text, int x, int y, Color color) override;
   void calculateTextBounds(const std::string &text, int &width,
                            int &height) override;
 
