@@ -1,17 +1,17 @@
 
 #include "GL/glew.h"
 #include "SDL2/SDL.h"
-#include "controller/controller_manager.hpp"
-#include "graphics/opengl/open_gl_driver.hpp"
-#include "graphics/opengl/shaders.hpp"
-#include "gui/context.hpp"
-#include "gui/widgets/frame.hpp"
-#include "gui/widgets/quick_menu.hpp"
-#include "gui/widgets/text.hpp"
+#include "app/controller/controller_manager.hpp"
+#include "app/libretro/core.hpp"
+#include "app/metrics/gameloop.hpp"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl2.h"
-#include "libretro/core.hpp"
-#include "metrics/gameloop.hpp"
+#include "lib/graphics/opengl/open_gl_driver.hpp"
+#include "lib/graphics/opengl/shaders.hpp"
+#include "lib/gui/context.hpp"
+#include "lib/gui/vertical_box_layout_manager.hpp"
+#include "lib/gui/widget_factory.hpp"
+#include "lib/gui/widgets/container_widget.hpp"
 
 #include <thread>
 
@@ -29,9 +29,6 @@ int main(int argc, char *argv[]) {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     return 1;
   }
-
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
-  SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 1);
 
   // Create window
   auto window =
@@ -98,57 +95,27 @@ int main(int argc, char *argv[]) {
   Uint64 frameEnd;
   double frameDiff;
 
-  FL::Math::BBox box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+  FL::Math::Box box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   FL::Graphics::Driver *driver =
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   FL::GUI::Context guiContext(box, driver);
 
-  FL::GUI::Frame frame;
-  //  frame.addChild(new FL::GUI::Text("heya"), FL::Math::BBox(100, 100, 400,
-  //  400)); guiContext.addWidget(&frame);
+  FL::GUI::WidgetFactory factory(&guiContext);
 
-  FL::GUI::QuickMenu quickMenu2(&guiContext);
-  quickMenu2.addItem(new FL::GUI::MenuItem("Test Item 1", [&](MenuItem *item) {
-    guiContext.setFocusTarget(item->getSubMenu());
-  }));
-  quickMenu2.addItem(new FL::GUI::MenuItem("Test Item 2", [&](MenuItem *item) {
-    guiContext.setFocusTarget(item->getSubMenu());
-  }));
-  quickMenu2.addItem(new FL::GUI::MenuItem("Test Item 3", [&](MenuItem *item) {
-    guiContext.setFocusTarget(item->getSubMenu());
-  }));
+  FL::GUI::ContainerWidget frame;
+  frame.setLayoutManager(std::make_unique<VerticalBoxLayoutManager>(30, 10));
 
-  quickMenu2.recalculateNavNeighbors();
+  frame.box.xPx = 200;
+  frame.box.yPx = 100;
+  frame.box.widthPx = 300;
+  frame.box.heightPx = 500;
 
-  auto load = new FL::GUI::MenuItem("Load Suspend Point", [&](MenuItem *item) {
-    guiContext.setFocusTarget(item->getSubMenu());
-  });
-
-  load->setSubMenu(&quickMenu2);
-
-  FL::GUI::QuickMenu quickMenu(&guiContext);
-  quickMenu.addItem(new FL::GUI::MenuItem("Continue", [&](MenuItem *item) {
-    guiContext.setFocusTarget(item->getSubMenu());
-  }));
-  quickMenu.addItem(new FL::GUI::MenuItem("Rewind", [&](MenuItem *item) {
-    guiContext.setFocusTarget(item->getSubMenu());
-  }));
-  quickMenu.addItem(load);
-  quickMenu.addItem(
-      new FL::GUI::MenuItem("Create Suspend Point", [&](MenuItem *item) {
-        guiContext.setFocusTarget(item->getSubMenu());
-      }));
-  quickMenu.addItem(new FL::GUI::MenuItem("Game Settings", [&](MenuItem *item) {
-    guiContext.setFocusTarget(item->getSubMenu());
-  }));
-  //  quickMenu.addItem("Crazy Bro", &quickMenu2);
-  //  quickMenu.addItem("Quit Game",
-  //                    new FL::GUI::Text("sub-content for Quit Game"));
-
-  quickMenu.recalculateNavNeighbors();
-
-  frame.addChild(&quickMenu, FL::Math::BBox(200, 220, 800, 280));
+  frame.addChild(factory.createButton("one"));
+  frame.addChild(factory.createButton("two"));
+  frame.addChild(factory.createButton("three"));
+  frame.addChild(factory.createButton("four"));
+  frame.addChild(factory.createButton("five"));
 
   guiContext.addWidget(&frame);
 
@@ -203,7 +170,7 @@ int main(int argc, char *argv[]) {
           auto height = ev.window.data2;
           core->getVideo()->setScreenDimensions(0, 0, width, height);
           guiContext.setWorkArea(
-              FL::Math::BBox(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
+              FL::Math::Box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
           break;
         }
       }
@@ -218,8 +185,8 @@ int main(int argc, char *argv[]) {
     glViewport(0, 0, width, height);
     //
     glEnable(GL_BLEND);
-    //    core->run(deltaTime);
-    //    core->getVideo()->draw();
+    core->run(deltaTime);
+    core->getVideo()->draw();
     frameEnd = SDL_GetPerformanceCounter();
     frameDiff = ((frameEnd - frameBegin) * 1000 /
                  (double)SDL_GetPerformanceFrequency());

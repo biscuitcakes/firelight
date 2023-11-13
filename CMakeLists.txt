@@ -15,25 +15,21 @@ link_directories(lib)
 
 add_executable(firelight
         src/main.cpp
-        src/libretro/core.cpp
-        src/libretro/coreoption.cpp
-        src/libretro/coreoption.hpp
-        src/libretro/game.cpp
-        src/libretro/game.hpp
-        src/libretro/video.cpp
-        src/libretro/video.hpp
-        src/settings/user_settings.cpp
-        src/settings/user_settings.h
-        src/metrics/gameloop.cpp
-        src/metrics/gameloop.hpp
-        src/controller/controller_manager.cpp
-        src/controller/controller_manager.hpp
-        src/controller/controller_mapping.cpp
-        src/controller/controller_mapping.hpp
-        src/libretro/gamepad.cpp
-        src/libretro/gamepad.hpp
-        src/libretro/input.cpp
-        src/libretro/input.hpp
+        src/app/libretro/core.cpp
+        src/app/libretro/coreoption.cpp
+        src/app/libretro/coreoption.hpp
+        src/app/libretro/game.cpp
+        src/app/libretro/game.hpp
+        src/app/libretro/video.cpp
+        src/app/libretro/video.hpp
+        src/app/metrics/gameloop.cpp
+        src/app/metrics/gameloop.hpp
+        src/app/controller/controller_manager.cpp
+        src/app/controller/controller_manager.hpp
+        src/app/libretro/gamepad.cpp
+        src/app/libretro/gamepad.hpp
+        src/app/libretro/input.cpp
+        src/app/libretro/input.hpp
         includes/imgui/imconfig.h
         includes/imgui/imgui.cpp
         includes/imgui/imgui.h
@@ -53,33 +49,34 @@ add_executable(firelight
         includes/imgui/imstb_textedit.h
         includes/imgui/imstb_truetype.h
         includes/imgui/imgui_impl_opengl3.cpp
-        src/gui/context.cpp
-        src/gui/context.hpp
-        src/gui/style.hpp
-        src/graphics/character.hpp
-        src/graphics/opengl/shaders.hpp
-        src/graphics/opengl/shaders.cpp
-        src/gui/widgets/text.cpp
-        src/gui/widgets/text.hpp
-        src/graphics/color.hpp
-        src/gui/widgets/base/widget.cpp
-        src/gui/widgets/base/widget.hpp
-        src/math/bbox.hpp
-        src/math/bbox.cpp
-        src/gui/widget_painter.hpp
-        src/gui/widget_painter.cpp
-        src/graphics/driver.hpp
-        src/graphics/opengl/open_gl_driver.cpp
-        src/graphics/opengl/open_gl_driver.hpp
-        src/gui/widgets/frame.cpp
-        src/gui/widgets/frame.hpp
-        src/gui/widgets/quick_menu.cpp
-        src/gui/widgets/quick_menu.hpp
-        src/gui/events/event.hpp
-        src/gui/widgets/button.cpp
-        src/gui/widgets/button.hpp
-        src/gui/widgets/menu_item.cpp
-        src/gui/widgets/menu_item.hpp
+        src/lib/gui/context.cpp
+        src/lib/gui/context.hpp
+        src/lib/gui/style.hpp
+        src/lib/graphics/character.hpp
+        src/lib/graphics/opengl/shaders.hpp
+        src/lib/graphics/opengl/shaders.cpp
+        src/lib/graphics/color.hpp
+        src/lib/gui/widgets/base/widget.cpp
+        src/lib/gui/widgets/base/widget.hpp
+        src/lib/math/bbox.hpp
+        src/lib/math/bbox.cpp
+        src/lib/gui/widget_painter.hpp
+        src/lib/gui/widget_painter.cpp
+        src/lib/graphics/driver.hpp
+        src/lib/graphics/opengl/open_gl_driver.cpp
+        src/lib/graphics/opengl/open_gl_driver.hpp
+        src/lib/gui/widgets/container_widget.cpp
+        src/lib/gui/widgets/container_widget.hpp
+        src/lib/gui/events/event.hpp
+        src/lib/gui/widgets/button.cpp
+        src/lib/gui/widgets/button.hpp
+        src/lib/gui/focusable.hpp
+        src/lib/gui/widget_factory.cpp
+        src/lib/gui/widget_factory.hpp
+        src/lib/gui/layout_manager.hpp
+        src/lib/gui/vertical_box_layout_manager.cpp
+        src/lib/gui/vertical_box_layout_manager.hpp
+        src/lib/math/position.hpp
         #        includes/GLfont/FontAtlas.cpp
         #        includes/GLfont/FTLabel.cpp
         #        includes/GLfont/GLFont.cpp
