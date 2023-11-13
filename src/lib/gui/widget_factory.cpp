@@ -6,10 +6,8 @@
 
 namespace FL::GUI {
 
-WidgetFactory::WidgetFactory(Context *context) : guiContext(context) {}
-
 std::unique_ptr<Button> WidgetFactory::createButton(const std::string &label) {
-  auto button = std::make_unique<Button>(label, nullptr);
+  auto button = std::make_unique<Button>(label);
   button->setId(getNextId());
 
   return button;

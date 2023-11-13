@@ -8,7 +8,9 @@
 #include "../../../math/bbox.hpp"
 #include "../../../math/position.hpp"
 #include "../../events/event.hpp"
+#include "../../signal.hpp"
 #include "../../widget_painter.hpp"
+#include <functional>
 #include <unordered_map>
 #include <vector>
 
@@ -63,6 +65,12 @@ public:
 
     return FL::Math::Position{box.xPx, box.yPx};
   }
+
+  Signal<Widget *> onFocusGained;
+  Signal<Widget *> onFocusLost;
+
+  virtual bool gainFocus();
+  virtual void loseFocus();
 
 protected:
   int id = -1;

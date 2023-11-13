@@ -8,7 +8,6 @@
 #include "imgui_impl_sdl2.h"
 #include "lib/graphics/opengl/open_gl_driver.hpp"
 #include "lib/graphics/opengl/shaders.hpp"
-#include "lib/gui/context.hpp"
 #include "lib/gui/screens/screen.hpp"
 #include "lib/gui/screens/screen_manager.hpp"
 #include "lib/gui/vertical_box_layout_manager.hpp"
@@ -103,27 +102,50 @@ int main(int argc, char *argv[]) {
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   auto widgetPainter = std::make_shared<WidgetPainter>(driver);
 
-  FL::GUI::Context guiContext(box, driver);
-
-  FL::GUI::WidgetFactory factory(&guiContext);
+  FL::GUI::WidgetFactory factory;
 
   auto frame = std::make_unique<ContainerWidget>();
   frame->setLayoutManager(std::make_unique<VerticalBoxLayoutManager>(30, 10));
 
-  frame->box.xPx = 200;
-  frame->box.yPx = 100;
-  frame->box.widthPx = 300;
-  frame->box.heightPx = 500;
+  frame->box.xPx = 0;
+  frame->box.yPx = 260;
+  frame->box.widthPx = 1280;
+  frame->box.heightPx = 200;
 
   FL::GUI::ScreenManager manager;
 
   auto screen = std::make_unique<Screen>(std::move(frame));
 
-  screen->addWidget(factory.createButton("one"));
-  screen->addWidget(factory.createButton("two"));
-  screen->addWidget(factory.createButton("three"));
-  screen->addWidget(factory.createButton("four"));
-  screen->addWidget(factory.createButton("five"));
+  auto button1 = factory.createButton("one");
+  button1->onPressed.connect([](Button *button) {
+    printf("pressed button 1! id: %d\n", button->getId());
+  });
+
+  auto button2 = factory.createButton("two");
+  button2->onPressed.connect([](Button *button) {
+    printf("pressed button 2! id: %d\n", button->getId());
+  });
+
+  auto button3 = factory.createButton("three");
+  button3->onPressed.connect([](Button *button) {
+    printf("pressed button 3! id: %d\n", button->getId());
+  });
+
+  auto button4 = factory.createButton("four");
+  button4->onPressed.connect([](Button *button) {
+    printf("pressed button 4! id: %d\n", button->getId());
+  });
+
+  auto button5 = factory.createButton("five");
+  button5->onPressed.connect([](Button *button) {
+    printf("pressed button 5! id: %d\n", button->getId());
+  });
+
+  screen->addWidget(std::move(button1));
+  screen->addWidget(std::move(button2));
+  screen->addWidget(std::move(button3));
+  screen->addWidget(std::move(button4));
+  screen->addWidget(std::move(button5));
 
   manager.pushScreen(std::move(screen));
 
@@ -140,7 +162,7 @@ int main(int argc, char *argv[]) {
 
     SDL_Event ev;
     while (SDL_PollEvent(&ev)) {
-      guiContext.handleSdlEvent(&ev);
+      manager.handleSdlEvent(&ev);
       ImGui_ImplSDL2_ProcessEvent(&ev);
       switch (ev.type) {
       case SDL_CONTROLLERDEVICEADDED: {
@@ -177,8 +199,6 @@ int main(int argc, char *argv[]) {
           auto width = ev.window.data1;
           auto height = ev.window.data2;
           core->getVideo()->setScreenDimensions(0, 0, width, height);
-          guiContext.setWorkArea(
-              FL::Math::Box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT));
           break;
         }
       }
@@ -208,7 +228,6 @@ int main(int argc, char *argv[]) {
     //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     //        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-    guiContext.render();
     ImGui::Render();
     //
     loopMetrics.recordFrameWorkDuration(frameDiff);

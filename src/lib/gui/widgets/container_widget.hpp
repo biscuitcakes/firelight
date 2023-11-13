@@ -21,6 +21,8 @@ public:
   std::vector<std::unique_ptr<Widget>> &getChildren();
   void setLayoutManager(std::unique_ptr<LayoutManager> manager);
   virtual ~ContainerWidget() = default;
+  bool gainFocus() override;
+  void loseFocus() override;
 
 private:
   std::unique_ptr<LayoutManager> layoutManager;

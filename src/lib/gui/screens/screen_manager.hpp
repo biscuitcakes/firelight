@@ -8,6 +8,7 @@
 #include "../widget_painter.hpp"
 #include "../widgets/base/widget.hpp"
 #include "screen.hpp"
+#include <SDL2/SDL.h>
 #include <memory>
 #include <stack>
 
@@ -19,6 +20,8 @@ private:
   //  std::shared_ptr<WidgetPainter> widgetPainter;
 
 public:
+  void handleSdlEvent(SDL_Event *event);
+
   void pushScreen(std::unique_ptr<Screen> screen) {
     if (!screenStack.empty()) {
       screenStack.top()->exit(); // Call exit on the current screen

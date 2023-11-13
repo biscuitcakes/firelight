@@ -9,9 +9,7 @@
 
 namespace FL::GUI {
 
-Button::Button(std::string text,
-               std::function<void(Button *button)> onClickCallback)
-    : label(std::move(text)), onClick(std::move(onClickCallback)) {}
+Button::Button(std::string text) : label(std::move(text)) {}
 
 void Button::paint(WidgetPainter *painter, FL::Math::Box box) {
   auto pos = getAbsolutePosition();
@@ -29,10 +27,7 @@ Widget *Button::getFirstFocusable() { return this; }
 
 bool Button::handleEvent(Event &event) {
   if (event.type == Event::NAV_SELECT_PUSHED) {
-    if (onClick) {
-      onClick(this);
-      return true;
-    }
+    onPressed.emit(this);
   }
 
   return Widget::handleEvent(event);

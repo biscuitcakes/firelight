@@ -11,17 +11,18 @@ namespace FL::GUI {
 
 class Button : public Widget {
 public:
-  Button(std::string text, std::function<void(Button *button)> onClickCallback);
+  explicit Button(std::string text);
   void paint(WidgetPainter *painter, FL::Math::Box box) override;
   Widget *getFirstFocusable() override;
   bool focusable() override;
   bool handleEvent(Event &event) override;
 
+  Signal<Button *> onPressed;
+
 private:
   friend class WidgetFactory;
 
   std::string label;
-  std::function<void(Button *button)> onClick;
 };
 
 } // namespace FL::GUI

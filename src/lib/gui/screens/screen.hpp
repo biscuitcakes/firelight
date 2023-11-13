@@ -13,7 +13,7 @@ namespace FL::GUI {
 class Screen {
 private:
   std::unique_ptr<ContainerWidget> mainContainer;
-  std::unique_ptr<Widget> *focusTarget = nullptr;
+  Widget *focusTarget = nullptr;
 
 public:
   explicit Screen(std::unique_ptr<ContainerWidget> container);
@@ -21,6 +21,10 @@ public:
   virtual void exit();
   virtual void update(float deltaTime);
   virtual void render(const std::shared_ptr<WidgetPainter> &painter);
+
+  virtual void setFocusTarget(Widget *target) { focusTarget = target; }
+
+  virtual bool handleEvent(Event &event);
 
   virtual void addWidget(std::unique_ptr<Widget> widget);
   virtual ~Screen() = default;

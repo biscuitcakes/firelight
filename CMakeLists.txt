@@ -49,8 +49,6 @@ add_executable(firelight
         includes/imgui/imstb_textedit.h
         includes/imgui/imstb_truetype.h
         includes/imgui/imgui_impl_opengl3.cpp
-        src/lib/gui/context.cpp
-        src/lib/gui/context.hpp
         src/lib/gui/style.hpp
         src/lib/graphics/character.hpp
         src/lib/graphics/opengl/shaders.hpp
@@ -70,7 +68,6 @@ add_executable(firelight
         src/lib/gui/events/event.hpp
         src/lib/gui/widgets/button.cpp
         src/lib/gui/widgets/button.hpp
-        src/lib/gui/focusable.hpp
         src/lib/gui/widget_factory.cpp
         src/lib/gui/widget_factory.hpp
         src/lib/gui/layout_manager.hpp
@@ -82,6 +79,7 @@ add_executable(firelight
         src/lib/gui/screens/screen_manager.cpp
         src/lib/gui/screens/screen_manager.hpp
         src/lib/gui/screens/screen.cpp
+        src/lib/gui/signal.hpp
         #        includes/GLfont/FontAtlas.cpp
         #        includes/GLfont/FTLabel.cpp
         #        includes/GLfont/GLFont.cpp

@@ -49,16 +49,16 @@ bool ContainerWidget::handleEvent(Event &event) {
   if (event.type == Event::NAV_DOWN) {
     for (int i = 0; i < childWidgets.size(); ++i) {
       if (childWidgets.at(i)->isFocused && (i + 1) < childWidgets.size()) {
-        childWidgets.at(i + 1)->isFocused = true;
-        childWidgets.at(i)->isFocused = false;
+        childWidgets.at(i + 1)->gainFocus();
+        childWidgets.at(i)->loseFocus();
         return true;
       }
     }
   } else if (event.type == Event::NAV_UP) {
     for (int i = 0; i < childWidgets.size(); ++i) {
       if (childWidgets.at(i)->isFocused && i > 0) {
-        childWidgets.at(i - 1)->isFocused = true;
-        childWidgets.at(i)->isFocused = false;
+        childWidgets.at(i - 1)->gainFocus();
+        childWidgets.at(i)->loseFocus();
         return true;
       }
     }
@@ -90,6 +90,23 @@ void ContainerWidget::addChild(std::unique_ptr<Widget> widget) {
 
   childWidgets.emplace_back(std::move(widget));
 }
+
+bool ContainerWidget::gainFocus() {
+  for (auto &child : childWidgets) {
+    if (child->gainFocus()) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+void ContainerWidget::loseFocus() {
+  for (auto &child : childWidgets) {
+    child->loseFocus();
+  }
+}
+
 bool ContainerWidget::isContainer() const { return true; }
 
 std::vector<std::unique_ptr<Widget>> &ContainerWidget::getChildren() {

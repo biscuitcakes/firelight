@@ -4,4 +4,36 @@
 
 #include "screen_manager.hpp"
 
-namespace FL::GUI {} // namespace FL::GUI
+namespace FL::GUI {
+void ScreenManager::handleSdlEvent(SDL_Event *event) {
+  FL::GUI::Event guiEvent{};
+
+  switch (event->type) {
+  case SDL_CONTROLLERBUTTONDOWN:
+    switch (event->cbutton.button) {
+    case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+      guiEvent.type = Event::NAV_DOWN;
+      break;
+    case SDL_CONTROLLER_BUTTON_DPAD_UP:
+      guiEvent.type = Event::NAV_UP;
+      break;
+    case SDL_CONTROLLER_BUTTON_A:
+      guiEvent.type = Event::NAV_SELECT_PUSHED;
+      break;
+    case SDL_CONTROLLER_BUTTON_B:
+      guiEvent.type = Event::NAV_BACK_PUSHED;
+      break;
+    default:
+      return;
+    }
+    break;
+  default:
+    return;
+  }
+
+  if (!screenStack.empty()) {
+    screenStack.top()->handleEvent(guiEvent); // Update the current screen
+  }
+}
+
+} // namespace FL::GUI
