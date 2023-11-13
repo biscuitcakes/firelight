@@ -12,6 +12,7 @@ class ContainerWidget;
 class LayoutManager {
 public:
   virtual void layoutWidgets(ContainerWidget &container) = 0;
+  virtual ~LayoutManager() = default;
 };
 
 } // namespace FL::GUI

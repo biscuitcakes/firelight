@@ -9,6 +9,8 @@
 #include "lib/graphics/opengl/open_gl_driver.hpp"
 #include "lib/graphics/opengl/shaders.hpp"
 #include "lib/gui/context.hpp"
+#include "lib/gui/screens/screen.hpp"
+#include "lib/gui/screens/screen_manager.hpp"
 #include "lib/gui/vertical_box_layout_manager.hpp"
 #include "lib/gui/widget_factory.hpp"
 #include "lib/gui/widgets/container_widget.hpp"
@@ -99,25 +101,31 @@ int main(int argc, char *argv[]) {
 
   FL::Graphics::Driver *driver =
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
+  auto widgetPainter = std::make_shared<WidgetPainter>(driver);
+
   FL::GUI::Context guiContext(box, driver);
 
   FL::GUI::WidgetFactory factory(&guiContext);
 
-  FL::GUI::ContainerWidget frame;
-  frame.setLayoutManager(std::make_unique<VerticalBoxLayoutManager>(30, 10));
+  auto frame = std::make_unique<ContainerWidget>();
+  frame->setLayoutManager(std::make_unique<VerticalBoxLayoutManager>(30, 10));
 
-  frame.box.xPx = 200;
-  frame.box.yPx = 100;
-  frame.box.widthPx = 300;
-  frame.box.heightPx = 500;
+  frame->box.xPx = 200;
+  frame->box.yPx = 100;
+  frame->box.widthPx = 300;
+  frame->box.heightPx = 500;
 
-  frame.addChild(factory.createButton("one"));
-  frame.addChild(factory.createButton("two"));
-  frame.addChild(factory.createButton("three"));
-  frame.addChild(factory.createButton("four"));
-  frame.addChild(factory.createButton("five"));
+  FL::GUI::ScreenManager manager;
 
-  guiContext.addWidget(&frame);
+  auto screen = std::make_unique<Screen>(std::move(frame));
+
+  screen->addWidget(factory.createButton("one"));
+  screen->addWidget(factory.createButton("two"));
+  screen->addWidget(factory.createButton("three"));
+  screen->addWidget(factory.createButton("four"));
+  screen->addWidget(factory.createButton("five"));
+
+  manager.pushScreen(std::move(screen));
 
   bool running = true;
   while (running) {
@@ -182,6 +190,7 @@ int main(int argc, char *argv[]) {
 
     int width, height;
     SDL_GetWindowSize(window, &width, &height);
+
     glViewport(0, 0, width, height);
     //
     glEnable(GL_BLEND);
@@ -190,6 +199,9 @@ int main(int argc, char *argv[]) {
     frameEnd = SDL_GetPerformanceCounter();
     frameDiff = ((frameEnd - frameBegin) * 1000 /
                  (double)SDL_GetPerformanceFrequency());
+
+    manager.update(0);
+    manager.render(widgetPainter);
 
     //    glDisable(GL_DEPTH_TEST);
 

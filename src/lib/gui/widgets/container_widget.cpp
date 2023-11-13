@@ -3,6 +3,7 @@
 //
 
 #include "container_widget.hpp"
+#include "imgui.h"
 #include <sstream>
 
 namespace FL::GUI {
@@ -13,6 +14,21 @@ void ContainerWidget::paint(WidgetPainter *painter, FL::Math::Box box) {
   if (layoutManager) {
     layoutManager->layoutWidgets(*this);
   }
+
+  //  if (ImGui::TreeNode("Container")) {
+  //    ImGui::BulletText(std::to_string(id).c_str());
+  //
+  //    //    for (auto f : focusChain) {
+  //    //      std::ostringstream address;
+  //    //      address << (void const *)f;
+  //    //      std::string name = address.str();
+  //    //
+  //    //      if (ImGui::TreeNode(name.c_str())) {
+  //    //        ImGui::TreePop();
+  //    //      }
+  //    //    }
+  //    ImGui::TreePop();
+  //  }
 
   for (auto &child : childWidgets) {
     child->paint(painter, child->box);
@@ -68,6 +84,8 @@ void ContainerWidget::addChild(std::unique_ptr<Widget> widget) {
   widget->setStyle(
       new FL::GUI::Style{.background = FILL_BACKGROUND,
                          .backgroundColor = FL::Graphics::Color{.B = 1},
+                         .horiAlignment = CENTER,
+                         .vertAlignment = CENTER,
                          .textColor = FL::Graphics::Color{.R = 1}});
 
   childWidgets.emplace_back(std::move(widget));
@@ -80,16 +98,6 @@ std::vector<std::unique_ptr<Widget>> &ContainerWidget::getChildren() {
 
 void ContainerWidget::setLayoutManager(std::unique_ptr<LayoutManager> manager) {
   layoutManager = std::move(manager);
-}
-
-std::unique_ptr<Widget> *ContainerWidget::getFocusedWidget() {
-  for (auto &child : childWidgets) {
-    if (child->isFocused) {
-      return &child;
-    }
-  }
-
-  return nullptr;
 }
 
 } // namespace FL::GUI

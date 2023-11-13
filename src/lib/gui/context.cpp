@@ -38,53 +38,18 @@ void Context::handleSdlEvent(SDL_Event *event) {
   if (focusTarget != nullptr) {
     focusTarget->handleEvent(guiEvent);
   }
-
-  //  Widget *next = focusTarget;
-  //
-  //  // Give the focus chain an opportunity to handle the event
-  //  while (next != nullptr) {
-  //    if (next->handleEvent(guiEvent)) {
-  //      return;
-  //    }
-  //
-  //    next = next->getParent();
-  //  }
-  //
-  //  // If we got here, then no widget handled the event, so we see if it's a
-  //  // nav event we can handle. Later this should probably go on a window or
-  //  // something
-  //  next = focusTarget;
-  //  while (next != nullptr) {
-  //    if (guiEvent.type == Event::NAV_UP) {
-  //      auto up = next->getNeighborUp();
-  //      if (up != nullptr) {
-  //        setFocusTarget(up);
-  //        return;
-  //      }
-  //    } else if (guiEvent.type == Event::NAV_DOWN) {
-  //      auto down = next->getNeighborDown();
-  //      if (down != nullptr) {
-  //        setFocusTarget(down);
-  //        return;
-  //      }
-  //    } else if (guiEvent.type == Event::NAV_BACK_PUSHED) {
-  //      if (next->getParent() != nullptr && next->getParent()->canHaveFocus())
-  //      {
-  //        setFocusTarget(next->getParent());
-  //        return;
-  //      }
-  //    }
-  //
-  //    next = next->getParent();
-  //  }
 }
 
 void Context::setWorkArea(FL::Math::Box area) { workArea = area; }
 
 void Context::render() {
+  ImGui::Begin("Widgets");
+
   for (auto widget : widgets) {
     widget->paint(widgetPainter.get(), workArea);
   }
+
+  ImGui::End();
 
   //  ImGui::Begin("Widgets");
   //

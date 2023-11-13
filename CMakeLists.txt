@@ -77,6 +77,11 @@ add_executable(firelight
         src/lib/gui/vertical_box_layout_manager.cpp
         src/lib/gui/vertical_box_layout_manager.hpp
         src/lib/math/position.hpp
+        src/lib/graphics/texture.hpp
+        src/lib/gui/screens/screen.hpp
+        src/lib/gui/screens/screen_manager.cpp
+        src/lib/gui/screens/screen_manager.hpp
+        src/lib/gui/screens/screen.cpp
         #        includes/GLfont/FontAtlas.cpp
         #        includes/GLfont/FTLabel.cpp
         #        includes/GLfont/GLFont.cpp

@@ -20,9 +20,9 @@ public:
   bool isContainer() const override;
   std::vector<std::unique_ptr<Widget>> &getChildren();
   void setLayoutManager(std::unique_ptr<LayoutManager> manager);
+  virtual ~ContainerWidget() = default;
 
 private:
-  std::unique_ptr<Widget> *getFocusedWidget();
   std::unique_ptr<LayoutManager> layoutManager;
 
   std::vector<std::unique_ptr<Widget>> childWidgets;
