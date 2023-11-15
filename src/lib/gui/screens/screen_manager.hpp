@@ -6,7 +6,7 @@
 #define FIRELIGHT_SCREEN_MANAGER_HPP
 
 #include "../widget_painter.hpp"
-#include "../widgets/base/widget.hpp"
+#include "../widgets/widget.hpp"
 #include "screen.hpp"
 #include <SDL2/SDL.h>
 #include <memory>

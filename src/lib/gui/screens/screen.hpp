@@ -5,8 +5,8 @@
 #ifndef FIRELIGHT_SCREEN_HPP
 #define FIRELIGHT_SCREEN_HPP
 
-#include "../widgets/base/widget.hpp"
 #include "../widgets/container_widget.hpp"
+#include "../widgets/widget.hpp"
 #include <memory>
 namespace FL::GUI {
 

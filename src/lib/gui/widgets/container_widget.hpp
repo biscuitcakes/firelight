@@ -6,7 +6,7 @@
 #define FIRELIGHT_CONTAINER_WIDGET_HPP
 
 #include "../layout_manager.hpp"
-#include "base/widget.hpp"
+#include "widget.hpp"
 #include <memory>
 namespace FL::GUI {
 

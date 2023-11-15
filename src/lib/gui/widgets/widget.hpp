@@ -5,11 +5,11 @@
 #ifndef FIRELIGHT_WIDGET_HPP
 #define FIRELIGHT_WIDGET_HPP
 
-#include "../../../math/bbox.hpp"
-#include "../../../math/position.hpp"
-#include "../../events/event.hpp"
-#include "../../signal.hpp"
-#include "../../widget_painter.hpp"
+#include "../../math/bbox.hpp"
+#include "../../math/position.hpp"
+#include "../events/event.hpp"
+#include "../signal.hpp"
+#include "../widget_painter.hpp"
 #include <functional>
 #include <unordered_map>
 #include <vector>
@@ -25,26 +25,12 @@ public:
 
   virtual Widget *getFirstFocusable() = 0;
 
-  virtual bool canHaveFocus();
-
   virtual bool isContainer() const { return false; }
 
   void setStyle(Style *style);
   void setParent(Widget *newParent);
   Widget *getParent() const;
   virtual bool handleEvent(FL::GUI::Event &event);
-
-  void setNeighborUp(Widget *neighbor);
-  void setNeighborDown(Widget *neighbor);
-  void setNeighborLeft(Widget *neighbor);
-  void setNeighborRight(Widget *neighbor);
-
-  Widget *getNeighborUp();
-  Widget *getNeighborDown();
-  Widget *getNeighborLeft();
-  Widget *getNeighborRight();
-
-  virtual void recalculateNavNeighbors();
 
   bool isFocused = false;
 

@@ -54,8 +54,8 @@ add_executable(firelight
         src/lib/graphics/opengl/shaders.hpp
         src/lib/graphics/opengl/shaders.cpp
         src/lib/graphics/color.hpp
-        src/lib/gui/widgets/base/widget.cpp
-        src/lib/gui/widgets/base/widget.hpp
+        src/lib/gui/widgets/widget.cpp
+        src/lib/gui/widgets/widget.hpp
         src/lib/math/bbox.hpp
         src/lib/math/bbox.cpp
         src/lib/gui/widget_painter.hpp
@@ -80,11 +80,15 @@ add_executable(firelight
         src/lib/gui/screens/screen_manager.hpp
         src/lib/gui/screens/screen.cpp
         src/lib/gui/signal.hpp
-        #        includes/GLfont/FontAtlas.cpp
-        #        includes/GLfont/FTLabel.cpp
-        #        includes/GLfont/GLFont.cpp
-        #        includes/GLfont/GLUtils.cpp
+        src/app/screen_thing.cpp
+        src/app/screen_thing.hpp
+        src/app/db/game_repository.hpp
+        src/app/db/game_record.hpp
+        src/app/library/entry.hpp
+        src/app/db/game_scanner.hpp
+        src/app/db/in_memory_game_repository.cpp
+        src/app/db/in_memory_game_repository.hpp
 )
 
-target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype)
+target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)
 target_compile_options(firelight PRIVATE -Werror -ggdb3 -O0)

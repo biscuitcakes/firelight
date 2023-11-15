@@ -2,8 +2,12 @@
 #include "GL/glew.h"
 #include "SDL2/SDL.h"
 #include "app/controller/controller_manager.hpp"
+#include "app/db/game_repository.hpp"
+#include "app/db/game_scanner.hpp"
+#include "app/db/in_memory_game_repository.hpp"
 #include "app/libretro/core.hpp"
 #include "app/metrics/gameloop.hpp"
+#include "app/screen_thing.hpp"
 #include "imgui_impl_opengl3.h"
 #include "imgui_impl_sdl2.h"
 #include "lib/graphics/opengl/open_gl_driver.hpp"
@@ -74,18 +78,21 @@ int main(int argc, char *argv[]) {
   FL::Graphics::Shaders::initializeAll();
 
   auto core = std::make_unique<libretro::Core>(
-      "/Users/alexs/git/ember-app/_cores/snes9x_libretro.dll");
+      "/Users/alexs/git/ember-app/_cores/mupen64plus_next_libretro.dll");
 
   core->setSystemDirectory(".");
   core->setSaveDirectory(".");
   core->init();
 
-  libretro::Game game("/Users/alexs/git/ember-app/_games/smw.smc");
+  libretro::Game game("/Users/alexs/git/ember-app/_games/MarioKart64.z64");
   core->loadGame(&game);
   core->getVideo()->initialize(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
 
   FL::ControllerManager conManager;
   conManager.setLoadedCore(core.get());
+
+  FL::DB::InMemoryGameRepository repository("games.json");
+  FL::DB::GameScanner scanner;
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;
@@ -96,58 +103,18 @@ int main(int argc, char *argv[]) {
   Uint64 frameEnd;
   double frameDiff;
 
-  FL::Math::Box box(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
   FL::Graphics::Driver *driver =
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   auto widgetPainter = std::make_shared<WidgetPainter>(driver);
 
   FL::GUI::WidgetFactory factory;
 
-  auto frame = std::make_unique<ContainerWidget>();
-  frame->setLayoutManager(std::make_unique<VerticalBoxLayoutManager>(30, 10));
-
-  frame->box.xPx = 0;
-  frame->box.yPx = 260;
-  frame->box.widthPx = 1280;
-  frame->box.heightPx = 200;
-
   FL::GUI::ScreenManager manager;
+  FL::GUI::ScreenThing thing(&manager, &factory);
 
-  auto screen = std::make_unique<Screen>(std::move(frame));
+  thing.buildHomeScreen();
 
-  auto button1 = factory.createButton("one");
-  button1->onPressed.connect([](Button *button) {
-    printf("pressed button 1! id: %d\n", button->getId());
-  });
-
-  auto button2 = factory.createButton("two");
-  button2->onPressed.connect([](Button *button) {
-    printf("pressed button 2! id: %d\n", button->getId());
-  });
-
-  auto button3 = factory.createButton("three");
-  button3->onPressed.connect([](Button *button) {
-    printf("pressed button 3! id: %d\n", button->getId());
-  });
-
-  auto button4 = factory.createButton("four");
-  button4->onPressed.connect([](Button *button) {
-    printf("pressed button 4! id: %d\n", button->getId());
-  });
-
-  auto button5 = factory.createButton("five");
-  button5->onPressed.connect([](Button *button) {
-    printf("pressed button 5! id: %d\n", button->getId());
-  });
-
-  screen->addWidget(std::move(button1));
-  screen->addWidget(std::move(button2));
-  screen->addWidget(std::move(button3));
-  screen->addWidget(std::move(button4));
-  screen->addWidget(std::move(button5));
-
-  manager.pushScreen(std::move(screen));
+  manager.pushScreen(thing.getInitialScreen());
 
   bool running = true;
   while (running) {
@@ -213,21 +180,21 @@ int main(int argc, char *argv[]) {
 
     glViewport(0, 0, width, height);
     //
-    glEnable(GL_BLEND);
+    //    glEnable(GL_BLEND);
     core->run(deltaTime);
     core->getVideo()->draw();
     frameEnd = SDL_GetPerformanceCounter();
     frameDiff = ((frameEnd - frameBegin) * 1000 /
                  (double)SDL_GetPerformanceFrequency());
 
-    manager.update(0);
-    manager.render(widgetPainter);
+    //    manager.update(0);
+    //    manager.render(widgetPainter);
 
     //    glDisable(GL_DEPTH_TEST);
 
     //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     //        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
+    //    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     ImGui::Render();
     //
     loopMetrics.recordFrameWorkDuration(frameDiff);

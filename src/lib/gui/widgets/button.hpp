@@ -5,7 +5,7 @@
 #ifndef FIRELIGHT_BUTTON_HPP
 #define FIRELIGHT_BUTTON_HPP
 
-#include "base/widget.hpp"
+#include "widget.hpp"
 #include <functional>
 namespace FL::GUI {
 
@@ -20,8 +20,6 @@ public:
   Signal<Button *> onPressed;
 
 private:
-  friend class WidgetFactory;
-
   std::string label;
 };
 
