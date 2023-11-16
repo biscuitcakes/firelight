@@ -95,7 +95,7 @@ OpenGLDriver::OpenGLDriver(int w, int h) {
     // oops
   }
 
-  if (FT_New_Face(fontLib, "Jost-Regular.ttf", 0, &fontFace) != 0) {
+  if (FT_New_Face(fontLib, "Lexend-Regular.ttf", 0, &fontFace) != 0) {
     // oops
   }
 
@@ -386,8 +386,10 @@ void OpenGLDriver::drawText(std::string text, int x, int y, Color color) {
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
 
+    glUseProgram(0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
+    glDisable(GL_BLEND);
     //
     //    drawTexture(c.texture, cursorX + c.xBearing, cursorY - c.yBearing + 1,
     //                c.glyphWidth, c.glyphHeight);

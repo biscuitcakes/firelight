@@ -171,9 +171,9 @@ int main(int argc, char *argv[]) {
       }
     }
 
-    ImGui_ImplOpenGL3_NewFrame();
-    ImGui_ImplSDL2_NewFrame();
-    ImGui::NewFrame();
+    //    ImGui_ImplOpenGL3_NewFrame();
+    //    ImGui_ImplSDL2_NewFrame();
+    //    ImGui::NewFrame();
 
     int width, height;
     SDL_GetWindowSize(window, &width, &height);
@@ -187,18 +187,18 @@ int main(int argc, char *argv[]) {
     frameDiff = ((frameEnd - frameBegin) * 1000 /
                  (double)SDL_GetPerformanceFrequency());
 
-    //    manager.update(0);
-    //    manager.render(widgetPainter);
+    manager.update(0);
+    manager.render(widgetPainter);
 
     //    glDisable(GL_DEPTH_TEST);
 
     //        glBindFramebuffer(GL_FRAMEBUFFER, 0);
     //        glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
     //    glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
-    ImGui::Render();
+    //    ImGui::Render();
     //
     loopMetrics.recordFrameWorkDuration(frameDiff);
-    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+    //    ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     SDL_GL_SwapWindow(window);
     glFinish();
 
