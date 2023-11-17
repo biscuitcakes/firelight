@@ -99,7 +99,7 @@ OpenGLDriver::OpenGLDriver(int w, int h) {
     // oops
   }
 
-  int size = 16; // pixels high
+  int size = 12; // pixels high
   if (FT_Set_Char_Size(fontFace, 0, size * 64, 96, 96) != 0) {
     // oops
   }

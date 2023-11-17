@@ -10,7 +10,7 @@ namespace FL::DB {
 
 class InMemoryGameRepository : public GameRepository {
 public:
-  explicit InMemoryGameRepository(const string &filename);
+  explicit InMemoryGameRepository(const std::string &filename);
   std::shared_ptr<GameRecord> getGameByChecksum(std::string checksum) override;
 
 private:

@@ -5,9 +5,16 @@
 #ifndef FIRELIGHT_ENTRY_HPP
 #define FIRELIGHT_ENTRY_HPP
 
+#include <filesystem>
+#include <string>
 namespace FL::Library {
 
-class Entry {};
+struct Entry {
+  std::string id;
+  std::string gameName;
+  std::string gameId;
+  std::filesystem::path romPath;
+};
 
 } // namespace FL::Library
 

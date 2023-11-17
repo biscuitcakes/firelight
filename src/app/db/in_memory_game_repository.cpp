@@ -9,7 +9,7 @@ namespace FL::DB {
 
 InMemoryGameRepository::InMemoryGameRepository(const string &filename) {
   std::filesystem::path path(filename);
-  ifstream file(path);
+  std::ifstream file(path);
 
   auto size = file_size(path);
   char content[size];
@@ -22,13 +22,19 @@ InMemoryGameRepository::InMemoryGameRepository(const string &filename) {
 
   auto p2 = j.template get<std::vector<GameRecord>>();
   for (const auto &p : p2) {
-    printf("name: %s\n", p.name.c_str());
+    games.emplace(p.md5_checksum, p);
+    //    printf("name: %s\n", p.name.c_str());
   }
 }
 
-shared_ptr<GameRecord>
+std::shared_ptr<GameRecord>
 InMemoryGameRepository::getGameByChecksum(string checksum) {
-  return shared_ptr<GameRecord>();
+  auto result = games.find(checksum);
+  if (result != nullptr) {
+    return std::make_shared<GameRecord>(result->second);
+  }
+
+  return nullptr;
 }
 
 } // namespace FL::DB

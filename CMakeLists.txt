@@ -85,9 +85,12 @@ add_executable(firelight
         src/app/db/game_repository.hpp
         src/app/db/game_record.hpp
         src/app/library/entry.hpp
+        src/app/db/game_scanner.cpp
         src/app/db/game_scanner.hpp
         src/app/db/in_memory_game_repository.cpp
         src/app/db/in_memory_game_repository.hpp
+        src/app/game_screen.cpp
+        src/app/game_screen.hpp
 )
 
 target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)

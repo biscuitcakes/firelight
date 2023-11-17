@@ -134,9 +134,9 @@ bool Core::handleEnvironmentCall(unsigned int cmd, void *data) {
     // TODO sane default
     for (int i = 0; i < 100; ++i) {
       auto descriptor = ptr[i];
-      printf("Variable port: %d, device: %d, index: %d, id: %d\n",
-             descriptor.port, descriptor.device, descriptor.index,
-             descriptor.id);
+      //      printf("Variable port: %d, device: %d, index: %d, id: %d\n",
+      //             descriptor.port, descriptor.device, descriptor.index,
+      //             descriptor.id);
       if (descriptor.description == nullptr) {
         break;
       }

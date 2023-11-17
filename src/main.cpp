@@ -65,11 +65,7 @@ int main(int argc, char *argv[]) {
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
-  ImGuiIO &io = ImGui::GetIO();
-
-  // Setup Dear ImGui style
   ImGui::StyleColorsDark();
-  // ImGui::StyleColorsLight();
 
   // Setup Platform/Renderer backends
   ImGui_ImplSDL2_InitForOpenGL(window, context);
@@ -77,22 +73,21 @@ int main(int argc, char *argv[]) {
 
   FL::Graphics::Shaders::initializeAll();
 
-  auto core = std::make_unique<libretro::Core>(
-      "/Users/alexs/git/ember-app/_cores/mupen64plus_next_libretro.dll");
-
-  core->setSystemDirectory(".");
-  core->setSaveDirectory(".");
-  core->init();
-
-  libretro::Game game("/Users/alexs/git/ember-app/_games/MarioKart64.z64");
-  core->loadGame(&game);
-  core->getVideo()->initialize(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-
-  FL::ControllerManager conManager;
-  conManager.setLoadedCore(core.get());
+  //  auto core = std::make_unique<libretro::Core>(
+  //      "/Users/alexs/git/ember-app/_cores/mupen64plus_next_libretro.dll");
+  //
+  //  core->setSystemDirectory(".");
+  //  core->setSaveDirectory(".");
+  //  core->init();
+  //
+  //  libretro::Game game("/Users/alexs/git/ember-app/_games/MarioKart64.z64");
+  //  core->loadGame(&game);
+  //  core->getVideo()->initialize(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+  //
+  //    conManager.setLoadedCore(core.get());
 
   FL::DB::InMemoryGameRepository repository("games.json");
-  FL::DB::GameScanner scanner;
+  FL::DB::GameScanner scanner(&repository);
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;
@@ -107,12 +102,16 @@ int main(int argc, char *argv[]) {
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   auto widgetPainter = std::make_shared<WidgetPainter>(driver);
 
+  FL::ControllerManager conManager;
+
   FL::GUI::WidgetFactory factory;
 
   FL::GUI::ScreenManager manager;
   FL::GUI::ScreenThing thing(&manager, &factory);
 
-  thing.buildHomeScreen();
+  auto results = scanner.scanDirectory("../../ember-app", true);
+  thing.buildHomeScreen(results);
+  thing.buildGameScreen(&conManager);
 
   manager.pushScreen(thing.getInitialScreen());
 
@@ -165,7 +164,8 @@ int main(int argc, char *argv[]) {
         case SDL_WINDOWEVENT_RESIZED:
           auto width = ev.window.data1;
           auto height = ev.window.data2;
-          core->getVideo()->setScreenDimensions(0, 0, width, height);
+          //          core->getVideo()->setScreenDimensions(0, 0, width,
+          //          height);
           break;
         }
       }
@@ -181,14 +181,14 @@ int main(int argc, char *argv[]) {
     glViewport(0, 0, width, height);
     //
     //    glEnable(GL_BLEND);
-    core->run(deltaTime);
-    core->getVideo()->draw();
-    frameEnd = SDL_GetPerformanceCounter();
-    frameDiff = ((frameEnd - frameBegin) * 1000 /
-                 (double)SDL_GetPerformanceFrequency());
+    //    core->run(deltaTime);
+    //    core->getVideo()->draw();
 
     manager.update(0);
     manager.render(widgetPainter);
+    frameEnd = SDL_GetPerformanceCounter();
+    frameDiff = ((frameEnd - frameBegin) * 1000 /
+                 (double)SDL_GetPerformanceFrequency());
 
     //    glDisable(GL_DEPTH_TEST);
 
