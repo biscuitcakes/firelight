@@ -5,6 +5,7 @@
 #ifndef FIRELIGHT_CORE_HPP
 #define FIRELIGHT_CORE_HPP
 
+#include "../../lib/graphics/driver.hpp"
 #include "SDL2/SDL.h"
 #include "coreoption.hpp"
 #include "game.hpp"
@@ -41,7 +42,7 @@ public:
 
   std::basic_string<char> dumpJson();
 
-  explicit Core(const std::string &libPath);
+  explicit Core(const std::string &libPath, FL::Graphics::Driver *driver);
 
   virtual ~Core();
 
@@ -62,6 +63,8 @@ public:
   void setSaveDirectory(string);
 
 private:
+  FL::Graphics::Driver *gfxDriver;
+
   array<Gamepad *, 8> gamepads = {nullptr};
 
   Video *video;

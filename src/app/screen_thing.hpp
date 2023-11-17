@@ -21,6 +21,7 @@ private:
   ScreenManager *screenManager;
   WidgetFactory *widgetFactory;
   ControllerManager *controllerManager;
+  FL::Graphics::Driver *gfxDriver;
 
 public:
   ScreenThing(ScreenManager *manager, WidgetFactory *factory);
@@ -56,7 +57,7 @@ public:
             std::make_unique<VerticalBoxLayoutManager>(30, 10));
 
         auto screen = std::make_unique<GameScreen>(std::move(container),
-                                                   controllerManager,
+                                                   controllerManager, gfxDriver,
                                                    e.romPath.generic_string());
 
         this->screenManager->pushScreen(std::move(screen));
@@ -68,8 +69,10 @@ public:
     screenCache.emplace("home", std::move(screen));
   }
 
-  void buildGameScreen(FL::ControllerManager *manager) {
+  void buildGameScreen(FL::ControllerManager *manager,
+                       FL::Graphics::Driver *driver) {
     this->controllerManager = manager;
+    this->gfxDriver = driver;
     //
     //
     //

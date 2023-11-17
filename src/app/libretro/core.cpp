@@ -856,7 +856,8 @@ template <typename T> static T loadRetroFunc(void *dll, const char *name) {
 //        return j.dump();
 //    }
 
-Core::Core(const std::string &libPath) {
+Core::Core(const std::string &libPath, FL::Graphics::Driver *driver)
+    : gfxDriver(driver) {
   this->dll = SDL_LoadObject(libPath.c_str());
   if (this->dll == nullptr) {
     // Check error
@@ -906,7 +907,7 @@ Core::Core(const std::string &libPath) {
   this->retroSystemInfo = new retro_system_info;
   this->retroSystemAVInfo = new retro_system_av_info;
 
-  this->video = new Video();
+  this->video = new Video(gfxDriver);
 
   currentCore = this; // todo prob different namespace
 

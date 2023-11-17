@@ -9,13 +9,14 @@
 
 namespace FL::GUI {
 GameScreen::GameScreen(std::unique_ptr<ContainerWidget> container,
-                       FL::ControllerManager *manager, std::string romPath)
+                       FL::ControllerManager *manager,
+                       FL::Graphics::Driver *driver, std::string romPath)
     : Screen(std::move(container)), gameRomPath(std::move(romPath)),
-      controllerManager(manager) {}
+      controllerManager(manager), gfxDriver(driver) {}
 
 void GameScreen::enter() {
   core = std::make_unique<libretro::Core>(
-      "/Users/alexs/git/ember-app/_cores/gambatte_libretro.dll");
+      "/Users/alexs/git/ember-app/_cores/gambatte_libretro.dll", gfxDriver);
 
   core->setSystemDirectory(".");
   core->setSaveDirectory(".");

@@ -111,7 +111,7 @@ int main(int argc, char *argv[]) {
 
   auto results = scanner.scanDirectory("../../ember-app", true);
   thing.buildHomeScreen(results);
-  thing.buildGameScreen(&conManager);
+  thing.buildGameScreen(&conManager, driver);
 
   manager.pushScreen(thing.getInitialScreen());
 

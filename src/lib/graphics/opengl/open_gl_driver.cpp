@@ -298,29 +298,7 @@ void OpenGLDriver::drawRectangle(int x, int y, int w, int h,
 }
 
 void OpenGLDriver::drawTexture(unsigned tex, int x, int y, unsigned w,
-                               unsigned h) {
-  auto vertices = calculateTexVertexArray(x, y, w, h);
-
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-  glBindTexture(GL_TEXTURE_2D, tex);
-  glUseProgram(FL::Graphics::Shaders::fontProgram);
-  glUniform3f(glGetUniformLocation(FL::Graphics::Shaders::fontProgram, "color"),
-              1, 0, 0);
-
-  glBindBuffer(GL_ARRAY_BUFFER, texVbo);
-  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
-               GL_DYNAMIC_DRAW);
-
-  glBindVertexArray(texVao);
-
-  glBindFramebuffer(GL_FRAMEBUFFER, 0);
-  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-
-  glBindBuffer(GL_ARRAY_BUFFER, 0);
-  glBindVertexArray(0);
-}
+                               unsigned h) {}
 
 void OpenGLDriver::drawText(std::string text, int x, int y, Color color) {
   // go through each character and calculate the total width
@@ -430,6 +408,32 @@ void OpenGLDriver::calculateTextBounds(const std::string &text, int &width,
   // loop.
   width -= (lastChar.xAdvance - lastChar.glyphWidth);
   height = (maxAscent + maxDescent);
+}
+
+Texture *OpenGLDriver::newTexture() { return new OpenGLTexture(); }
+
+void OpenGLDriver::drawTexture(Texture *texture, FL::Math::Box displayBox) {
+  auto *actualTex = reinterpret_cast<OpenGLTexture *>(texture);
+  // TODO: Error handle I guess
+
+  auto vertices = calculateTexVertexArray(
+      displayBox.xPx, displayBox.yPx, displayBox.widthPx, displayBox.heightPx);
+
+  glBindTexture(GL_TEXTURE_2D, actualTex->texId);
+  glUseProgram(FL::Graphics::Shaders::texProgram);
+
+  glBindBuffer(GL_ARRAY_BUFFER, texVbo);
+  glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
+               GL_DYNAMIC_DRAW);
+
+  glBindVertexArray(texVao);
+
+  glBindFramebuffer(GL_FRAMEBUFFER, 0);
+  glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+
+  glBindBuffer(GL_ARRAY_BUFFER, 0);
+  glBindVertexArray(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 } // namespace FL::Graphics

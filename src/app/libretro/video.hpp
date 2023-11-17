@@ -5,6 +5,9 @@
 #ifndef FIRELIGHT_VIDEO_HPP
 #define FIRELIGHT_VIDEO_HPP
 
+#include "../../lib/graphics/driver.hpp"
+#include "../../lib/graphics/texture.hpp"
+#include "../../lib/math/bbox.hpp"
 #include "GL/glew.h"
 #include "libretro.h"
 #include <array>
@@ -29,7 +32,7 @@ enum PictureMode {
 class Video {
 
 public:
-  Video();
+  Video(FL::Graphics::Driver *driver);
 
   void initialize(int x2, int y2, int screenWidth, int screenHeight);
 
@@ -61,8 +64,12 @@ public:
   void setFrameTimeCallback(retro_frame_time_callback *);
 
 private:
+  FL::Math::Box displayBox;
+  FL::Graphics::Driver *gfxDriver;
   int x, y = 0;
   int windowWidth, windowHeight;
+
+  FL::Graphics::Texture *gameTexture;
 
   bool hardwareRendering = false;
 
@@ -82,7 +89,6 @@ private:
 
   GLuint vao;
   GLuint vbo;
-  GLuint tex;
 
   std::array<float, 16> vertices = {-1.0, -1.0, 0, 1.0, 1.0, -1.0, 1.0, 1.0,
                                     -1.0, 1.0,  0, 0,   1.0, 1.0,  1.0, 0};

@@ -5,11 +5,13 @@
 #ifndef FIRELIGHT_OPEN_GL_DRIVER_HPP
 #define FIRELIGHT_OPEN_GL_DRIVER_HPP
 
+#include "../../math/bbox.hpp"
 #include "../character.hpp"
 #include "../color.hpp"
 #include "../driver.hpp"
 #include "GL/glew.h"
 #include "freetype/freetype.h"
+#include "open_gl_texture.hpp"
 #include <array>
 #include <unordered_map>
 
@@ -20,12 +22,16 @@ public:
   OpenGLDriver(int w, int h);
   ~OpenGLDriver();
 
+  Texture *newTexture() override;
+
   void drawRectangle(int x, int y, int w, int h, Color color) override;
   void drawText(std::string text, int x, int y, Color color) override;
   void calculateTextBounds(const std::string &text, int &width,
                            int &height) override;
 
   void drawTexture(unsigned tex, int x, int y, unsigned w, unsigned h);
+  void drawTexture(Texture *texture, FL::Math::Box displayBox) override;
+
   int viewportWidth, viewportHeight = 0;
 
 private:

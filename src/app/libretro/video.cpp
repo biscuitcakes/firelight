@@ -11,51 +11,6 @@
 #include <cstring>
 #include <string>
 
-const GLchar *fragmentShader2 =
-    "#version 410\n"
-    "//uniform vec2 OutputSize;\n"
-    "//uniform vec2 TextureSize;\n"
-    "//uniform vec2 InputSize;\n"
-    "uniform sampler2D Texture;\n"
-
-    "in vec2 fragTexCoord;\n"
-
-    "out vec4 FragColor;\n"
-
-    "void main() {\n"
-    "vec4 c = texture(Texture, fragTexCoord);\n"
-    //"FragColor = vec4(1-c.x, 1-c.y, 1-c.z, c.a);\n"
-    "FragColor = c;\n"
-    "}\0";
-
-const GLchar *fragmentShader = "#version 410\n"
-                               "//uniform vec2 OutputSize;\n"
-                               "//uniform vec2 TextureSize;\n"
-                               "//uniform vec2 InputSize;\n"
-                               "uniform sampler2D Texture;\n"
-
-                               "in vec2 fragTexCoord;\n"
-
-                               "out vec4 FragColor;\n"
-
-                               "void main() {\n"
-                               "vec4 c = texture(Texture, fragTexCoord);\n"
-                               "FragColor = c;\n"
-                               "//FragColor = vec4(fragTexCoord.xy, 0, 1.0);\n"
-                               "}\0";
-
-// compiler combines adjacent strings apparently
-const GLchar *vertexShader = "#version 410\n"
-                             "layout(location = 0) in vec2 vert;\n"
-                             "layout(location = 1) in vec2 vertTexCoord;\n"
-
-                             "out vec2 fragTexCoord;\n"
-
-                             "void main() {\n"
-                             "fragTexCoord = vertTexCoord;\n"
-                             "gl_Position = vec4(vert, 0.0, 1.0);\n"
-                             "}\0";
-
 namespace libretro {
 static GLuint fboId = 0;
 
@@ -63,6 +18,12 @@ void Video::recalcVertexArray() {
   if (this->gameGeometry == nullptr || this->displayMode == STRETCH) {
     this->vertices = {-1.0, -1.0, 0, 1.0, 1.0, -1.0, 1.0, 1.0,
                       -1.0, 1.0,  0, 0,   1.0, 1.0,  1.0, 0};
+
+    displayBox.xPx = 0;
+    displayBox.yPx = 0;
+    displayBox.widthPx = windowWidth;
+    displayBox.heightPx = windowHeight;
+
   } else if (this->displayMode == ORIGINAL) {
     auto geo = *this->gameGeometry;
     auto w = geo.base_width; // Can multiply here to do what I guess is integer
@@ -74,6 +35,12 @@ void Video::recalcVertexArray() {
         (w / float(windowWidth)),  -(h / float(windowHeight)), 1.0, 1.0,
         -(w / float(windowWidth)), (h / float(windowHeight)),  0,   0,
         (w / float(windowWidth)),  (h / float(windowHeight)),  1.0, 0};
+
+    displayBox.xPx = (windowWidth - w) / 2;
+    displayBox.yPx = (windowHeight - h) / 2;
+    displayBox.widthPx = w;
+    displayBox.heightPx = h;
+
   } else if (this->displayMode == ASPECT_RATIO) {
     auto geo = *this->gameGeometry;
     auto aspectRatio = geo.aspect_ratio;
@@ -94,6 +61,11 @@ void Video::recalcVertexArray() {
       desiredWidth = windowWidth;
       desiredHeight = desiredWidth / aspectRatio;
     }
+
+    displayBox.xPx = (windowWidth - desiredWidth) / 2;
+    displayBox.yPx = (windowHeight - desiredHeight) / 2;
+    displayBox.widthPx = desiredWidth;
+    displayBox.heightPx = desiredHeight;
 
     this->vertices = {-(desiredWidth / float(windowWidth)),
                       -(desiredHeight / float(windowHeight)),
@@ -124,7 +96,7 @@ void Video::recalcVertexArray() {
   glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-Video::Video() {
+Video::Video(FL::Graphics::Driver *driver) : gfxDriver(driver) {
   printf("OpenGL version: %s\n", glGetString(GL_VERSION));
 
   glGenBuffers(1, &intermediateVbo);
@@ -176,70 +148,7 @@ Video::Video() {
     printf("GL ERROR: %d\n", err);
   }
 
-  auto frag2 = glCreateShader(GL_FRAGMENT_SHADER);
-  glShaderSource(frag2, 1, &fragmentShader2, nullptr);
-  glCompileShader(frag2);
-
-  auto vert = glCreateShader(GL_VERTEX_SHADER);
-  glShaderSource(vert, 1, &vertexShader, nullptr);
-  glCompileShader(vert);
-
-  GLint status2;
-
-  glGetShaderiv(vert, GL_COMPILE_STATUS, &status2);
-  if (status2 == GL_FALSE) {
-    printf("Oh no, error: %d :(\n", status2);
-    GLint logLength;
-    glGetShaderiv(vert, GL_INFO_LOG_LENGTH, &logLength);
-
-    char *str = static_cast<char *>(malloc(logLength + 1));
-    memset(str, 'a', logLength);
-    str[logLength] = '\0';
-    glGetShaderInfoLog(vert, logLength, nullptr, str);
-
-    printf("error: %s\n", str);
-  }
-
-  err = glGetError();
-  if (err != GL_NO_ERROR) {
-    printf("GL ERROR: %d\n", err);
-  }
-
-  intermediateProgram = glCreateProgram();
-  glAttachShader(intermediateProgram, frag2);
-  glAttachShader(intermediateProgram, vert);
-
-  glLinkProgram(intermediateProgram);
-  glDetachShader(intermediateProgram, vert);
-  glDetachShader(intermediateProgram, frag2);
-
-  glDeleteShader(vert);
-  glDeleteShader(frag2);
-
-  err = glGetError();
-  if (err != GL_NO_ERROR) {
-    printf("GL ERROR: %d\n", err);
-  }
-
-  glGenTextures(1, &tex);
-  glBindTexture(GL_TEXTURE_2D, tex);
-
-  err = glGetError();
-  if (err != GL_NO_ERROR) {
-    printf("GL ERROR: %d\n", err);
-  }
-
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-
-  err = glGetError();
-  if (err != GL_NO_ERROR) {
-    printf("GL ERROR: %d\n", err);
-  }
-
-  glBindTexture(GL_TEXTURE_2D, 0);
+  gameTexture = driver->newTexture();
 }
 
 void Video::setScreenDimensions(int x2, int y2, int screenWidth,
@@ -260,25 +169,25 @@ void Video::setScreenDimensions(int x2, int y2, int screenWidth,
 void Video::draw() {
   glViewport(this->x, this->y, this->windowWidth, this->windowHeight);
   if (!this->hardwareRendering) {
-    glBindTexture(GL_TEXTURE_2D, tex);
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, softwareBufPitch / 2);
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, softwareBufWidth,
-                 softwareBufHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
-                 softwareBufData);
-
-    auto err = glGetError();
-    if (err != GL_NO_ERROR) {
-      printf("GL ERROR software rendering: %d\n", err);
-    }
-
-    glUseProgram(FL::Graphics::Shaders::texProgram);
-    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glBindVertexArray(vao);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    glBindVertexArray(0);
-    glBindTexture(GL_TEXTURE_2D, 0);
+    gfxDriver->drawTexture(gameTexture, displayBox);
+    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, softwareBufPitch / 2);
+    //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, softwareBufWidth,
+    //                 softwareBufHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
+    //                 softwareBufData);
+    //
+    //    auto err = glGetError();
+    //    if (err != GL_NO_ERROR) {
+    //      printf("GL ERROR software rendering: %d\n", err);
+    //    }
+    //
+    //    glUseProgram(FL::Graphics::Shaders::texProgram);
+    //    glBindFramebuffer(GL_FRAMEBUFFER, 0);
+    //    glBindVertexArray(vao);
+    //    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    //    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+    //    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    //    glBindVertexArray(0);
+    //    glBindTexture(GL_TEXTURE_2D, 0);
 
     // Bind texture with game data
     // Draw to intermediate framebuffer
@@ -297,7 +206,7 @@ void Video::draw() {
 
     glBindTexture(GL_TEXTURE_2D, intermediateTex);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glUseProgram(intermediateProgram);
+    glUseProgram(FL::Graphics::Shaders::texProgram);
     glBindVertexArray(intermediateVao);
     glBindBuffer(GL_ARRAY_BUFFER, intermediateVbo);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
@@ -329,6 +238,8 @@ void Video::refreshCoreVideo(const void *d, unsigned w, unsigned h, size_t p) {
   this->softwareBufWidth = w;
   this->softwareBufHeight = h;
   this->softwareBufPitch = p;
+
+  gameTexture->setContent(d, w, h, p);
 }
 
 void Video::setHardwareRenderCallback(retro_hw_render_callback *cb) {

@@ -8,9 +8,6 @@ namespace FL::Graphics {
 
 void Shaders::initializeAll() {
   fontFragmentShader = "#version 410\n"
-                       "//uniform vec2 OutputSize;\n"
-                       "//uniform vec2 TextureSize;\n"
-                       "//uniform vec2 InputSize;\n"
                        "uniform sampler2D Texture;\n"
                        "uniform vec3 color;\n"
 
@@ -21,13 +18,9 @@ void Shaders::initializeAll() {
                        "void main() {\n"
                        "float alpha = texture(Texture, fragTexCoord).a;\n"
                        "FragColor = vec4(color.rgb, alpha);\n"
-                       //                       "FragColor = c;\n"
                        "}\0";
 
   fragmentShader = "#version 410\n"
-                   "//uniform vec2 OutputSize;\n"
-                   "//uniform vec2 TextureSize;\n"
-                   "//uniform vec2 InputSize;\n"
                    "uniform sampler2D Texture;\n"
 
                    "in vec2 fragTexCoord;\n"
@@ -36,7 +29,6 @@ void Shaders::initializeAll() {
 
                    "void main() {\n"
                    "vec4 c = texture(Texture, fragTexCoord);\n"
-                   //"FragColor = vec4(1-c.x, 1-c.y, 1-c.z, c.a);\n"
                    "FragColor = c;\n"
                    "}\0";
 
