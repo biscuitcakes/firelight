@@ -91,6 +91,8 @@ add_executable(firelight
         src/app/db/in_memory_game_repository.hpp
         src/app/game_screen.cpp
         src/app/game_screen.hpp
+        src/lib/graphics/opengl/open_gl_texture.cpp
+        src/lib/graphics/opengl/open_gl_texture.hpp
 )
 
 target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)

@@ -14,10 +14,12 @@ InMemoryGameRepository::InMemoryGameRepository(const string &filename) {
   auto size = file_size(path);
   char content[size];
 
+  memset(content, 0, size);
+
   file.read(content, size);
   file.close();
 
-  string contentString = content;
+  string contentString(content);
   auto j = json::parse(contentString);
 
   auto p2 = j.template get<std::vector<GameRecord>>();

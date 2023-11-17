@@ -65,12 +65,6 @@ public:
       screen->addWidget(std::move(button));
     }
 
-    //    screen->addWidget(widgetFactory->createButton("Paper Mario"));
-    //    screen->addWidget(widgetFactory->createButton("Pokemon Red Version"));
-    //    screen->addWidget(widgetFactory->createButton("Pokemon Yellow
-    //    Version")); screen->addWidget(widgetFactory->createButton("Super Mario
-    //    World"));
-
     screenCache.emplace("home", std::move(screen));
   }
 

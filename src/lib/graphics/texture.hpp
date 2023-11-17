@@ -9,6 +9,7 @@ namespace FL::Graphics {
 
 class Texture {
 public:
+  virtual void resize(int w, int h) = 0;
 };
 
 } // namespace FL::Graphics
