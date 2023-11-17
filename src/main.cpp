@@ -26,16 +26,11 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
 int main(int argc, char *argv[]) {
-  const auto processor_count = std::thread::hardware_concurrency();
-  printf("Got hardware concurrency: %d\n", processor_count);
-
-  // Initialize SDL
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     return 1;
   }
 
-  // Create window
   auto window =
       SDL_CreateWindow("Firelight", SDL_WINDOWPOS_UNDEFINED,
                        SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT,
@@ -47,15 +42,7 @@ int main(int argc, char *argv[]) {
     return 1;
   }
 
-  float hDpi = 0;
-  float vDpi = 0;
-  float dDpi = 0;
-  SDL_GetDisplayDPI(SDL_GetWindowDisplayIndex(window), &dDpi, &hDpi, &vDpi);
-
-  printf("DPI values: d: %f h: %f v: %f", dDpi, hDpi, vDpi);
-
   auto context = SDL_GL_CreateContext(window);
-
   SDL_SetWindowMinimumSize(window, 160, 144); // TODO set based on core
 
   if (GLEW_OK != glewInit()) {
@@ -71,21 +58,6 @@ int main(int argc, char *argv[]) {
   ImGui_ImplSDL2_InitForOpenGL(window, context);
   ImGui_ImplOpenGL3_Init("#version 130");
 
-  FL::Graphics::Shaders::initializeAll();
-
-  //  auto core = std::make_unique<libretro::Core>(
-  //      "/Users/alexs/git/ember-app/_cores/mupen64plus_next_libretro.dll");
-  //
-  //  core->setSystemDirectory(".");
-  //  core->setSaveDirectory(".");
-  //  core->init();
-  //
-  //  libretro::Game game("/Users/alexs/git/ember-app/_games/MarioKart64.z64");
-  //  core->loadGame(&game);
-  //  core->getVideo()->initialize(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
-  //
-  //    conManager.setLoadedCore(core.get());
-
   FL::DB::InMemoryGameRepository repository("games.json");
   FL::DB::GameScanner scanner(&repository);
 
@@ -98,6 +70,7 @@ int main(int argc, char *argv[]) {
   Uint64 frameEnd;
   double frameDiff;
 
+  FL::Graphics::Shaders::initializeAll();
   FL::Graphics::Driver *driver =
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   auto widgetPainter = std::make_shared<WidgetPainter>(driver);
@@ -179,10 +152,6 @@ int main(int argc, char *argv[]) {
     SDL_GetWindowSize(window, &width, &height);
 
     glViewport(0, 0, width, height);
-    //
-    //    glEnable(GL_BLEND);
-    //    core->run(deltaTime);
-    //    core->getVideo()->draw();
 
     manager.update(0);
     manager.render(widgetPainter);
@@ -204,10 +173,8 @@ int main(int argc, char *argv[]) {
 
     // todo: measure post-swap somehow?
   }
-  // Destroy window
+  
   SDL_DestroyWindow(window);
-
-  // Quit SDL subsystems
   SDL_Quit();
 
   return 0;

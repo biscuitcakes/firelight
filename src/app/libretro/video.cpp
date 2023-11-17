@@ -170,30 +170,6 @@ void Video::draw() {
   glViewport(this->x, this->y, this->windowWidth, this->windowHeight);
   if (!this->hardwareRendering) {
     gfxDriver->drawTexture(gameTexture, displayBox);
-    //    glPixelStorei(GL_UNPACK_ROW_LENGTH, softwareBufPitch / 2);
-    //    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, softwareBufWidth,
-    //                 softwareBufHeight, 0, GL_RGB, GL_UNSIGNED_SHORT_5_6_5,
-    //                 softwareBufData);
-    //
-    //    auto err = glGetError();
-    //    if (err != GL_NO_ERROR) {
-    //      printf("GL ERROR software rendering: %d\n", err);
-    //    }
-    //
-    //    glUseProgram(FL::Graphics::Shaders::texProgram);
-    //    glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    //    glBindVertexArray(vao);
-    //    glBindBuffer(GL_ARRAY_BUFFER, vbo);
-    //    glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
-    //    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    //    glBindVertexArray(0);
-    //    glBindTexture(GL_TEXTURE_2D, 0);
-
-    // Bind texture with game data
-    // Draw to intermediate framebuffer
-    // Bind that framebuffer's texture (max resolution)
-    // Bind back buffer
-    // Draw texture like normal
   } else {
     glBindTexture(GL_TEXTURE_2D, otherTex); // 600 x 480 or whatever
     glUseProgram(FL::Graphics::Shaders::texProgram);
@@ -224,21 +200,10 @@ void Video::draw() {
     if (err != GL_NO_ERROR) {
       printf("GL ERROR: %d\n", err);
     }
-
-    // bind game FBO's texture
-    // Draw to intermediate framebuffer
-    // Bind that framebuffer's texture (max resolution)
-    // Bind back buffer
-    // Draw texture like normal
   }
 }
 
 void Video::refreshCoreVideo(const void *d, unsigned w, unsigned h, size_t p) {
-  this->softwareBufData = d;
-  this->softwareBufWidth = w;
-  this->softwareBufHeight = h;
-  this->softwareBufPitch = p;
-
   gameTexture->setContent(d, w, h, p);
 }
 

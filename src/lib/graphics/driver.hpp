@@ -9,6 +9,7 @@
 #include "color.hpp"
 #include "texture.hpp"
 #include <string>
+
 namespace FL::Graphics {
 
 class Driver {

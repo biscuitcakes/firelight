@@ -297,9 +297,6 @@ void OpenGLDriver::drawRectangle(int x, int y, int w, int h,
   glBindVertexArray(0);
 }
 
-void OpenGLDriver::drawTexture(unsigned tex, int x, int y, unsigned w,
-                               unsigned h) {}
-
 void OpenGLDriver::drawText(std::string text, int x, int y, Color color) {
   // go through each character and calculate the total width
   // while doing that, keep track of which character goes highest above the

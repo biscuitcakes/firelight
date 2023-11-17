@@ -29,7 +29,6 @@ public:
   void calculateTextBounds(const std::string &text, int &width,
                            int &height) override;
 
-  void drawTexture(unsigned tex, int x, int y, unsigned w, unsigned h);
   void drawTexture(Texture *texture, FL::Math::Box displayBox) override;
 
   int viewportWidth, viewportHeight = 0;

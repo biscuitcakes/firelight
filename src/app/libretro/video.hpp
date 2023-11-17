@@ -83,7 +83,6 @@ private:
   GLuint intermediateVbo;
   GLuint intermediateTex;
   GLuint intermediateFbo;
-  GLuint intermediateProgram;
 
   void recalcVertexArray();
 
@@ -96,11 +95,6 @@ private:
   std::array<float, 16> fullScreenVertices = {-1.0, -1.0, 0,    1.0, 1.0, -1.0,
                                               1.0,  1.0,  -1.0, 1.0, 0,   0,
                                               1.0,  1.0,  1.0,  0};
-
-  const void *softwareBufData;
-  unsigned softwareBufWidth;
-  unsigned softwareBufHeight;
-  size_t softwareBufPitch;
 
   retro_game_geometry *gameGeometry;
 
