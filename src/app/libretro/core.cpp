@@ -991,4 +991,42 @@ void Core::plugInGamepad(int port, Gamepad *gamepad) {
 Gamepad *Core::getGamepad(int port) { return gamepads[port]; }
 Input *Core::getInput() { return input; }
 
+std::vector<char> Core::getMemoryData(MemoryType memType) {
+  auto size = symRetroGetMemoryDataSize((unsigned)memType);
+  auto ptr = symRetroGetMemoryData((unsigned)memType);
+
+  printf("getting memory data size: %zu\n", size);
+
+  auto end = ((char *)ptr) + size;
+
+  vector<char> memData((char *)ptr, end);
+  //  memData.reserve(size);
+
+  //  std::vector<unsigned char> v(charBuf, charBuf + len);
+
+  //  memcpy(memData.data(), ptr, size);
+
+  //  std::copy((char *)ptr, end, memData.begin());
+
+  //  std::cout << "begin: " << reinterpret_cast<void *>(ptr)
+  //            << ", end: " << reinterpret_cast<void *>(end) << std::endl;
+
+  return memData;
+
+  //  vector<byte *> &myName = *reinterpret_cast<vector<byte *> *>(ptr);
+  //  return std::vector<char>();
+}
+
+void Core::writeMemoryData(MemoryType memType, char *data) {
+  auto size = symRetroGetMemoryDataSize((unsigned)memType);
+  auto ptr = symRetroGetMemoryData((unsigned)memType);
+
+  //  if (data.size() != size) {
+  //    printf("um sizes don't match. data: %zu, size: %zu\n", data.size(),
+  //    size);
+  //  }
+
+  memcpy((byte *)ptr, data, size);
+}
+
 } // namespace libretro

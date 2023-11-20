@@ -70,6 +70,7 @@ private:
   int windowWidth, windowHeight;
 
   FL::Graphics::Texture *gameTexture;
+  FL::Graphics::Texture *fullScreenTexture;
 
   bool hardwareRendering = false;
 

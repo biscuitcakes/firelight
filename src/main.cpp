@@ -82,7 +82,7 @@ int main(int argc, char *argv[]) {
   FL::GUI::ScreenManager manager;
   FL::GUI::ScreenThing thing(&manager, &factory);
 
-  auto results = scanner.scanDirectory("../../ember-app", true);
+  auto results = scanner.scanDirectory("/Users/alexs/git/ember-app", true);
   thing.buildHomeScreen(results);
   thing.buildGameScreen(&conManager, driver);
 
@@ -173,7 +173,7 @@ int main(int argc, char *argv[]) {
 
     // todo: measure post-swap somehow?
   }
-  
+
   SDL_DestroyWindow(window);
   SDL_Quit();
 

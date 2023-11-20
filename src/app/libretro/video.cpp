@@ -149,6 +149,7 @@ Video::Video(FL::Graphics::Driver *driver) : gfxDriver(driver) {
   }
 
   gameTexture = driver->newTexture();
+  fullScreenTexture = driver->newTexture();
 }
 
 void Video::setScreenDimensions(int x2, int y2, int screenWidth,

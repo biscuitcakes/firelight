@@ -21,6 +21,7 @@ public:
   void update(float deltaTime) override;
   void render(const std::shared_ptr<WidgetPainter> &painter) override;
   ~GameScreen() override = default;
+  bool handleEvent(Event &event) override;
 
 private:
   std::unique_ptr<libretro::Core> core;

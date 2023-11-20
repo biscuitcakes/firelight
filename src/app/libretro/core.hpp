@@ -23,6 +23,13 @@ using std::vector;
 
 namespace libretro {
 
+enum MemoryType {
+  SAVE_RAM = RETRO_MEMORY_SAVE_RAM,
+  RTC = RETRO_MEMORY_RTC,
+  SYSTEM_RAM = RETRO_MEMORY_SYSTEM_RAM,
+  VIDEO_RAM = RETRO_MEMORY_VIDEO_RAM
+};
+
 typedef void (*RetroSetEnvironment)(bool (*)(unsigned cmd, void *data));
 typedef void (*RetroSetVideoRefresh)(retro_video_refresh_t);
 typedef void (*RetroSetAudioSample)(retro_audio_sample_t);
@@ -61,6 +68,10 @@ public:
   void setSystemDirectory(string);
 
   void setSaveDirectory(string);
+
+  std::vector<char> getMemoryData(MemoryType memType);
+
+  void writeMemoryData(MemoryType memType, char *data);
 
 private:
   FL::Graphics::Driver *gfxDriver;

@@ -23,6 +23,9 @@ void ScreenManager::handleSdlEvent(SDL_Event *event) {
     case SDL_CONTROLLER_BUTTON_B:
       guiEvent.type = Event::NAV_BACK_PUSHED;
       break;
+    case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+      guiEvent.type = Event::TEST;
+      break;
     default:
       return;
     }

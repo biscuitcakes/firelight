@@ -93,6 +93,11 @@ add_executable(firelight
         src/app/game_screen.hpp
         src/lib/graphics/opengl/open_gl_texture.cpp
         src/lib/graphics/opengl/open_gl_texture.hpp
+        src/app/library/game_library.cpp
+        src/app/library/game_library.hpp
+        src/app/saves/save_manager.cpp
+        src/app/saves/save_manager.hpp
+        src/app/app_constants.hpp
 )
 
 target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)
