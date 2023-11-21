@@ -9,6 +9,20 @@ void ScreenManager::handleSdlEvent(SDL_Event *event) {
   FL::GUI::Event guiEvent{};
 
   switch (event->type) {
+  case SDL_KEYDOWN:
+    switch (event->key.keysym.sym) {
+    case SDLK_DOWN:
+      guiEvent.type = Event::NAV_DOWN;
+      break;
+    case SDLK_UP:
+      guiEvent.type = Event::NAV_UP;
+      break;
+    case SDLK_SPACE:
+    case SDLK_RETURN:
+      guiEvent.type = Event::NAV_SELECT_PUSHED;
+      break;
+    }
+    break;
   case SDL_CONTROLLERBUTTONDOWN:
     switch (event->cbutton.button) {
     case SDL_CONTROLLER_BUTTON_DPAD_DOWN:

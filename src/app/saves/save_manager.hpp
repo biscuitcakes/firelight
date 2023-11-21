@@ -12,7 +12,8 @@ namespace FL {
 
 class SaveManager {
 public:
-  std::vector<unsigned char> getLatestForGame(std::string gameId);
+  std::vector<unsigned char> read(std::string gameId);
+  void write(std::string gameId, std::vector<unsigned char> data);
 
 private:
   DB::GameRepository *gameRepository;

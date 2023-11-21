@@ -48,12 +48,7 @@ void GameScreen::enter() {
   if (saveFile) {
     auto size = file_size(path);
 
-    printf("got size: %ju\n", size);
-
     char data[size];
-    //    std::vector<char> data;
-    //    data.reserve(size);
-
     saveFile.read(data, size);
     saveFile.close();
 
