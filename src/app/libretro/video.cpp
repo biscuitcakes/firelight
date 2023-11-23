@@ -29,6 +29,9 @@ const GLchar *fragmentShader2 =
     "}\0";
 
 const GLchar *fragmentShader = "#version 410\n"
+                               "//uniform vec2 OutputSize;\n"
+                               "//uniform vec2 TextureSize;\n"
+                               "//uniform vec2 InputSize;\n"
                                "uniform sampler2D Texture;\n"
 
                                "in vec2 fragTexCoord;\n"
