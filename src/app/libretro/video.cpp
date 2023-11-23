@@ -346,6 +346,8 @@ void Video::refreshCoreVideo(const void *d, unsigned w, unsigned h, size_t p) {
   this->softwareBufWidth = w;
   this->softwareBufHeight = h;
   this->softwareBufPitch = p;
+
+  //  gameTexture->setContent(d, w, h, p);
 }
 
 void Video::setHardwareRenderCallback(retro_hw_render_callback *cb) {

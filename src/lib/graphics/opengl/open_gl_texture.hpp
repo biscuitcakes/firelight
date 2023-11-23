@@ -17,7 +17,10 @@ public:
   void setContent(const void *data, unsigned width, unsigned height,
                   unsigned pitch) override;
 
+private:
+  friend class OpenGLDriver;
   GLuint texId = -1;
+  
   void *content = nullptr;
 };
 

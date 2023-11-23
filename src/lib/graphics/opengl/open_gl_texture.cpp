@@ -8,7 +8,6 @@
 namespace FL::Graphics {
 
 OpenGLTexture::OpenGLTexture() {
-
   glGenTextures(1, &texId);
   glBindTexture(GL_TEXTURE_2D, texId);
 

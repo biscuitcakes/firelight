@@ -9,9 +9,9 @@
 #include "../character.hpp"
 #include "../color.hpp"
 #include "../driver.hpp"
-#include "../texture.hpp"
 #include "GL/glew.h"
 #include "freetype/freetype.h"
+#include "open_gl_texture.hpp"
 #include <array>
 #include <unordered_map>
 
@@ -31,6 +31,7 @@ public:
 
   void drawTexture(unsigned tex, int x, int y, unsigned w, unsigned h);
   void drawTexture(Texture *texture, FL::Math::Box displayBox) override;
+  
   int viewportWidth, viewportHeight = 0;
 
 private:

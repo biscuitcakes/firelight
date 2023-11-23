@@ -5,6 +5,7 @@
 #ifndef FIRELIGHT_VIDEO_HPP
 #define FIRELIGHT_VIDEO_HPP
 
+#include "../../lib/graphics/driver.hpp"
 #include "../../lib/math/bbox.hpp"
 #include "GL/glew.h"
 #include "libretro.h"
@@ -63,8 +64,11 @@ public:
 
 private:
   FL::Math::Box displayBox;
+  FL::Graphics::Driver *gfxDriver;
   int x, y = 0;
   int windowWidth, windowHeight;
+  
+  FL::Graphics::Texture *gameTexture;
 
   bool hardwareRendering = false;
 
