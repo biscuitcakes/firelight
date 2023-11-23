@@ -90,6 +90,8 @@ private:
   GLuint vao;
   GLuint vbo;
 
+  GLuint tex;
+
   std::array<float, 16> vertices = {-1.0, -1.0, 0, 1.0, 1.0, -1.0, 1.0, 1.0,
                                     -1.0, 1.0,  0, 0,   1.0, 1.0,  1.0, 0};
 

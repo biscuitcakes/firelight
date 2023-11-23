@@ -16,7 +16,8 @@ GameScreen::GameScreen(std::unique_ptr<ContainerWidget> container,
 
 void GameScreen::enter() {
   core = std::make_unique<libretro::Core>(
-      "/Users/alexs/git/ember-app/_cores/gambatte_libretro.dll", gfxDriver);
+      "/Users/alexs/git/ember-app/_cores/mupen64plus_next_libretro.dll",
+      gfxDriver);
 
   core->setSystemDirectory(".");
   core->setSaveDirectory(".");
