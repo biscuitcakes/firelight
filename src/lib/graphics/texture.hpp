@@ -9,6 +9,8 @@ namespace FL::Graphics {
 
 class Texture {
 public:
+  virtual void setContent(const void *data, unsigned width, unsigned height,
+                          unsigned pitch) = 0;
   virtual void resize(int w, int h) = 0;
 };
 

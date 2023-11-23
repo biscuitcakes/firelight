@@ -12,13 +12,13 @@ namespace FL::Graphics {
 
 class OpenGLTexture : public Texture {
 public:
+  OpenGLTexture();
   void resize(int w, int h) override;
+  void setContent(const void *data, unsigned width, unsigned height,
+                  unsigned pitch) override;
 
   GLuint texId = -1;
-
-private:
-  int width = 0;
-  int height = 0;
+  void *content = nullptr;
 };
 
 } // namespace FL::Graphics
