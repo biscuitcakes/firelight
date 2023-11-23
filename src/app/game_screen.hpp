@@ -7,7 +7,9 @@
 
 #include "../lib/gui/screens/screen.hpp"
 #include "controller/controller_manager.hpp"
+#include "library/entry.hpp"
 #include "libretro/core.hpp"
+#include "saves/save_manager.hpp"
 #include <filesystem>
 namespace FL::GUI {
 
@@ -15,7 +17,8 @@ class GameScreen : public Screen {
 public:
   explicit GameScreen(std::unique_ptr<ContainerWidget> container,
                       FL::ControllerManager *manager,
-                      FL::Graphics::Driver *driver, std::string romPath);
+                      FL::Graphics::Driver *driver, std::string romPath,
+                      Library::Entry libEntry, SaveManager *saveMan);
   void enter() override;
   void exit() override;
   void update(float deltaTime) override;
@@ -28,6 +31,8 @@ private:
   std::string gameRomPath;
   FL::ControllerManager *controllerManager;
   FL::Graphics::Driver *gfxDriver;
+  Library::Entry libraryEntry;
+  SaveManager *saveManager;
 };
 
 } // namespace FL::GUI

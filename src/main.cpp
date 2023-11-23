@@ -81,10 +81,11 @@ int main(int argc, char *argv[]) {
 
   FL::GUI::ScreenManager manager;
   FL::GUI::ScreenThing thing(&manager, &factory);
+  FL::SaveManager saveManager;
 
   auto results = scanner.scanDirectory("/Users/alexs/git/ember-app", true);
   thing.buildHomeScreen(results);
-  thing.buildGameScreen(&conManager, driver);
+  thing.buildGameScreen(&conManager, driver, &saveManager);
 
   manager.pushScreen(thing.getInitialScreen());
 

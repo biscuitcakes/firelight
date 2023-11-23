@@ -3,7 +3,6 @@
 //
 
 #include "game_screen.hpp"
-#include "controller/controller_manager.hpp"
 
 #include <fstream>
 #include <iterator>
@@ -12,17 +11,16 @@
 namespace FL::GUI {
 GameScreen::GameScreen(std::unique_ptr<ContainerWidget> container,
                        FL::ControllerManager *manager,
-                       FL::Graphics::Driver *driver, std::string romPath)
+                       FL::Graphics::Driver *driver, std::string romPath,
+                       Library::Entry libEntry, SaveManager *saveMan)
     : Screen(std::move(container)), gameRomPath(std::move(romPath)),
-      controllerManager(manager), gfxDriver(driver) {}
+      controllerManager(manager), gfxDriver(driver),
+      libraryEntry(std::move(libEntry)), saveManager(saveMan) {}
 
 bool GameScreen::handleEvent(Event &event) {
   if (event.type == FL::GUI::Event::TEST) {
     auto data = core->getMemoryData(libretro::SAVE_RAM);
-    printf("size of data writing: %zu\n", data.size());
-    std::ofstream saveFile("save.whatever", std::ios::binary);
-    saveFile.write(data.data(), data.size());
-    saveFile.close();
+    saveManager->write(libraryEntry.gameId, data);
     return true;
   }
 
@@ -43,17 +41,22 @@ void GameScreen::enter() {
 
   controllerManager->setLoadedCore(core.get());
 
-  std::filesystem::path path("save.whatever");
-  std::ifstream saveFile(path, std::ios::binary);
-  if (saveFile) {
-    auto size = file_size(path);
-
-    char data[size];
-    saveFile.read(data, size);
-    saveFile.close();
-
-    core->writeMemoryData(libretro::SAVE_RAM, data);
+  auto saveData = saveManager->read(libraryEntry.gameId);
+  if (!saveData.empty()) {
+    core->writeMemoryData(libretro::SAVE_RAM, saveData.data());
   }
+
+  //  std::filesystem::path path("save.whatever");
+  //  std::ifstream saveFile(path, std::ios::binary);
+  //  if (saveFile) {
+  //    auto size = file_size(path);
+  //
+  //    char data[size];
+  //    saveFile.read(data, size);
+  //    saveFile.close();
+  //
+  //    core->writeMemoryData(libretro::SAVE_RAM, data);
+  //  }
 }
 
 void GameScreen::exit() { Screen::exit(); }
