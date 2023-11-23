@@ -15,7 +15,7 @@ GameScreen::GameScreen(std::unique_ptr<ContainerWidget> container,
 
 void GameScreen::enter() {
   core = std::make_unique<libretro::Core>(
-      "/Users/alexs/git/ember-app/_cores/gambatte_libretro.dll");
+      "/Users/alexs/git/ember-app/_cores/mupen64plus_next_libretro.dll");
 
   core->setSystemDirectory(".");
   core->setSaveDirectory(".");

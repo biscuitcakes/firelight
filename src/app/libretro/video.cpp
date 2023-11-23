@@ -63,6 +63,12 @@ void Video::recalcVertexArray() {
   if (this->gameGeometry == nullptr || this->displayMode == STRETCH) {
     this->vertices = {-1.0, -1.0, 0, 1.0, 1.0, -1.0, 1.0, 1.0,
                       -1.0, 1.0,  0, 0,   1.0, 1.0,  1.0, 0};
+
+    displayBox.xPx = 0;
+    displayBox.yPx = 0;
+    displayBox.widthPx = windowWidth;
+    displayBox.heightPx = windowHeight;
+
   } else if (this->displayMode == ORIGINAL) {
     auto geo = *this->gameGeometry;
     auto w = geo.base_width; // Can multiply here to do what I guess is integer
@@ -74,6 +80,12 @@ void Video::recalcVertexArray() {
         (w / float(windowWidth)),  -(h / float(windowHeight)), 1.0, 1.0,
         -(w / float(windowWidth)), (h / float(windowHeight)),  0,   0,
         (w / float(windowWidth)),  (h / float(windowHeight)),  1.0, 0};
+
+    displayBox.xPx = (windowWidth - w) / 2;
+    displayBox.yPx = (windowHeight - h) / 2;
+    displayBox.widthPx = w;
+    displayBox.heightPx = h;
+
   } else if (this->displayMode == ASPECT_RATIO) {
     auto geo = *this->gameGeometry;
     auto aspectRatio = geo.aspect_ratio;
@@ -94,6 +106,11 @@ void Video::recalcVertexArray() {
       desiredWidth = windowWidth;
       desiredHeight = desiredWidth / aspectRatio;
     }
+
+    displayBox.xPx = (windowWidth - desiredWidth) / 2;
+    displayBox.yPx = (windowHeight - desiredHeight) / 2;
+    displayBox.widthPx = desiredWidth;
+    displayBox.heightPx = desiredHeight;
 
     this->vertices = {-(desiredWidth / float(windowWidth)),
                       -(desiredHeight / float(windowHeight)),

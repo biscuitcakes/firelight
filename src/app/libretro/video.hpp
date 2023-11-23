@@ -5,6 +5,7 @@
 #ifndef FIRELIGHT_VIDEO_HPP
 #define FIRELIGHT_VIDEO_HPP
 
+#include "../../lib/math/bbox.hpp"
 #include "GL/glew.h"
 #include "libretro.h"
 #include <array>
@@ -61,6 +62,7 @@ public:
   void setFrameTimeCallback(retro_frame_time_callback *);
 
 private:
+  FL::Math::Box displayBox;
   int x, y = 0;
   int windowWidth, windowHeight;
 
