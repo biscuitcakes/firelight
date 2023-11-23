@@ -314,7 +314,7 @@ void Video::draw() {
 
     glBindTexture(GL_TEXTURE_2D, intermediateTex);
     glBindFramebuffer(GL_FRAMEBUFFER, 0);
-    glUseProgram(intermediateProgram);
+    glUseProgram(FL::Graphics::Shaders::texProgram);
     glBindVertexArray(intermediateVao);
     glBindBuffer(GL_ARRAY_BUFFER, intermediateVbo);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

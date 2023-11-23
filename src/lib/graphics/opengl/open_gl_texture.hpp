@@ -14,8 +14,9 @@ class OpenGLTexture : public Texture {
 public:
   void resize(int w, int h) override;
 
-private:
   GLuint texId = -1;
+
+private:
   int width = 0;
   int height = 0;
 };

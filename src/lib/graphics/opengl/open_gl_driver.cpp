@@ -3,6 +3,9 @@
 //
 
 #include "open_gl_driver.hpp"
+#include "../../math/bbox.hpp"
+#include "../texture.hpp"
+#include "open_gl_texture.hpp"
 #include "shaders.hpp"
 
 namespace FL::Graphics {
@@ -298,16 +301,19 @@ void OpenGLDriver::drawRectangle(int x, int y, int w, int h,
 }
 
 void OpenGLDriver::drawTexture(unsigned tex, int x, int y, unsigned w,
-                               unsigned h) {
-  auto vertices = calculateTexVertexArray(x, y, w, h);
+                               unsigned h) {}
 
-  glEnable(GL_BLEND);
-  glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+Texture *OpenGLDriver::newTexture() { return new OpenGLTexture(); }
 
-  glBindTexture(GL_TEXTURE_2D, tex);
-  glUseProgram(FL::Graphics::Shaders::fontProgram);
-  glUniform3f(glGetUniformLocation(FL::Graphics::Shaders::fontProgram, "color"),
-              1, 0, 0);
+void OpenGLDriver::drawTexture(Texture *texture, FL::Math::Box displayBox) {
+  auto *actualTex = reinterpret_cast<OpenGLTexture *>(texture);
+  // TODO: Error handle I guess
+
+  auto vertices = calculateTexVertexArray(
+      displayBox.xPx, displayBox.yPx, displayBox.widthPx, displayBox.heightPx);
+
+  glBindTexture(GL_TEXTURE_2D, actualTex->texId);
+  glUseProgram(FL::Graphics::Shaders::texProgram);
 
   glBindBuffer(GL_ARRAY_BUFFER, texVbo);
   glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices.data(),
@@ -320,6 +326,7 @@ void OpenGLDriver::drawTexture(unsigned tex, int x, int y, unsigned w,
 
   glBindBuffer(GL_ARRAY_BUFFER, 0);
   glBindVertexArray(0);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 void OpenGLDriver::drawText(std::string text, int x, int y, Color color) {
