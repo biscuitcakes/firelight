@@ -205,7 +205,10 @@ void Video::draw() {
 }
 
 void Video::refreshCoreVideo(const void *d, unsigned w, unsigned h, size_t p) {
-  gameTexture->setContent(d, w, h, p);
+  // TODO: Handle this better?
+  if (d != nullptr && p != 0) {
+    gameTexture->setContent(d, w, h, p);
+  }
 }
 
 void Video::setHardwareRenderCallback(retro_hw_render_callback *cb) {
