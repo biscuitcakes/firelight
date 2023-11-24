@@ -98,6 +98,7 @@ add_executable(firelight
         src/app/saves/save_manager.cpp
         src/app/saves/save_manager.hpp
         src/app/app_constants.hpp
+        src/app/platforms/platform_configuration.hpp
 )
 
 target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)

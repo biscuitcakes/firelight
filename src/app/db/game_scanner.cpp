@@ -74,9 +74,21 @@ GameScanner::scanDirectory(const std::string &path, bool recursive) {
 
           auto result = gameRepository->getGameByChecksum(md5);
           if (result != nullptr) {
+            auto core = "";
+            if (result->platform == "gb" || result->platform == "gbc") {
+              core = "/Users/alexs/git/ember-app/_cores/gambatte_libretro.dll";
+            } else if (result->platform == "n64") {
+              core = "/Users/alexs/git/ember-app/_cores/"
+                     "mupen64plus_next_libretro.dll";
+            } else if (result->platform == "snes") {
+              core = "/Users/alexs/git/ember-app/_cores/"
+                     "snes9x_libretro.dll";
+            }
+
             results.push_back({.id = "testing",
                                .gameName = result->name,
                                .gameId = result->id,
+                               .corePath = core,
                                .romPath = entry.path()});
           } else {
             printf("didn't find the game with name %ls\n",

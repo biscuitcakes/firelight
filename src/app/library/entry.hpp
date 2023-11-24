@@ -13,6 +13,7 @@ struct Entry {
   std::string id;
   std::string gameName;
   std::string gameId;
+  std::string corePath;
   std::filesystem::path romPath;
 };
 

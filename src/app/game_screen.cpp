@@ -28,8 +28,7 @@ bool GameScreen::handleEvent(Event &event) {
 }
 
 void GameScreen::enter() {
-  core = std::make_unique<libretro::Core>(
-      "/Users/alexs/git/ember-app/_cores/gambatte_libretro.dll", gfxDriver);
+  core = std::make_unique<libretro::Core>(libraryEntry.corePath, gfxDriver);
 
   core->setSystemDirectory(".");
   core->setSaveDirectory(".");
