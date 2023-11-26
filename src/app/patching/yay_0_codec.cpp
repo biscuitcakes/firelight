@@ -7,6 +7,16 @@
 #include <cstring>
 
 namespace FL::Patching {
+
+struct Header {
+  uint32_t magic; // should just be ASCII 'Yay0'
+  uint32_t uncompressedLength;
+  uint32_t opsAddr;  // Address of beginning of opcodes
+  uint32_t dataAddr; // Address of beginning of compressed data
+};
+
+// algorithm from
+// https://github.com/pmret/papermario/blob/main/tools/splat/util/n64/Yay0decompress.c
 std::vector<uint8_t> Yay0Codec::decompress(uint8_t *data) {
 
   // Fun little test that checks if the system is big or little endian.
@@ -14,11 +24,12 @@ std::vector<uint8_t> Yay0Codec::decompress(uint8_t *data) {
   char *test = (char *)&num;
 
   bool sysBigEndian = (*test != 1);
+  // TODO: really just need to check
 
   // Check if the beginning is 'Yay0' or '0yaY' lol
   bool dataBigEndian = data[0] == 'Y';
 
-  Header header;
+  Header header{};
 
   header.magic = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
   header.uncompressedLength = ((uint8_t)data[4]) << 24 |
@@ -67,8 +78,6 @@ std::vector<uint8_t> Yay0Codec::decompress(uint8_t *data) {
       }
     }
   }
-
-  printf("done\n");
 
   std::vector<uint8_t> result(header.uncompressedLength);
   memcpy(result.data(), dest, header.uncompressedLength);

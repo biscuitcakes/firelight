@@ -99,7 +99,6 @@ add_executable(firelight
         src/app/saves/save_manager.hpp
         src/app/app_constants.hpp
         src/app/platforms/platform_configuration.hpp
-        src/app/patching/thing.cpp
         src/app/patching/pm_star_rod_mod_patcher.hpp
         src/app/patching/yay_0_codec.cpp
         src/app/patching/yay_0_codec.hpp
