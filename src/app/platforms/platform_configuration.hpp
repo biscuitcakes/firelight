@@ -11,6 +11,8 @@ namespace FL::Platforms {
 class PlatformConfiguration {
 public:
   std::string corePath;
+  // core options
+  //
 };
 
 } // namespace FL::Platforms

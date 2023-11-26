@@ -1000,21 +1000,7 @@ std::vector<char> Core::getMemoryData(MemoryType memType) {
   auto end = ((char *)ptr) + size;
 
   vector<char> memData((char *)ptr, end);
-  //  memData.reserve(size);
-
-  //  std::vector<unsigned char> v(charBuf, charBuf + len);
-
-  //  memcpy(memData.data(), ptr, size);
-
-  //  std::copy((char *)ptr, end, memData.begin());
-
-  //  std::cout << "begin: " << reinterpret_cast<void *>(ptr)
-  //            << ", end: " << reinterpret_cast<void *>(end) << std::endl;
-
   return memData;
-
-  //  vector<byte *> &myName = *reinterpret_cast<vector<byte *> *>(ptr);
-  //  return std::vector<char>();
 }
 
 void Core::writeMemoryData(MemoryType memType, char *data) {
