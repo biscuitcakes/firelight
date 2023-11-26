@@ -83,7 +83,8 @@ int main(int argc, char *argv[]) {
   FL::GUI::ScreenThing thing(&manager, &factory);
   FL::SaveManager saveManager;
 
-  auto results = scanner.scanDirectory("/Users/alexs/git/ember-app", true);
+  auto results =
+      scanner.scanDirectory("/Users/alexs/git/firelight/_data/_games", true);
   thing.buildHomeScreen(results);
   thing.buildGameScreen(&conManager, driver, &saveManager);
 

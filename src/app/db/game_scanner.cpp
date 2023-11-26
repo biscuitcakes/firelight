@@ -76,12 +76,13 @@ GameScanner::scanDirectory(const std::string &path, bool recursive) {
           if (result != nullptr) {
             auto core = "";
             if (result->platform == "gb" || result->platform == "gbc") {
-              core = "/Users/alexs/git/ember-app/_cores/gambatte_libretro.dll";
+              core = "/Users/alexs/git/firelight/_data/_cores/gambatte_libretro"
+                     ".dll";
             } else if (result->platform == "n64") {
-              core = "/Users/alexs/git/ember-app/_cores/"
+              core = "/Users/alexs/git/firelight/_data/_cores/"
                      "mupen64plus_next_libretro.dll";
             } else if (result->platform == "snes") {
-              core = "/Users/alexs/git/ember-app/_cores/"
+              core = "/Users/alexs/git/firelight/_data/_cores/"
                      "snes9x_libretro.dll";
             }
 

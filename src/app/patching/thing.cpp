@@ -2,6 +2,7 @@
 // Created by alexs on 11/25/2023.
 //
 
+#include "pm_star_rod_mod_patch.hpp"
 #include "yay_0_codec.hpp"
 #include <cstdint>
 #include <cstdio>
@@ -15,15 +16,6 @@ struct Record {
 };
 
 int main() {
-  unsigned int num = 1;
-  char *byte = (char *)&num;
-
-  if (*byte == 1) {
-    printf("Little-endian\n");
-  } else {
-    printf("Big-endian\n");
-  }
-
   std::filesystem::path t = "/Users/alexs/git/firelight/src/app/patching"
                             "/PMMQ_Jr._1.5.1.2_fixed.mod";
 
@@ -39,30 +31,20 @@ int main() {
 
   auto result = codec.decompress(reinterpret_cast<uint8_t *>(data));
 
-  auto cursor = result.data();
-  uint32_t pmsr;
-  memcpy(&pmsr, cursor, 4);
-  cursor += 4;
+  FL::Patching::PMStarRodModPatch patch(result);
 
-  uint32_t numRecords =
-      cursor[0] << 24 | cursor[1] << 16 | cursor[2] << 8 | cursor[3];
-  cursor += 4;
+  std::filesystem::path gamePath =
+      "/Users/alexs/git/firelight/_data/_games/PaperMario.z64";
+  std::ifstream game(gamePath);
 
-  std::ofstream output("cooler.guy", std::ios::binary);
-  output.write(reinterpret_cast<const char *>(result.data()), result.size());
+  auto gameSize = file_size(gamePath);
+  std::vector<uint8_t> gameData(gameSize);
 
-  printf("pmsr: %c\n", pmsr);
-  printf("numRecords: %u\n", numRecords);
+  game.read(reinterpret_cast<char *>(gameData.data()), gameSize);
 
-  for (int i = 0; i < numRecords; ++i) {
-    uint32_t offset =
-        cursor[0] << 24 | cursor[1] << 16 | cursor[2] << 8 | cursor[3];
-    cursor += 4;
-    uint32_t dataLength =
-        cursor[0] << 24 | cursor[1] << 16 | cursor[2] << 8 | cursor[3];
+  auto patchedGame = patch.patchRom(gameData);
 
-    cursor += 4;
-    cursor += dataLength;
-    //    printf("[%d] offset: %u, dataLen: %u\n", i, offset, dataLength);
-  }
+  std::ofstream output("moddedpm.z64", std::ios::binary);
+  output.write(reinterpret_cast<const char *>(patchedGame.data()),
+               patchedGame.size());
 }
