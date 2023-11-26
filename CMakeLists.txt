@@ -99,8 +99,10 @@ add_executable(firelight
         src/app/saves/save_manager.hpp
         src/app/app_constants.hpp
         src/app/platforms/platform_configuration.hpp
-        src/app/patching/paper_mario_patch_thing.hpp
         src/app/patching/thing.cpp
+        src/app/patching/pm_star_rod_mod_patcher.hpp
+        src/app/patching/yay_0_codec.cpp
+        src/app/patching/yay_0_codec.hpp
 )
 
 target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)

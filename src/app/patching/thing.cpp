@@ -2,6 +2,7 @@
 // Created by alexs on 11/25/2023.
 //
 
+#include "yay_0_codec.hpp"
 #include <cstdint>
 #include <cstdio>
 #include <filesystem>
@@ -79,25 +80,11 @@ int main() {
 
   file.read(data, size);
 
-  Yay0Header header;
+  FL::Patching::Yay0Codec codec;
 
-  header.magic = data[0] << 24 | data[1] << 16 | data[2] << 8 | data[3];
-  header.uncompressedLength = ((uint8_t)data[4]) << 24 |
-                              ((uint8_t)data[5]) << 16 |
-                              ((uint8_t)data[6]) << 8 | ((uint8_t)data[7]);
-  header.opPtr = data[8] << 24 | data[9] << 16 | data[10] << 8 | data[11];
-  header.dataPtr = data[12] << 24 | data[13] << 16 | data[14] << 8 | data[15];
+  auto result = codec.decompress(reinterpret_cast<uint8_t *>(data));
 
-  printf("filesize: %ju\n", size);
-  printf("magic: %0x\n", header.magic);
-  printf("uncompressed: %u\n", header.uncompressedLength);
-  printf("opPtr: %0x\n", header.opPtr);
-  printf("dataPtr: %0x\n", header.dataPtr);
-
-  auto dest = new uint8_t[header.uncompressedLength];
-  decompress(&header, (uint8_t *)data, dest, true);
-
-  auto cursor = dest;
+  auto cursor = result.data();
   uint32_t pmsr;
   memcpy(&pmsr, cursor, 4);
   cursor += 4;
@@ -106,8 +93,8 @@ int main() {
       cursor[0] << 24 | cursor[1] << 16 | cursor[2] << 8 | cursor[3];
   cursor += 4;
 
-  std::ofstream output("cool.guy", std::ios::binary);
-  output.write(reinterpret_cast<const char *>(dest), header.uncompressedLength);
+  std::ofstream output("cooler.guy", std::ios::binary);
+  output.write(reinterpret_cast<const char *>(result.data()), result.size());
 
   printf("pmsr: %c\n", pmsr);
   printf("numRecords: %u\n", numRecords);
