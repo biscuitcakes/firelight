@@ -103,6 +103,9 @@ add_executable(firelight
         src/app/patching/yay_0_codec.cpp
         src/app/patching/yay_0_codec.hpp
         src/app/patching/pm_star_rod_mod_patch.hpp
+        src/app/db/game_full_file_thing.hpp
+        src/app/db/romhack_record.hpp
+        src/app/db/romhack_version_record.hpp
 )
 
 target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)

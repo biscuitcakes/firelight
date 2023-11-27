@@ -121,8 +121,6 @@ void Shaders::initializeAll() {
   if (err != GL_NO_ERROR) {
     printf("GL ERROR: %d\n", err);
   }
-
-  printf("Supposedly created the program\n");
 }
 
 } // namespace FL::Graphics

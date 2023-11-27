@@ -60,7 +60,8 @@ GameScanner::scanDirectory(const std::string &path, bool recursive) {
     if (!entry.is_directory()) {
 
       auto ext = entry.path().extension();
-      if (ext == ".gb" || ext == ".gbc" || ext == ".z64" || ext == ".smc") {
+      if (ext == ".gb" || ext == ".gbc" || ext == ".z64" || ext == ".smc" ||
+          ext == ".mod") {
         auto size = entry.file_size();
 
         if (size < MAX_FILESIZE_BYTES) {
@@ -71,6 +72,17 @@ GameScanner::scanDirectory(const std::string &path, bool recursive) {
           file.close();
 
           auto md5 = calculateMD5(thing.data(), size);
+
+          if (ext == ".mod") {
+            auto result = gameRepository->getRomhackByChecksum(md5);
+            if (result != nullptr) {
+              auto sourceGameId = result->sourceGameId;
+              printf("here's where I would find the thiiiiiiinnnnnng\n");
+            } else {
+              printf("didn't find the romhack with name %ls\n",
+                     entry.path().c_str());
+            }
+          }
 
           auto result = gameRepository->getGameByChecksum(md5);
           if (result != nullptr) {

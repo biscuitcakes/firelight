@@ -6,15 +6,21 @@
 #define FIRELIGHT_IN_MEMORY_GAME_REPOSITORY_HPP
 
 #include "game_repository.hpp"
+#include "romhack_record.hpp"
 namespace FL::DB {
 
 class InMemoryGameRepository : public GameRepository {
 public:
-  explicit InMemoryGameRepository(const std::string &filename);
+  InMemoryGameRepository(const std::string &filename,
+                         const string &romhackFile);
   std::shared_ptr<GameRecord> getGameByChecksum(std::string checksum) override;
+  std::shared_ptr<GameRecord> getGameById(std::string id) override;
+  std::shared_ptr<RomhackRecord>
+  getRomhackByChecksum(std::string checksum) override;
 
 private:
   std::unordered_map<std::string, GameRecord> games;
+  std::vector<RomhackRecord> romhacks;
 };
 
 } // namespace FL::DB

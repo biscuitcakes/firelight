@@ -58,7 +58,7 @@ int main(int argc, char *argv[]) {
   ImGui_ImplSDL2_InitForOpenGL(window, context);
   ImGui_ImplOpenGL3_Init("#version 130");
 
-  FL::DB::InMemoryGameRepository repository("games.json");
+  FL::DB::InMemoryGameRepository repository("games.json", "romhacks.json");
   FL::DB::GameScanner scanner(&repository);
 
   Uint64 NOW = SDL_GetPerformanceCounter();

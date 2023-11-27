@@ -6,6 +6,7 @@
 #define FIRELIGHT_GAME_REPOSITORY_HPP
 
 #include "game_record.hpp"
+#include "romhack_record.hpp"
 #include <memory>
 #include <string>
 
@@ -15,6 +16,9 @@ class GameRepository {
 public:
   virtual std::shared_ptr<GameRecord>
   getGameByChecksum(std::string checksum) = 0;
+  virtual std::shared_ptr<GameRecord> getGameById(std::string id) = 0;
+  virtual std::shared_ptr<RomhackRecord>
+  getRomhackByChecksum(std::string checksum) = 0;
 };
 
 } // namespace FL::DB
