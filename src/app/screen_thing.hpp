@@ -12,6 +12,7 @@
 #include "controller/controller_manager.hpp"
 #include "game_screen.hpp"
 #include "library/entry.hpp"
+#include "library/game_library.hpp"
 #include "saves/save_manager.hpp"
 #include <memory>
 namespace FL::GUI {
@@ -33,7 +34,7 @@ public:
     return std::move(screenCache["home"]);
   }
 
-  void buildHomeScreen(const std::vector<Library::Entry> &entries) {
+  void buildHomeScreen(FL::Library::GameLibrary *library) {
     auto container = std::make_unique<ContainerWidget>();
     container->box.xPx = 0;
     container->box.yPx = 0;
@@ -45,10 +46,10 @@ public:
 
     auto screen = std::make_unique<Screen>(std::move(container));
 
-    for (const auto &e : entries) {
+    for (const auto &e : library->getAllGames()) {
       auto button = widgetFactory->createButton(e.gameName);
 
-      button->onPressed.connect([e, this](Button *button) {
+      button->onPressed.connect([e, library, this](Button *button) {
         auto container = std::make_unique<ContainerWidget>();
         container->box.xPx = 0;
         container->box.yPx = 0;
@@ -60,7 +61,7 @@ public:
 
         auto screen = std::make_unique<GameScreen>(
             std::move(container), controllerManager, gfxDriver,
-            e.romPath.generic_string(), e, saveManager);
+            e.romPath.generic_string(), library, e, saveManager);
 
         this->screenManager->pushScreen(std::move(screen));
       });

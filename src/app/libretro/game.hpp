@@ -6,6 +6,7 @@
 #define FIRELIGHT_GAME_HPP
 
 #include <cstddef>
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -15,6 +16,7 @@ namespace libretro {
 
 class Game {
 public:
+  explicit Game(const std::vector<unsigned char> &data);
   explicit Game(const string &filePath);
 
   string getPath();
@@ -24,7 +26,7 @@ public:
   size_t getSize();
 
 private:
-  std::vector<char> data;
+  std::vector<unsigned char> data;
   string path;
 };
 

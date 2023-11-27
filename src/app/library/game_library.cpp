@@ -14,4 +14,6 @@ Entry *GameLibrary::getEntryByGameId(const std::string &gameId) {
 
   return nullptr;
 }
+void GameLibrary::addGame(Entry &entry) { allGames.emplace_back(entry); }
+std::vector<Entry> GameLibrary::getAllGames() { return allGames; }
 } // namespace FL::Library

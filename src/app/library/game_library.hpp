@@ -12,7 +12,9 @@ namespace FL::Library {
 
 class GameLibrary {
 public:
+  void addGame(Entry &entry);
   Entry *getEntryByGameId(const std::string &gameId);
+  std::vector<Entry> getAllGames();
 
 private:
   std::vector<Entry> allGames;

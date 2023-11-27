@@ -5,6 +5,7 @@
 #include "app/db/game_repository.hpp"
 #include "app/db/game_scanner.hpp"
 #include "app/db/in_memory_game_repository.hpp"
+#include "app/library/game_library.hpp"
 #include "app/libretro/core.hpp"
 #include "app/metrics/gameloop.hpp"
 #include "app/screen_thing.hpp"
@@ -85,7 +86,13 @@ int main(int argc, char *argv[]) {
 
   auto results =
       scanner.scanDirectory("/Users/alexs/git/firelight/_data/_games", true);
-  thing.buildHomeScreen(results);
+
+  FL::Library::GameLibrary library;
+  for (auto r : results) {
+    library.addGame(r);
+  }
+
+  thing.buildHomeScreen(&library);
   thing.buildGameScreen(&conManager, driver, &saveManager);
 
   manager.pushScreen(thing.getInitialScreen());

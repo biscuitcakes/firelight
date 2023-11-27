@@ -11,20 +11,24 @@ using std::vector;
 using std::string;
 
 namespace libretro {
-static std::vector<char> ReadAllBytes(const string &filename) {
+static std::vector<unsigned char> ReadAllBytes(const string &filename) {
   std::ifstream ifs(filename, std::ios::binary | std::ios::ate);
   std::ifstream::pos_type pos = ifs.tellg();
 
   if (pos == 0) {
-    return std::vector<char>{};
+    return std::vector<unsigned char>{};
   }
 
-  vector<char> result(pos);
+  vector<unsigned char> result(pos);
 
   ifs.seekg(0, std::ios::beg);
-  ifs.read(&result[0], pos);
+  ifs.read(reinterpret_cast<char *>(&result[0]), pos);
 
   return result;
+}
+
+Game::Game(const std::vector<unsigned char> &data) {
+  this->data = data; // todo
 }
 
 Game::Game(const string &filePath) {

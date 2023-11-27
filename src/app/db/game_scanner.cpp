@@ -76,36 +76,57 @@ GameScanner::scanDirectory(const std::string &path, bool recursive) {
           if (ext == ".mod") {
             auto result = gameRepository->getRomhackByChecksum(md5);
             if (result != nullptr) {
-              auto sourceGameId = result->sourceGameId;
-              printf("here's where I would find the thiiiiiiinnnnnng\n");
+              auto core = "";
+              if (result->platform == "gb" || result->platform == "gbc") {
+                core =
+                    "/Users/alexs/git/firelight/_data/_cores/gambatte_libretro"
+                    ".dll";
+              } else if (result->platform == "n64") {
+                core = "/Users/alexs/git/firelight/_data/_cores/"
+                       "mupen64plus_next_libretro.dll";
+              } else if (result->platform == "snes") {
+                core = "/Users/alexs/git/firelight/_data/_cores/"
+                       "snes9x_libretro.dll";
+              }
+
+              // TODO: Need to differentiate between versions.....
+              results.push_back({.id = "testing",
+                                 .type = Library::ROMHACK,
+                                 .gameName = result->name,
+                                 .gameId = result->id,
+                                 .sourceGameId = result->sourceGameId,
+                                 .corePath = core,
+                                 .romPath = entry.path()});
             } else {
               printf("didn't find the romhack with name %ls\n",
                      entry.path().c_str());
             }
-          }
-
-          auto result = gameRepository->getGameByChecksum(md5);
-          if (result != nullptr) {
-            auto core = "";
-            if (result->platform == "gb" || result->platform == "gbc") {
-              core = "/Users/alexs/git/firelight/_data/_cores/gambatte_libretro"
-                     ".dll";
-            } else if (result->platform == "n64") {
-              core = "/Users/alexs/git/firelight/_data/_cores/"
-                     "mupen64plus_next_libretro.dll";
-            } else if (result->platform == "snes") {
-              core = "/Users/alexs/git/firelight/_data/_cores/"
-                     "snes9x_libretro.dll";
-            }
-
-            results.push_back({.id = "testing",
-                               .gameName = result->name,
-                               .gameId = result->id,
-                               .corePath = core,
-                               .romPath = entry.path()});
           } else {
-            printf("didn't find the game with name %ls\n",
-                   entry.path().c_str());
+            auto result = gameRepository->getGameByChecksum(md5);
+            if (result != nullptr) {
+              auto core = "";
+              if (result->platform == "gb" || result->platform == "gbc") {
+                core =
+                    "/Users/alexs/git/firelight/_data/_cores/gambatte_libretro"
+                    ".dll";
+              } else if (result->platform == "n64") {
+                core = "/Users/alexs/git/firelight/_data/_cores/"
+                       "mupen64plus_next_libretro.dll";
+              } else if (result->platform == "snes") {
+                core = "/Users/alexs/git/firelight/_data/_cores/"
+                       "snes9x_libretro.dll";
+              }
+
+              results.push_back({.id = "testing",
+                                 .type = Library::NORMAL_GAME,
+                                 .gameName = result->name,
+                                 .gameId = result->id,
+                                 .corePath = core,
+                                 .romPath = entry.path()});
+            } else {
+              printf("didn't find the game with name %ls\n",
+                     entry.path().c_str());
+            }
           }
         }
       }
