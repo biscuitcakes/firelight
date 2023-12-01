@@ -27,6 +27,7 @@ public:
   void render(const std::shared_ptr<WidgetPainter> &painter) override;
   ~GameScreen() override = default;
   bool handleEvent(Event &event) override;
+  void setWindowArea(int width, int height) override;
 
 private:
   std::unique_ptr<libretro::Core> core;

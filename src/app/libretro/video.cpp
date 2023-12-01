@@ -172,9 +172,16 @@ void Video::draw() {
   if (!this->hardwareRendering) {
     gfxDriver->drawTexture(gameTexture, displayBox);
   } else {
+
+    // core renders to the other FBO which is backed by otherTex
+    // then we render that texture to the intermediate FBO which is a full
+    // screen FBO
     glBindTexture(GL_TEXTURE_2D, otherTex); // 600 x 480 or whatever
     glUseProgram(FL::Graphics::Shaders::texProgram);
     glBindFramebuffer(GL_FRAMEBUFFER, intermediateFbo);
+    glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     glBindVertexArray(vao);
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);

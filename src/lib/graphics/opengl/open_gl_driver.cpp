@@ -433,4 +433,10 @@ void OpenGLDriver::drawTexture(Texture *texture, FL::Math::Box displayBox) {
   glBindTexture(GL_TEXTURE_2D, 0);
 }
 
+void OpenGLDriver::setDisplayArea(FL::Math::Box box) {
+  displayArea = box;
+  viewportWidth = box.widthPx;
+  viewportHeight = box.heightPx;
+}
+
 } // namespace FL::Graphics

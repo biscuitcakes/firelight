@@ -52,6 +52,12 @@ public:
     }
   }
 
+  void setWindowArea(int width, int height) {
+    if (!screenStack.empty()) {
+      screenStack.top()->setWindowArea(width, height);
+    }
+  }
+
   // ... other methods as needed
 };
 

@@ -30,10 +30,11 @@ public:
                            int &height) override;
 
   void drawTexture(Texture *texture, FL::Math::Box displayBox) override;
-
+  void setDisplayArea(FL::Math::Box box) override;
   int viewportWidth, viewportHeight = 0;
 
 private:
+  FL::Math::Box displayArea;
   FT_Library fontLib;
   FT_Face fontFace;
   GLuint fontTex;

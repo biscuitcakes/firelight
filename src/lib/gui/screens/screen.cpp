@@ -47,4 +47,9 @@ bool Screen::handleEvent(Event &event) {
   return false;
 }
 
+void Screen::setWindowArea(int width, int height) {
+  windowWidth = width;
+  windowHeight = height;
+}
+
 } // namespace FL::GUI

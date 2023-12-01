@@ -15,14 +15,27 @@
               "state": {
                 "file": "Untitled.canvas",
                 "viewState": {
-                  "x": 166,
-                  "y": -28,
+                  "x": 264.8355697996826,
+                  "y": -283.2333285808969,
                   "zoom": 0
                 }
               }
             }
+          },
+          {
+            "id": "3042a6539427e5fe",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "ROM Hacks.md",
+                "mode": "source",
+                "source": false
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -88,7 +101,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Untitled.canvas",
+                "file": "ROM Hacks.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -105,7 +118,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Untitled.canvas",
+                "file": "ROM Hacks.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -128,7 +141,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Untitled.canvas"
+                "file": "ROM Hacks.md"
               }
             }
           }
@@ -149,8 +162,9 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "a8e1239c6426a6ee",
+  "active": "3042a6539427e5fe",
   "lastOpenFiles": [
-    "Untitled.canvas"
+    "Untitled.canvas",
+    "ROM Hacks.md"
   ]
 }

@@ -20,6 +20,7 @@ public:
   virtual void calculateTextBounds(const std::string &text, int &width,
                                    int &height) = 0;
   virtual void drawTexture(Texture *texture, FL::Math::Box displayBox) = 0;
+  virtual void setDisplayArea(FL::Math::Box box) = 0;
 };
 
 } // namespace FL::Graphics

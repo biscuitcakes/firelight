@@ -146,8 +146,9 @@ int main(int argc, char *argv[]) {
         case SDL_WINDOWEVENT_RESIZED:
           auto width = ev.window.data1;
           auto height = ev.window.data2;
-          //          core->getVideo()->setScreenDimensions(0, 0, width,
-          //          height);
+          driver->setDisplayArea(FL::Math::Box(0, 0, width, height));
+          manager.setWindowArea(width, height);
+          printf("resize w: %d, h: %d\n", width, height);
           break;
         }
       }

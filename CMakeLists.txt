@@ -106,6 +106,7 @@ add_executable(firelight
         src/app/db/game_full_file_thing.hpp
         src/app/db/romhack_record.hpp
         src/app/db/romhack_version_record.hpp
+        src/lib/graphics/framebuffer.hpp
 )
 
 target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)

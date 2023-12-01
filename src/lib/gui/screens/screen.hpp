@@ -23,11 +23,16 @@ public:
   virtual void render(const std::shared_ptr<WidgetPainter> &painter);
 
   virtual void setFocusTarget(Widget *target) { focusTarget = target; }
+  virtual void setWindowArea(int width, int height);
 
   virtual bool handleEvent(Event &event);
 
   virtual void addWidget(std::unique_ptr<Widget> widget);
   virtual ~Screen() = default;
+
+protected:
+  int windowWidth = 0;
+  int windowHeight = 0;
 };
 
 } // namespace FL::GUI

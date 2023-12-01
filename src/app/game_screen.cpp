@@ -96,24 +96,18 @@ void GameScreen::enter() {
   if (!saveData.empty()) {
     core->writeMemoryData(libretro::SAVE_RAM, saveData.data());
   }
-
-  //  std::filesystem::path path("save.whatever");
-  //  std::ifstream saveFile(path, std::ios::binary);
-  //  if (saveFile) {
-  //    auto size = file_size(path);
-  //
-  //    char data[size];
-  //    saveFile.read(data, size);
-  //    saveFile.close();
-  //
-  //    core->writeMemoryData(libretro::SAVE_RAM, data);
-  //  }
 }
 
 void GameScreen::exit() { Screen::exit(); }
 void GameScreen::update(float deltaTime) { core->run(deltaTime); }
 void GameScreen::render(const std::shared_ptr<WidgetPainter> &painter) {
   core->getVideo()->draw();
+}
+void GameScreen::setWindowArea(int width, int height) {
+  Screen::setWindowArea(width, height);
+  if (core) {
+    core->getVideo()->setScreenDimensions(0, 0, width, height);
+  }
 }
 
 } // namespace FL::GUI
