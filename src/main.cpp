@@ -71,7 +71,6 @@ int main(int argc, char *argv[]) {
   Uint64 frameEnd;
   double frameDiff;
 
-  FL::Graphics::Shaders::initializeAll();
   FL::Graphics::Driver *driver =
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   auto widgetPainter = std::make_shared<WidgetPainter>(driver);
@@ -148,7 +147,6 @@ int main(int argc, char *argv[]) {
           auto height = ev.window.data2;
           driver->setDisplayArea(FL::Math::Box(0, 0, width, height));
           manager.setWindowArea(width, height);
-          printf("resize w: %d, h: %d\n", width, height);
           break;
         }
       }

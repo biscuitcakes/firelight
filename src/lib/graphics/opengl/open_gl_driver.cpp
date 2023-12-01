@@ -91,6 +91,7 @@ std::array<float, 16> OpenGLDriver::calculateTexVertexArray(int x, int y, int w,
 }
 
 OpenGLDriver::OpenGLDriver(int w, int h) {
+  FL::Graphics::Shaders::initializeAll();
   if (FT_Init_FreeType(&fontLib) != 0) {
     // oops
   }

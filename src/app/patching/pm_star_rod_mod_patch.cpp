@@ -19,7 +19,7 @@ PMStarRodModPatch::PMStarRodModPatch(const std::vector<uint8_t> &data) {
   cursor += 4;
 
   for (int i = 0; i < numRecords; ++i) {
-    Record record{};
+    PMStarRodPatchRecord record{};
     record.offset =
         cursor[0] << 24 | cursor[1] << 16 | cursor[2] << 8 | cursor[3];
     cursor += 4;
@@ -58,6 +58,9 @@ std::vector<uint8_t> PMStarRodModPatch::patchRom(std::vector<uint8_t> &data) {
   }
 
   return result;
+}
+std::vector<PMStarRodPatchRecord> PMStarRodModPatch::getRecords() {
+  return records;
 }
 
 } // namespace FL::Patching

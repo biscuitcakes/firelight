@@ -13,8 +13,22 @@ include_directories(includes/SDL2)
 
 link_directories(lib)
 
-add_executable(firelight
-        src/main.cpp
+# Include Google Test as an external project
+#include(ExternalProject)
+#ExternalProject_Add(googletest
+#        GIT_REPOSITORY https://github.com/google/googletest.git
+#        GIT_TAG master
+#        PREFIX ${CMAKE_BINARY_DIR}/gtest
+#        INSTALL_COMMAND ""
+#)
+#
+## Set GTest source and binary directories
+#ExternalProject_Get_Property(googletest source_dir binary_dir)
+#
+## Add Google Test headers to your project's include directories
+#include_directories(${source_dir}/googletest/include)
+
+add_library(firelight_lib
         src/app/libretro/core.cpp
         src/app/libretro/coreoption.cpp
         src/app/libretro/coreoption.hpp
@@ -106,8 +120,23 @@ add_executable(firelight
         src/app/db/game_full_file_thing.hpp
         src/app/db/romhack_record.hpp
         src/app/db/romhack_version_record.hpp
-        src/lib/graphics/framebuffer.hpp
+        src/lib/graphics/framebuffer.hpp)
+
+
+target_link_libraries(firelight_lib mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto gtest_main)
+
+# main code
+add_executable(firelight
+        src/main.cpp)
+target_link_libraries(firelight PRIVATE firelight_lib)
+target_compile_options(firelight PRIVATE -Werror -ggdb3 -O0)
+
+add_executable(firelight_test
+        tests/app/patching/pm_star_rod_mod_patch_test.cpp
 )
 
-target_link_libraries(firelight mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto)
-target_compile_options(firelight PRIVATE -Werror -ggdb3 -O0)
+target_link_libraries(firelight_test PRIVATE firelight_lib gtest gtest_main)
+#target_compile_options(firelight PRIVATE -Werror -ggdb3 -O0)
+#
+#add_test(NAME firelight_test COMMAND firelight)
+#
