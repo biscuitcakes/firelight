@@ -1,4 +1,6 @@
 
+#define DEBUG_JOYSTICK
+
 #include "GL/glew.h"
 #include "SDL2/SDL.h"
 #include "app/controller/controller_manager.hpp"
@@ -50,6 +52,7 @@ int main(int argc, char *argv[]) {
     exit(1);
   }
   SDL_GL_SetSwapInterval(1);
+  SDL_GameControllerAddMappingsFromFile("gamecontrollerdb.txt");
 
   IMGUI_CHECKVERSION();
   ImGui::CreateContext();
@@ -112,6 +115,10 @@ int main(int argc, char *argv[]) {
       manager.handleSdlEvent(&ev);
       ImGui_ImplSDL2_ProcessEvent(&ev);
       switch (ev.type) {
+      case SDL_CONTROLLERBUTTONDOWN: {
+        printf("pressed: %d\n", ev.cbutton.button);
+        break;
+      }
       case SDL_CONTROLLERDEVICEADDED: {
         conManager.handleControllerAddedEvent(ev.cdevice.which);
         //            printf("holy shit we got a controller\n");

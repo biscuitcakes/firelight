@@ -13,6 +13,8 @@ Gamepad::Gamepad(SDL_GameController *controller) {
 }
 
 bool Gamepad::isButtonPressed(int button) {
+
+  // retropad A is east, SDL A is south...
   if (button == RETRO_DEVICE_ID_JOYPAD_A &&
       SDL_GameControllerGetButton(sdlController, SDL_CONTROLLER_BUTTON_B)) {
     return true;
@@ -65,6 +67,16 @@ bool Gamepad::isButtonPressed(int button) {
   if (button == RETRO_DEVICE_ID_JOYPAD_R &&
       SDL_GameControllerGetButton(sdlController,
                                   SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_L2 &&
+      SDL_GameControllerGetAxis(sdlController,
+                                SDL_CONTROLLER_AXIS_TRIGGERLEFT) > 0) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_R2 &&
+      SDL_GameControllerGetAxis(sdlController,
+                                SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 0) {
     return true;
   }
   if (button == RETRO_DEVICE_ID_JOYPAD_L3 &&

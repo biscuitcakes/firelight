@@ -11,29 +11,31 @@ namespace FL::DB {
 InMemoryGameRepository::InMemoryGameRepository(const string &gameFile,
                                                const string &romhackFile) {
   std::filesystem::path path(gameFile);
-  std::ifstream file(path);
+  std::ifstream file(path, std::ios::binary);
 
   auto size = file_size(path);
-  char content[size];
+  printf("file size: %ju\n", size);
+  char content[size + 1];
 
-  memset(content, 0, size);
+  //  memset(content, 0, size);
 
   file.read(content, size);
   file.close();
 
+  content[size] = 0;
+
   string contentString(content);
   auto j = json::parse(contentString);
 
-  auto p2 = j.template get<std::vector<GameRecord>>();
+  auto p2 = j.template get<std::vector<ROM>>();
   for (const auto &p : p2) {
-    games.emplace(p.md5_checksum, p);
-    //    printf("name: %s\n", p.name.c_str());
+    games.emplace(p.checksums.at("md5"), p);
   }
 
   // romhacks
 
   std::filesystem::path romhackPath(romhackFile);
-  std::ifstream romhackF(romhackPath);
+  std::ifstream romhackF(romhackPath, std::ios::binary);
 
   auto romhackSize = file_size(romhackPath);
   char romhackContent[romhackSize];
@@ -52,21 +54,20 @@ InMemoryGameRepository::InMemoryGameRepository(const string &gameFile,
   }
 }
 
-std::shared_ptr<GameRecord>
+std::shared_ptr<ROM>
 InMemoryGameRepository::getGameByChecksum(string checksum) {
   auto result = games.find(checksum);
   if (result != nullptr) {
-    return std::make_shared<GameRecord>(result->second);
+    return std::make_shared<ROM>(result->second);
   }
 
   return nullptr;
 }
 
-std::shared_ptr<GameRecord>
-InMemoryGameRepository::getGameById(std::string id) {
+std::shared_ptr<ROM> InMemoryGameRepository::getGameById(std::string id) {
   for (const auto &record : games) {
     if (record.second.id == id) {
-      return std::make_shared<GameRecord>(record.second);
+      return std::make_shared<ROM>(record.second);
     }
   }
 

@@ -13,13 +13,13 @@ class InMemoryGameRepository : public GameRepository {
 public:
   InMemoryGameRepository(const std::string &filename,
                          const string &romhackFile);
-  std::shared_ptr<GameRecord> getGameByChecksum(std::string checksum) override;
-  std::shared_ptr<GameRecord> getGameById(std::string id) override;
+  std::shared_ptr<ROM> getGameByChecksum(std::string checksum) override;
+  std::shared_ptr<ROM> getGameById(std::string id) override;
   std::shared_ptr<RomhackRecord>
   getRomhackByChecksum(std::string checksum) override;
 
 private:
-  std::unordered_map<std::string, GameRecord> games;
+  std::unordered_map<std::string, ROM> games;
   std::vector<RomhackRecord> romhacks;
 };
 

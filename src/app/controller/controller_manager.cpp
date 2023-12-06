@@ -18,6 +18,12 @@ void ControllerManager::setLoadedCore(libretro::Core *core) {
 void ControllerManager::handleControllerAddedEvent(int32_t sdlJoystickIndex) {
   // Check if we already have a controller for this joystick index
   auto controller = SDL_GameControllerOpen(sdlJoystickIndex);
+
+  if (controller != nullptr) {
+    unassignedControllers.push_back(
+        std::make_unique<FL::Input::SDLGamepad>(controller));
+  }
+
   controllers.push_back(controller);
   auto gamepad = new libretro::Gamepad(controller);
   if (loadedCore != nullptr) {

@@ -14,9 +14,8 @@ namespace FL::DB {
 
 class GameRepository {
 public:
-  virtual std::shared_ptr<GameRecord>
-  getGameByChecksum(std::string checksum) = 0;
-  virtual std::shared_ptr<GameRecord> getGameById(std::string id) = 0;
+  virtual std::shared_ptr<ROM> getGameByChecksum(std::string checksum) = 0;
+  virtual std::shared_ptr<ROM> getGameById(std::string id) = 0;
   virtual std::shared_ptr<RomhackRecord>
   getRomhackByChecksum(std::string checksum) = 0;
 };

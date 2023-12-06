@@ -6,6 +6,7 @@
 #define FIRELIGHT_CONTROLLER_MANAGER_HPP
 
 #include "../libretro/core.hpp"
+#include "sdl_controller.hpp"
 #include <cstdint>
 #include <memory>
 namespace FL {
@@ -19,6 +20,8 @@ public:
 private:
   libretro::Core *loadedCore = nullptr;
   std::vector<SDL_GameController *> controllers;
+  std::vector<std::unique_ptr<FL::Input::SDLGamepad>> unassignedControllers;
+  std::array<std::unique_ptr<FL::Input::SDLGamepad>, 8> portAssignedControllers;
 };
 
 } // namespace FL

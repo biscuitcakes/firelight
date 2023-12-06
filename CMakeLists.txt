@@ -120,8 +120,11 @@ add_library(firelight_lib
         src/app/db/game_full_file_thing.hpp
         src/app/db/romhack_record.hpp
         src/app/db/romhack_version_record.hpp
-        src/lib/graphics/framebuffer.hpp)
-
+        src/lib/graphics/framebuffer.hpp
+        src/app/controller/sdl_controller.cpp
+        src/app/controller/sdl_controller.hpp
+        src/app/controller/controller_type.hpp
+        src/app/controller/special_mappings.hpp)
 
 target_link_libraries(firelight_lib mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto gtest_main)
 
@@ -131,11 +134,11 @@ add_executable(firelight
 target_link_libraries(firelight PRIVATE firelight_lib)
 target_compile_options(firelight PRIVATE -Werror -ggdb3 -O0)
 
-add_executable(firelight_test
+add_executable(fl_test
         tests/app/patching/pm_star_rod_mod_patch_test.cpp
 )
 
-target_link_libraries(firelight_test PRIVATE firelight_lib gtest gtest_main)
+target_link_libraries(fl_test PRIVATE firelight_lib gtest gtest_main)
 #target_compile_options(firelight PRIVATE -Werror -ggdb3 -O0)
 #
 #add_test(NAME firelight_test COMMAND firelight)

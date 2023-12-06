@@ -119,7 +119,7 @@ GameScanner::scanDirectory(const std::string &path, bool recursive) {
 
               results.push_back({.id = "testing",
                                  .type = Library::NORMAL_GAME,
-                                 .gameName = result->name,
+                                 .gameName = result->gameName,
                                  .gameId = result->id,
                                  .corePath = core,
                                  .romPath = entry.path()});
