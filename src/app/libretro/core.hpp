@@ -6,11 +6,11 @@
 #define FIRELIGHT_CORE_HPP
 
 #include "../../lib/graphics/driver.hpp"
+#include "../controller/controller_manager.hpp"
 #include "SDL2/SDL.h"
 #include "coreoption.hpp"
 #include "game.hpp"
 #include "gamepad.hpp"
-#include "input.hpp"
 #include "libretro.h"
 #include "video.hpp"
 #include <iostream>
@@ -43,15 +43,13 @@ typedef void (*RetroRunFunc)();
 class Core {
 
 public:
-  Gamepad *getGamepad(int port);
-  void plugInGamepad(int port, Gamepad *gamepad);
-
   Video *getVideo();
-  Input *getInput();
+  FL::Input::ControllerManager *getControllerManager();
 
   std::basic_string<char> dumpJson();
 
-  explicit Core(const std::string &libPath, FL::Graphics::Driver *driver);
+  Core(const std::string &libPath, FL::Graphics::Driver *driver,
+       FL::Input::ControllerManager *conManager);
 
   virtual ~Core();
 
@@ -76,13 +74,11 @@ public:
   void writeMemoryData(MemoryType memType, char *data);
 
 private:
+  FL::Input::ControllerManager *controllerManager;
   FL::Graphics::Driver *gfxDriver;
   SDL_AudioDeviceID audioDevice;
 
-  array<Gamepad *, 8> gamepads = {nullptr};
-
   Video *video;
-  Input *input;
 
   vector<string> environmentCalls;
 

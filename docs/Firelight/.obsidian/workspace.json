@@ -79,7 +79,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Audio Rate.md",
+                "file": "ROM Hacks.md",
                 "mode": "source",
                 "source": false
               }
@@ -152,7 +152,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Audio Rate.md",
+                "file": "ROM Hacks.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -169,7 +169,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Audio Rate.md",
+                "file": "ROM Hacks.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -192,7 +192,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Audio Rate.md"
+                "file": "ROM Hacks.md"
               }
             }
           }
@@ -215,8 +215,8 @@
   },
   "active": "7739235b290e4ffd",
   "lastOpenFiles": [
-    "Notes.md",
     "Audio Rate.md",
+    "Notes.md",
     "mappingsdb.txt",
     "mappingsnodb.txt",
     "Untitled.canvas",

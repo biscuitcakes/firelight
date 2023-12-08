@@ -13,10 +13,10 @@ namespace FL {
 class SaveManager {
 public:
   std::vector<char> read(const std::string &gameId);
-  void write(std::string gameId, std::vector<char> data);
+  void write(const std::string &gameId, std::vector<char> data);
 
 private:
-  std::string profileId = "biscuitcakes";
+  std::string profileId = "defaultuser";
   DB::GameRepository *gameRepository;
 
   std::filesystem::path getSaveFilePath(const std::string &gameId);

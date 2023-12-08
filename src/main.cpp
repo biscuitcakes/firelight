@@ -87,7 +87,7 @@ int main(int argc, char *argv[]) {
       new FL::Graphics::OpenGLDriver(SCREEN_WIDTH, SCREEN_HEIGHT);
   auto widgetPainter = std::make_shared<WidgetPainter>(driver);
 
-  FL::ControllerManager conManager;
+  FL::Input::ControllerManager conManager;
   conManager.scanGamepads();
 
   FL::GUI::WidgetFactory factory;
@@ -96,8 +96,7 @@ int main(int argc, char *argv[]) {
   FL::GUI::ScreenThing thing(&manager, &factory);
   FL::SaveManager saveManager;
 
-  auto results =
-      scanner.scanDirectory("/Users/alexs/git/firelight/_data/_games", true);
+  auto results = scanner.scanDirectory("./roms", true);
 
   FL::Library::GameLibrary library;
   for (auto r : results) {
@@ -127,24 +126,10 @@ int main(int argc, char *argv[]) {
       switch (ev.type) {
       case SDL_CONTROLLERDEVICEADDED: {
         conManager.handleControllerAddedEvent(ev.cdevice.which);
-        //            printf("holy shit we got a controller\n");
-        //            auto controller =
-        //            SDL_GameControllerOpen(ev.cdevice.which);
-        //            printf("SDL
-        //            error? %s\n", SDL_GetError()); auto gamepad = new
-        //            libretro::Gamepad(controller);
-        //            core->plugInGamepad(0,
-        //            gamepad);
         break;
       }
       case SDL_CONTROLLERDEVICEREMOVED:
-        //            if (controller &&
-        //                ev.cdevice.which ==
-        //                    SDL_JoystickInstanceID(
-        // SDL_GameControllerGetJoystick(controller)))
-        //                        {
-        //              SDL_GameControllerClose(controller);
-        //            }
+        conManager.handleControllerRemovedEvent(ev.cdevice.which);
         break;
       case SDL_QUIT:
         manager.forceStop();

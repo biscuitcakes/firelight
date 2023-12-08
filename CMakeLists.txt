@@ -42,8 +42,6 @@ add_library(firelight_lib
         src/app/controller/controller_manager.hpp
         src/app/libretro/gamepad.cpp
         src/app/libretro/gamepad.hpp
-        src/app/libretro/input.cpp
-        src/app/libretro/input.hpp
         includes/imgui/imconfig.h
         includes/imgui/imgui.cpp
         includes/imgui/imgui.h
@@ -123,8 +121,6 @@ add_library(firelight_lib
         src/lib/graphics/framebuffer.hpp
         src/app/controller/sdl_controller.cpp
         src/app/controller/sdl_controller.hpp
-        src/app/controller/controller_type.hpp
-        src/app/controller/special_mappings.hpp
         src/lib/audio/source.hpp
         src/lib/audio/sdl_source.cpp
         src/lib/audio/sdl_source.hpp)

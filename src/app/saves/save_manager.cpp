@@ -7,8 +7,7 @@
 
 namespace FL {
 
-const std::filesystem::path BASE_USER_DIR =
-    "/Users/alexs/git/firelight/_data/_users/";
+const std::filesystem::path BASE_USER_DIR = "./userdata";
 
 std::filesystem::path SaveManager::getSaveFileDirectory() {
   return BASE_USER_DIR / profileId / "saves";
@@ -34,10 +33,10 @@ std::vector<char> SaveManager::read(const std::string &gameId) {
     return std::vector<char>(data, data + sizeof data / sizeof data[0]);
   }
 
-  return std::vector<char>();
+  return {};
 }
 
-void SaveManager::write(std::string gameId, std::vector<char> data) {
+void SaveManager::write(const std::string &gameId, std::vector<char> data) {
   std::filesystem::create_directories(getSaveFileDirectory());
   std::ofstream saveFile(getSaveFilePath(gameId), std::ios::binary);
   saveFile.write(data.data(), data.size());

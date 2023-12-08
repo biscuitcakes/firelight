@@ -22,7 +22,7 @@ private:
   std::unordered_map<std::string, std::unique_ptr<Screen>> screenCache;
   ScreenManager *screenManager;
   WidgetFactory *widgetFactory;
-  ControllerManager *controllerManager;
+  FL::Input::ControllerManager *controllerManager;
   SaveManager *saveManager;
   Graphics::Driver *gfxDriver;
 
@@ -72,7 +72,7 @@ public:
     screenCache.emplace("home", std::move(screen));
   }
 
-  void buildGameScreen(FL::ControllerManager *manager,
+  void buildGameScreen(FL::Input::ControllerManager *manager,
                        FL::Graphics::Driver *driver, FL::SaveManager *saveMan) {
     this->controllerManager = manager;
     this->gfxDriver = driver;
@@ -81,6 +81,28 @@ public:
     //
     //
     //    screenCache.emplace("game", std::move(screen));
+  }
+
+  void buildQuickMenu() {
+    auto container = std::make_unique<ContainerWidget>();
+    container->box.xPx = 0;
+    container->box.yPx = 0;
+    container->box.widthPx = 1280;
+    container->box.heightPx = 720;
+
+    container->setLayoutManager(
+        std::make_unique<VerticalBoxLayoutManager>(30, 10));
+
+    auto screen = std::make_unique<Screen>(std::move(container));
+
+    auto button = widgetFactory->createButton("resume");
+
+    button->onPressed.connect(
+        [this](Button *button) { this->screenManager->popScreen(); });
+
+    screen->addWidget(std::move(button));
+
+    screenCache.emplace("quick", std::move(screen));
   }
 };
 

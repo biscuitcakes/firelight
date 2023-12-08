@@ -15,10 +15,19 @@ namespace FL::Input {
 class SDLGamepad {
 public:
   explicit SDLGamepad(SDL_GameController *controller);
+  std::string getSerial();
+  SDL_GameController *sdlController;
+  int32_t sdlJoystickIndex;
+
+  bool isLibretroButtonPressed(int button);
+  int16_t getLeftStickXPosition();
+  int16_t getLeftStickYPosition();
+  int16_t getRightStickXPosition();
+  int16_t getRightStickYPosition();
 
 private:
-  std::string deviceName;
-  SDL_GameController *sdlController;
+  std::string deviceName = "";
+  std::string serial = "";
 };
 
 } // namespace FL::Input

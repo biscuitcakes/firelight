@@ -3,6 +3,7 @@
 //
 
 #include "sdl_controller.hpp"
+#include "../libretro/libretro.h"
 
 namespace FL::Input {
 SDLGamepad::SDLGamepad(SDL_GameController *controller)
@@ -10,53 +11,119 @@ SDLGamepad::SDLGamepad(SDL_GameController *controller)
   auto joystick = SDL_GameControllerGetJoystick(controller);
   auto guid = SDL_JoystickGetGUID(joystick);
 
-  int numAxes = SDL_CONTROLLER_AXIS_MAX;
-  int numButtons = SDL_CONTROLLER_BUTTON_MAX;
-
-  printf("Available controller inputs:\n");
-
-  for (int axis = 0; axis < numAxes; ++axis) {
-    SDL_GameControllerButtonBind bind = SDL_GameControllerGetBindForAxis(
-        controller, (SDL_GameControllerAxis)axis);
-    if (bind.bindType == SDL_CONTROLLER_BINDTYPE_AXIS) {
-      printf("Axis %d: %s\n", axis,
-             SDL_GameControllerGetStringForAxis((SDL_GameControllerAxis)axis));
-    }
-  }
-
-  for (int button = 0; button < numButtons; ++button) {
-    SDL_GameControllerButtonBind bind = SDL_GameControllerGetBindForButton(
-        controller, (SDL_GameControllerButton)button);
-    if (bind.bindType == SDL_CONTROLLER_BINDTYPE_BUTTON) {
-      printf("Button %d: %s\n", button,
-             SDL_GameControllerGetStringForButton(
-                 (SDL_GameControllerButton)button));
-    }
-  }
-
-  auto vendor = SDL_GameControllerGetVendor(controller);
-  auto product = SDL_GameControllerGetProduct(controller);
-
-  if (vendor == 1406 && product == 8217) {
-    printf("Got NSO N64 controller\n");
-  }
-  //  for (auto i = 0; i < SDL_GameControllerNumMappings(); ++i) {
-  //    auto s = SDL_GameControllerMappingForIndex(i);
-  //    printf("%s\n", s);
-  //    SDL_free(s);
-  //  }
-
   char buf[33];
   SDL_GUIDToString(guid, buf, 33);
   printf("GUID: %s\n", buf);
 
+  auto instanceID =
+      SDL_JoystickInstanceID(SDL_GameControllerGetJoystick(controller));
+  sdlJoystickIndex = SDL_JoystickGetDeviceInstanceID(instanceID);
+
+  auto serialCStr = SDL_GameControllerGetSerial(controller);
+  if (serialCStr != nullptr) {
+    serial = serialCStr;
+  }
+
   printf("name: %s\n", SDL_GameControllerName(controller));
   printf("type: %u\n", SDL_GameControllerGetType(controller));
 
-  printf("serial: %s\n", SDL_GameControllerGetSerial(controller));
   printf("vendor: %u\n", SDL_GameControllerGetVendor(controller));
   printf("product: %u\n", SDL_GameControllerGetProduct(controller));
   printf("product version: %u\n",
          SDL_GameControllerGetProductVersion(controller));
+}
+std::string SDLGamepad::getSerial() { return serial; }
+
+bool SDLGamepad::isLibretroButtonPressed(int button) {
+
+  // retropad A is east, SDL A is south...
+  if (button == RETRO_DEVICE_ID_JOYPAD_A &&
+      SDL_GameControllerGetButton(sdlController, SDL_CONTROLLER_BUTTON_B)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_B &&
+      SDL_GameControllerGetButton(sdlController, SDL_CONTROLLER_BUTTON_A)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_X &&
+      SDL_GameControllerGetButton(sdlController, SDL_CONTROLLER_BUTTON_Y)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_Y &&
+      SDL_GameControllerGetButton(sdlController, SDL_CONTROLLER_BUTTON_X)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_LEFT &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_DPAD_LEFT)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_RIGHT &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_DPAD_RIGHT)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_UP &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_DPAD_UP)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_DOWN &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_DPAD_DOWN)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_START &&
+      SDL_GameControllerGetButton(sdlController, SDL_CONTROLLER_BUTTON_START)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_SELECT &&
+      SDL_GameControllerGetButton(sdlController, SDL_CONTROLLER_BUTTON_BACK)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_L &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_LEFTSHOULDER)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_R &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_RIGHTSHOULDER)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_L2 &&
+      SDL_GameControllerGetAxis(sdlController,
+                                SDL_CONTROLLER_AXIS_TRIGGERLEFT) > 0) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_R2 &&
+      SDL_GameControllerGetAxis(sdlController,
+                                SDL_CONTROLLER_AXIS_TRIGGERRIGHT) > 0) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_L3 &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_LEFTSTICK)) {
+    return true;
+  }
+  if (button == RETRO_DEVICE_ID_JOYPAD_R3 &&
+      SDL_GameControllerGetButton(sdlController,
+                                  SDL_CONTROLLER_BUTTON_RIGHTSTICK)) {
+    return true;
+  }
+
+  return false;
+}
+int16_t SDLGamepad::getLeftStickXPosition() {
+  return SDL_GameControllerGetAxis(sdlController, SDL_CONTROLLER_AXIS_LEFTX);
+}
+int16_t SDLGamepad::getLeftStickYPosition() {
+  return SDL_GameControllerGetAxis(sdlController, SDL_CONTROLLER_AXIS_LEFTY);
+}
+int16_t SDLGamepad::getRightStickXPosition() {
+  return SDL_GameControllerGetAxis(sdlController, SDL_CONTROLLER_AXIS_RIGHTX);
+}
+int16_t SDLGamepad::getRightStickYPosition() {
+  return SDL_GameControllerGetAxis(sdlController, SDL_CONTROLLER_AXIS_RIGHTY);
 }
 } // namespace FL::Input

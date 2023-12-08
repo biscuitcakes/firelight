@@ -12,7 +12,7 @@
 
 namespace FL::GUI {
 GameScreen::GameScreen(std::unique_ptr<ContainerWidget> container,
-                       FL::ControllerManager *manager,
+                       FL::Input::ControllerManager *manager,
                        FL::Graphics::Driver *driver, std::string romPath,
                        FL::Library::GameLibrary *library,
                        Library::Entry libEntry, SaveManager *saveMan)
@@ -31,7 +31,8 @@ bool GameScreen::handleEvent(Event &event) {
 }
 
 void GameScreen::enter() {
-  core = std::make_unique<libretro::Core>(libraryEntry.corePath, gfxDriver);
+  core = std::make_unique<libretro::Core>(libraryEntry.corePath, gfxDriver,
+                                          controllerManager);
 
   core->setSystemDirectory(".");
   core->setSaveDirectory(".");
@@ -76,8 +77,6 @@ void GameScreen::enter() {
     core->loadGame(&lrGame);
     core->getVideo()->initialize(0, 0, 1280, 720);
 
-    controllerManager->setLoadedCore(core.get());
-
     auto saveData = saveManager->read(libraryEntry.gameId);
     if (!saveData.empty()) {
       core->writeMemoryData(libretro::SAVE_RAM, saveData.data());
@@ -89,8 +88,6 @@ void GameScreen::enter() {
   libretro::Game game(gameRomPath);
   core->loadGame(&game);
   core->getVideo()->initialize(0, 0, 1280, 720);
-
-  controllerManager->setLoadedCore(core.get());
 
   auto saveData = saveManager->read(libraryEntry.gameId);
   if (!saveData.empty()) {
@@ -113,7 +110,6 @@ void GameScreen::update(float deltaTime) {
   core->run(deltaTime);
 }
 void GameScreen::forceStop() {
-  printf("saving on close\n");
   auto data = core->getMemoryData(libretro::SAVE_RAM);
   saveManager->write(libraryEntry.gameId, data);
 }

@@ -3,36 +3,79 @@
 //
 
 #include "controller_manager.hpp"
+#include <cstring>
 
-namespace FL {
-
-void ControllerManager::setLoadedCore(libretro::Core *core) {
-  // Check if we already know about controllers and plug them in?
-  loadedCore = core;
-  if (!controllers.empty()) {
-    auto gamepad = new libretro::Gamepad(controllers[0]);
-    loadedCore->plugInGamepad(0, gamepad);
-  }
-}
+namespace FL::Input {
 
 void ControllerManager::handleControllerAddedEvent(int32_t sdlJoystickIndex) {
+  printf("got event for joystick index %d\n", sdlJoystickIndex);
   // Check if we already have a controller for this joystick index
   auto controller = SDL_GameControllerOpen(sdlJoystickIndex);
   if (controller == nullptr) {
     return;
   }
 
+  for (int i = 0; i < portAssignedControllers.max_size(); ++i) {
+    if (portAssignedControllers[i]) {
+      if (portAssignedControllers[i].get()->sdlJoystickIndex ==
+          sdlJoystickIndex) {
+        SDL_GameControllerClose(portAssignedControllers[i]->sdlController);
+        portAssignedControllers[i].reset();
+      }
+    }
+  }
+
+  for (int i = 0; i < unassignedControllers.size(); ++i) {
+    if (unassignedControllers[i]) {
+      if (unassignedControllers[i].get()->sdlJoystickIndex ==
+          sdlJoystickIndex) {
+        SDL_GameControllerClose(unassignedControllers[i]->sdlController);
+        unassignedControllers[i].reset();
+      }
+    }
+  }
+
+  // check  ^^^^
+  // assign vvvv
+
+  for (int i = 0; i < portAssignedControllers.max_size(); ++i) {
+    if (!portAssignedControllers[i]) {
+      portAssignedControllers[i] =
+          std::make_unique<FL::Input::SDLGamepad>(controller);
+      return;
+    }
+  }
+
+  // If we didn't find a spot in the player slots, make it unassigned.
   unassignedControllers.push_back(
       std::make_unique<FL::Input::SDLGamepad>(controller));
 
-  controllers.push_back(controller);
-  auto gamepad = new libretro::Gamepad(controller);
-  if (loadedCore != nullptr) {
-    loadedCore->plugInGamepad(0, gamepad);
-  }
+  // Keyboard controller should ALWAYS be last by default - let users move it
+  // if desired
 }
 
-void ControllerManager::handleControllerRemovedEvent(int32_t sdlInstanceId) {}
+void ControllerManager::handleControllerRemovedEvent(int32_t sdlInstanceId) {
+  auto con = SDL_GameControllerFromInstanceID(sdlInstanceId);
+  auto joystickIndex = SDL_JoystickGetDeviceInstanceID(sdlInstanceId);
+
+  for (int i = 0; i < portAssignedControllers.max_size(); ++i) {
+    if (portAssignedControllers[i]) {
+      if (portAssignedControllers[i].get()->sdlJoystickIndex == joystickIndex) {
+        SDL_GameControllerClose(portAssignedControllers[i]->sdlController);
+        portAssignedControllers[i].reset();
+      }
+    }
+  }
+
+  for (int i = 0; i < unassignedControllers.size(); ++i) {
+    if (unassignedControllers[i]) {
+      if (unassignedControllers[i].get()->sdlJoystickIndex == joystickIndex) {
+        SDL_GameControllerClose(unassignedControllers[i]->sdlController);
+        unassignedControllers[i].reset();
+      }
+    }
+  }
+}
 
 void ControllerManager::scanGamepads() {
   auto numJoys = SDL_NumJoysticks();
@@ -46,4 +89,8 @@ void ControllerManager::scanGamepads() {
     handleControllerAddedEvent(i);
   }
 }
-} // namespace FL
+FL::Input::SDLGamepad *ControllerManager::getGamepad(int playerIndex) {
+  return portAssignedControllers[playerIndex].get();
+}
+
+} // namespace FL::Input

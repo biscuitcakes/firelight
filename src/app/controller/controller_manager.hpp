@@ -5,26 +5,28 @@
 #ifndef FIRELIGHT_CONTROLLER_MANAGER_HPP
 #define FIRELIGHT_CONTROLLER_MANAGER_HPP
 
-#include "../libretro/core.hpp"
+#include "../libretro/gamepad.hpp"
 #include "sdl_controller.hpp"
+#include <array>
 #include <cstdint>
 #include <memory>
-namespace FL {
+#include <vector>
+namespace FL::Input {
 
 class ControllerManager {
 public:
-  void setLoadedCore(libretro::Core *core);
   void handleControllerAddedEvent(int32_t sdlJoystickIndex);
   void handleControllerRemovedEvent(int32_t sdlInstanceId);
   void scanGamepads();
+  FL::Input::SDLGamepad *getGamepad(int port);
 
 private:
-  libretro::Core *loadedCore = nullptr;
-  std::vector<SDL_GameController *> controllers;
+  static const int MAX_PLAYERS = 8;
   std::vector<std::unique_ptr<FL::Input::SDLGamepad>> unassignedControllers;
-  std::array<std::unique_ptr<FL::Input::SDLGamepad>, 8> portAssignedControllers;
+  std::array<std::unique_ptr<FL::Input::SDLGamepad>, MAX_PLAYERS>
+      portAssignedControllers;
 };
 
-} // namespace FL
+} // namespace FL::Input
 
 #endif // FIRELIGHT_CONTROLLER_MANAGER_HPP

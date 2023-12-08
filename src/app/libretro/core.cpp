@@ -32,7 +32,8 @@ static int16_t inputStateCallback(unsigned port, unsigned device,
     return 0;
   }
 
-  auto controller = currentCore->getGamepad(port);
+  auto manager = currentCore->getControllerManager();
+  auto controller = manager->getGamepad(port);
   if (controller == nullptr) {
     return 0;
   }
@@ -52,7 +53,7 @@ static int16_t inputStateCallback(unsigned port, unsigned device,
       }
     }
   } else if (device == RETRO_DEVICE_JOYPAD) {
-    return controller->isButtonPressed(id);
+    return controller->isLibretroButtonPressed(id);
   }
 
   return 0;
@@ -859,8 +860,9 @@ template <typename T> static T loadRetroFunc(void *dll, const char *name) {
 //        return j.dump();
 //    }
 
-Core::Core(const std::string &libPath, FL::Graphics::Driver *driver)
-    : gfxDriver(driver) {
+Core::Core(const std::string &libPath, FL::Graphics::Driver *driver,
+           FL::Input::ControllerManager *conManager)
+    : gfxDriver(driver), controllerManager(conManager) {
   this->dll = SDL_LoadObject(libPath.c_str());
   if (this->dll == nullptr) {
     // Check error
@@ -1006,27 +1008,9 @@ void Core::recordPotentialAPIViolation(const std::string &msg) {
 
 Video *Core::getVideo() { return this->video; }
 
-void Core::plugInGamepad(int port, Gamepad *gamepad) {
-  if (gamepads[port] != nullptr) {
-    printf("UHHHH\n");
-    // TODO: Do some error here since we're trying to plug into an occupied
-    //  port. Or we could check if it's the same device and ignore it.
-
-    return;
-  }
-
-  printf("Plugging gamepad %p into port %d\n", gamepad, port);
-  symRetroSetControllerPortDevice(port, RETRO_DEVICE_ANALOG);
-  gamepads[port] = gamepad;
-}
-Gamepad *Core::getGamepad(int port) { return gamepads[port]; }
-Input *Core::getInput() { return input; }
-
 std::vector<char> Core::getMemoryData(MemoryType memType) {
   auto size = symRetroGetMemoryDataSize((unsigned)memType);
   auto ptr = symRetroGetMemoryData((unsigned)memType);
-
-  printf("getting memory data size: %zu\n", size);
 
   auto end = ((char *)ptr) + size;
 
@@ -1044,6 +1028,9 @@ void Core::writeMemoryData(MemoryType memType, char *data) {
   //  }
 
   memcpy((byte *)ptr, data, size);
+}
+FL::Input::ControllerManager *Core::getControllerManager() {
+  return controllerManager;
 }
 
 } // namespace libretro

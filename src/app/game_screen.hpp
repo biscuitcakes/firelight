@@ -17,7 +17,7 @@ namespace FL::GUI {
 class GameScreen : public Screen {
 public:
   explicit GameScreen(std::unique_ptr<ContainerWidget> container,
-                      FL::ControllerManager *manager,
+                      FL::Input::ControllerManager *manager,
                       FL::Graphics::Driver *driver, std::string romPath,
                       FL::Library::GameLibrary *library,
                       Library::Entry libEntry, SaveManager *saveMan);
@@ -33,7 +33,7 @@ public:
 private:
   std::unique_ptr<libretro::Core> core;
   std::string gameRomPath;
-  FL::ControllerManager *controllerManager;
+  FL::Input::ControllerManager *controllerManager;
   FL::Graphics::Driver *gfxDriver;
   FL::Library::GameLibrary *gameLibrary;
   Library::Entry libraryEntry;
