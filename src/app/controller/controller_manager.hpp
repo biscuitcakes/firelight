@@ -16,6 +16,7 @@ public:
   void setLoadedCore(libretro::Core *core);
   void handleControllerAddedEvent(int32_t sdlJoystickIndex);
   void handleControllerRemovedEvent(int32_t sdlInstanceId);
+  void scanGamepads();
 
 private:
   libretro::Core *loadedCore = nullptr;

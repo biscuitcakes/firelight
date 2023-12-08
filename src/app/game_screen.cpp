@@ -99,7 +99,25 @@ void GameScreen::enter() {
 }
 
 void GameScreen::exit() { Screen::exit(); }
-void GameScreen::update(float deltaTime) { core->run(deltaTime); }
+void GameScreen::update(float deltaTime) {
+  millisSinceLastSave += deltaTime;
+
+  if (millisSinceLastSave >= 5000) {
+    millisSinceLastSave = 0;
+
+    // TODO: Need to get IO out of the hot path
+    auto data = core->getMemoryData(libretro::SAVE_RAM);
+    saveManager->write(libraryEntry.gameId, data);
+  }
+
+  core->run(deltaTime);
+}
+void GameScreen::forceStop() {
+  printf("saving on close\n");
+  auto data = core->getMemoryData(libretro::SAVE_RAM);
+  saveManager->write(libraryEntry.gameId, data);
+}
+
 void GameScreen::render(const std::shared_ptr<WidgetPainter> &painter) {
   core->getVideo()->draw();
 }

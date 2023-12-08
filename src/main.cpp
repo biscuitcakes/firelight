@@ -29,6 +29,9 @@ const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 720;
 
 int main(int argc, char *argv[]) {
+  SDL_SetHint(SDL_HINT_APP_NAME, "Firelight");
+  SDL_SetHint(SDL_HINT_GAMECONTROLLER_USE_BUTTON_LABELS, "0");
+
   if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
     printf("SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
     return 1;
@@ -44,6 +47,12 @@ int main(int argc, char *argv[]) {
     printf("Window could not be created! SDL_Error: %s\n", SDL_GetError());
     return 1;
   }
+
+  SDL_Surface *iconSurface = SDL_LoadBMP("logo.bmp");
+  SDL_SetWindowIcon(window, iconSurface);
+  SDL_FreeSurface(iconSurface);
+
+  //  signal(SIGINT, [](int signal) { printf("got signal: %d\n", signal); });
 
   auto context = SDL_GL_CreateContext(window);
   SDL_SetWindowMinimumSize(window, 160, 144); // TODO set based on core
@@ -79,6 +88,7 @@ int main(int argc, char *argv[]) {
   auto widgetPainter = std::make_shared<WidgetPainter>(driver);
 
   FL::ControllerManager conManager;
+  conManager.scanGamepads();
 
   FL::GUI::WidgetFactory factory;
 
@@ -115,10 +125,6 @@ int main(int argc, char *argv[]) {
       manager.handleSdlEvent(&ev);
       ImGui_ImplSDL2_ProcessEvent(&ev);
       switch (ev.type) {
-      case SDL_CONTROLLERBUTTONDOWN: {
-        printf("pressed: %d\n", ev.cbutton.button);
-        break;
-      }
       case SDL_CONTROLLERDEVICEADDED: {
         conManager.handleControllerAddedEvent(ev.cdevice.which);
         //            printf("holy shit we got a controller\n");
@@ -132,7 +138,6 @@ int main(int argc, char *argv[]) {
         break;
       }
       case SDL_CONTROLLERDEVICEREMOVED:
-        printf("bye bye controller\n");
         //            if (controller &&
         //                ev.cdevice.which ==
         //                    SDL_JoystickInstanceID(
@@ -142,6 +147,7 @@ int main(int argc, char *argv[]) {
         //            }
         break;
       case SDL_QUIT:
+        manager.forceStop();
         running = false;
         break;
       case SDL_WINDOWEVENT:
@@ -168,7 +174,7 @@ int main(int argc, char *argv[]) {
 
     glViewport(0, 0, width, height);
 
-    manager.update(0);
+    manager.update(deltaTime);
     manager.render(widgetPainter);
     frameEnd = SDL_GetPerformanceCounter();
     frameDiff = ((frameEnd - frameBegin) * 1000 /

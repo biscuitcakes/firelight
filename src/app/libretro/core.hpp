@@ -14,6 +14,8 @@
 #include "libretro.h"
 #include "video.hpp"
 #include <iostream>
+#include <mutex>
+#include <queue>
 #include <vector>
 #include <windows.h>
 
@@ -75,6 +77,7 @@ public:
 
 private:
   FL::Graphics::Driver *gfxDriver;
+  SDL_AudioDeviceID audioDevice;
 
   array<Gamepad *, 8> gamepads = {nullptr};
 

@@ -28,6 +28,7 @@ public:
   ~GameScreen() override = default;
   bool handleEvent(Event &event) override;
   void setWindowArea(int width, int height) override;
+  void forceStop() override;
 
 private:
   std::unique_ptr<libretro::Core> core;
@@ -37,6 +38,7 @@ private:
   FL::Library::GameLibrary *gameLibrary;
   Library::Entry libraryEntry;
   SaveManager *saveManager;
+  float millisSinceLastSave = 0;
 };
 
 } // namespace FL::GUI

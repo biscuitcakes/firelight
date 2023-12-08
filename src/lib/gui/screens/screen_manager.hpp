@@ -22,6 +22,13 @@ private:
 public:
   void handleSdlEvent(SDL_Event *event);
 
+  void forceStop() {
+    while (!screenStack.empty()) {
+      screenStack.top()->forceStop();
+      screenStack.pop();
+    }
+  }
+
   void pushScreen(std::unique_ptr<Screen> screen) {
     if (!screenStack.empty()) {
       screenStack.top()->exit(); // Call exit on the current screen

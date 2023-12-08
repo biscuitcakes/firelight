@@ -124,13 +124,18 @@ add_library(firelight_lib
         src/app/controller/sdl_controller.cpp
         src/app/controller/sdl_controller.hpp
         src/app/controller/controller_type.hpp
-        src/app/controller/special_mappings.hpp)
+        src/app/controller/special_mappings.hpp
+        src/lib/audio/source.hpp
+        src/lib/audio/sdl_source.cpp
+        src/lib/audio/sdl_source.hpp)
 
 target_link_libraries(firelight_lib mingw32 SDL2main SDL2 glew32 opengl32 freetype ssl crypto gtest_main)
 
 # main code
 add_executable(firelight
-        src/main.cpp)
+        src/main.cpp
+        src/logo.ico)
+
 target_link_libraries(firelight PRIVATE firelight_lib)
 target_compile_options(firelight PRIVATE -Werror -ggdb3 -O0)
 

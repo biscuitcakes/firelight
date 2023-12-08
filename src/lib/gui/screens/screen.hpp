@@ -17,6 +17,7 @@ private:
 
 public:
   explicit Screen(std::unique_ptr<ContainerWidget> container);
+  virtual void forceStop();
   virtual void enter();
   virtual void exit();
   virtual void update(float deltaTime);

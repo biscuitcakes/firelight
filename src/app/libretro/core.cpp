@@ -11,6 +11,8 @@
 
 namespace libretro {
 
+static const int THINGY = 5;
+
 void log(enum retro_log_level level, const char *fmt, ...) {
   char msg[4096] = {0};
   va_list va;
@@ -920,11 +922,39 @@ Core::Core(const std::string &libPath, FL::Graphics::Driver *driver)
                                       "retro_set_video_refresh")(videoCallback);
   loadRetroFunc<RetroSetAudioSample>(dll, "retro_set_audio_sample")(
       [](int16_t left, int16_t right) {});
+
+  auto processAudioLambda = [](const int16_t *data, size_t frames) -> size_t {
+    auto core = currentCore;
+    if (core == nullptr) {
+      printf("core was null in libretro audio callback\n");
+      return frames;
+    }
+
+    SDL_QueueAudio(core->audioDevice, data, frames * 4);
+
+    return frames;
+  };
+
   loadRetroFunc<RetroSetAudioSampleBatch>(dll, "retro_set_audio_sample_batch")(
-      [](const int16_t *, size_t frames) { return frames; });
+      processAudioLambda);
   loadRetroFunc<RetroInputPoll>(dll, "retro_set_input_poll")([]() {});
   loadRetroFunc<RetroInputState>(dll,
                                  "retro_set_input_state")(inputStateCallback);
+  SDL_AudioSpec want, have;
+
+  SDL_memset(&want, 0, sizeof(want));
+  want.freq = 44100;       // Sample rate (e.g., 44.1 kHz)
+  want.format = AUDIO_S16; // Audio format (16-bit signed)
+  want.channels = 2;       // Number of audio channels (stereo)
+  want.samples = 1024;     // Audio buffer size (samples)
+  want.callback = nullptr;
+
+  this->audioDevice = SDL_OpenAudioDevice(nullptr, 0, &want, &have, 0);
+  if (audioDevice == 0) {
+    printf("SDL_OpenAudioDevice failed: %s\n", SDL_GetError());
+  }
+
+  SDL_PauseAudioDevice(audioDevice, 0); // Start audio playback
 
   //  symRetroSetControllerPortDevice(0, RETRO_DEVICE_ANALOG);
 }

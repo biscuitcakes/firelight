@@ -52,4 +52,6 @@ void Screen::setWindowArea(int width, int height) {
   windowHeight = height;
 }
 
+void Screen::forceStop() {}
+
 } // namespace FL::GUI
