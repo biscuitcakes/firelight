@@ -10,7 +10,6 @@
 #include "SDL2/SDL.h"
 #include "coreoption.hpp"
 #include "game.hpp"
-#include "gamepad.hpp"
 #include "libretro.h"
 #include "video.hpp"
 #include <iostream>

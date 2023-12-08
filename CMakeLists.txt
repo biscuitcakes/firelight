@@ -40,8 +40,6 @@ add_library(firelight_lib
         src/app/metrics/gameloop.hpp
         src/app/controller/controller_manager.cpp
         src/app/controller/controller_manager.hpp
-        src/app/libretro/gamepad.cpp
-        src/app/libretro/gamepad.hpp
         includes/imgui/imconfig.h
         includes/imgui/imgui.cpp
         includes/imgui/imgui.h
@@ -115,7 +113,6 @@ add_library(firelight_lib
         src/app/patching/yay_0_codec.cpp
         src/app/patching/yay_0_codec.hpp
         src/app/patching/pm_star_rod_mod_patch.hpp
-        src/app/db/game_full_file_thing.hpp
         src/app/db/romhack_record.hpp
         src/app/db/romhack_version_record.hpp
         src/lib/graphics/framebuffer.hpp

@@ -5,7 +5,6 @@
 #ifndef FIRELIGHT_CONTROLLER_MANAGER_HPP
 #define FIRELIGHT_CONTROLLER_MANAGER_HPP
 
-#include "../libretro/gamepad.hpp"
 #include "sdl_controller.hpp"
 #include <array>
 #include <cstdint>

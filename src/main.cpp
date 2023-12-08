@@ -72,7 +72,6 @@ int main(int argc, char *argv[]) {
   ImGui_ImplOpenGL3_Init("#version 130");
 
   FL::DB::InMemoryGameRepository repository("games.json", "romhacks.json");
-  FL::DB::GameScanner scanner(&repository);
 
   Uint64 NOW = SDL_GetPerformanceCounter();
   Uint64 LAST = 0;
@@ -96,12 +95,8 @@ int main(int argc, char *argv[]) {
   FL::GUI::ScreenThing thing(&manager, &factory);
   FL::SaveManager saveManager;
 
-  auto results = scanner.scanDirectory("./roms", true);
-
-  FL::Library::GameLibrary library;
-  for (auto r : results) {
-    library.addGame(r);
-  }
+  FL::Library::GameLibrary library("./userdata/library.json", &repository);
+  library.scanNow();
 
   thing.buildHomeScreen(&library);
   thing.buildGameScreen(&conManager, driver, &saveManager);
