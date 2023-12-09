@@ -29,6 +29,10 @@ InMemoryGameRepository::InMemoryGameRepository(const string &gameFile,
 
   auto p2 = j.template get<std::vector<ROM>>();
   for (const auto &p : p2) {
+    if (p.checksums.at("md5").empty()) {
+      printf("empty: %s\n", p.gameName.c_str());
+      continue;
+    }
     games.emplace(p.checksums.at("md5"), p);
   }
 

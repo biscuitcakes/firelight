@@ -309,6 +309,10 @@ void OpenGLDriver::drawText(std::string text, int x, int y, Color color) {
 
   FL::Graphics::Character lastChar;
   for (unsigned char glyph : text) {
+    if (characters.find(glyph) == characters.end()) {
+      continue;
+    }
+
     auto c = characters.at(glyph);
 
     auto ascent = c.yBearing;
@@ -338,6 +342,9 @@ void OpenGLDriver::drawText(std::string text, int x, int y, Color color) {
   auto cursorX = x;
   auto cursorY = y + maxAscent;
   for (unsigned char glyph : text) {
+    if (characters.find(glyph) == characters.end()) {
+      continue;
+    }
     auto c = characters.at(glyph);
 
     auto vertices =
@@ -384,6 +391,9 @@ void OpenGLDriver::calculateTextBounds(const std::string &text, int &width,
 
   FL::Graphics::Character lastChar;
   for (unsigned char glyph : text) {
+    if (characters.find(glyph) == characters.end()) {
+      continue;
+    }
     auto c = characters.at(glyph);
 
     auto ascent = c.yBearing;

@@ -16,7 +16,14 @@ Entry *GameLibrary::getEntryByGameId(const std::string &gameId) {
 
   return nullptr;
 }
-void GameLibrary::addGame(Entry &entry) { allGames.emplace_back(entry); }
+void GameLibrary::addGame(Entry &entry) {
+  for (auto &game : allGames) {
+    if (game.gameId == entry.gameId) {
+      return;
+    }
+  }
+  allGames.emplace_back(entry);
+}
 std::vector<Entry> GameLibrary::getAllGames() { return allGames; }
 
 GameLibrary::GameLibrary(std::filesystem::path libFile,

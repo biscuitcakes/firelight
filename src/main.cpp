@@ -95,6 +95,8 @@ int main(int argc, char *argv[]) {
   FL::GUI::ScreenThing thing(&manager, &factory);
   FL::SaveManager saveManager;
 
+  printf("before library\n");
+
   FL::Library::GameLibrary library("./userdata/library.json", &repository);
   library.scanNow();
 
